@@ -39,7 +39,7 @@
     steps: [{
       popup: {
         type: 'modal',
-        content: 'Hello there!, let us walk through here for a moment, it will make you feel home :)'
+        content: 'Hello there!, let us walk through here for a moment, it will make you comfortable :)'
       },
       onLeave: function() {
         console.log(arguments)

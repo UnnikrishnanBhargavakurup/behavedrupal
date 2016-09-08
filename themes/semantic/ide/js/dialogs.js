@@ -326,10 +326,10 @@
     var project_data = get_data();
     var id = "";
     if(project_name == "") {
-      project_name = $("#saved_projects").text().trim();
       id = $("#saved_projects").val();
+      project_name = "";
     }
-    if(project_name != "" && project_data.length  > 0) {
+    if((project_name || id) != "" && project_data.length  > 0) {
       $.ajax({
         url : "/behave/save?_format=json",
         method : "POST",
@@ -512,7 +512,6 @@
       beforeSend: function (request) {
         request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
         request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
-        $(".auto_save").show();
       },
       dataType: "json",
       error: function(response) {

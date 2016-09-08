@@ -114,7 +114,7 @@ class BehaviourSave extends ResourceBase {
       if(isset($data['id']) && is_numeric($data['id'])) {
         $node = Node::load($data['id']);
         //set value for field
-        $node->body->value = $data['data'];
+        $node->body->value = json_encode($data['data']);
       }
       else {
         $node = Node::create([
