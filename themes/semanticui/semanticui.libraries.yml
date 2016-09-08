@@ -1,0 +1,12 @@
+global-css:
+  css:
+    theme:
+      css/style.css: {}
+      libs/semantic/dist/semantic.css: {}
+
+global-js:
+  js:
+    js/script.js: {}
+    libs/semantic/dist/semantic.js: {}
+  dependencies:
+   - core/jquery

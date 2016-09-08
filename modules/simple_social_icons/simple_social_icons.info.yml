@@ -1,0 +1,11 @@
+name: Simple Social Icons
+type: module
+description: Simple social Icons
+# core: 8.x
+package: Custom
+
+# Information added by Drupal.org packaging script on 2016-02-09
+version: '8.x-1.0-alpha1'
+core: '8.x'
+project: 'simple_social_icons'
+datestamp: 1455000544

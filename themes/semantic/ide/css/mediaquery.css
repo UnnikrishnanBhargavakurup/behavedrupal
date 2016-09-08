@@ -1,0 +1,146 @@
+@media (max-width:480px) {
+  ul.collection li {
+    padding: .5em 1em;
+  }
+  .mdl-button--fab {
+    height: 46px;
+    margin: auto;
+    min-width: 46px;
+    width: 46px;
+  }
+  .add-scenario {
+    margin-right: 3%;
+  }
+  div .feature-help {
+    right: 10%
+  }
+  div .action-wrap {
+    min-height: 180px;
+  }
+  ul.collection {
+    min-height: 293px;
+  }
+  .sticky-header .main-content {
+    padding-top: 56px;
+  }
+  .profile_details {
+    margin-right: .5em;
+  }
+  .logo-icon a i {
+      padding-top: 20px;
+  }
+  .left-side-collapsed .logo-icon {
+     height: 60px;
+  }
+  .feedback-dialog {
+    display: none;
+    height: 319px;
+    width: 330px;
+    padding: 0;
+  }
+
+  .feedback-dialog form {
+    height: 174px;
+  }
+
+  div .feature-help, 
+  div .feature-help:focus, 
+  div .feature-help:active {
+    bottom: inherit;
+  }
+  .feedback-dialog .mdl-textfield {
+    width: 300px;
+  }
+
+  .save-dialog  {
+    width: 300px;
+  }
+
+  .dialog-profile .card-wrap, .dialog-profile {
+    width: 380px;
+  }
+  .dialog-open {
+    width: 372px;
+    height: 429px;
+  }
+  dialog[open] {
+    display: block;
+    z-index: 10000;
+  }
+  .dialog-open form {
+    width: 100%;
+    overflow: hidden;
+  }
+  .dialog-open table {
+    width: 100%;
+  }
+  .user-panel-top li a i {
+    width: 40px;
+  }
+  .scrollbar-projects {
+    height: 100px;
+    padding: .2em;
+  }
+  .dialog-templates {
+    width: 380px;
+  }
+  .profile_img i{
+    width: 20px;
+  }
+  #messages {
+    width: 90%;
+    left: 11%;
+    top: 30%;
+  }
+  .usr-profile  li {
+    float: right;
+  }
+  .usr-profile .lnr {
+    float: right;
+    margin-top: 10px;
+    margin-left: 24px;
+  }
+  .dialog-run {
+    width: 100%;
+    height: 690px;
+    top: 5%;
+  }
+}
+@media (max-width:1283px) {
+ ul.collection li {
+   padding: .8em 1.2em;
+ }
+}
+@media (max-width:1243px) {
+
+}
+@media (max-width:1205px){
+
+}
+@media (max-width:1169px){
+
+}
+@media (max-width: 1136px){
+
+
+}
+@media (max-width: 1104px){
+
+
+}
+@media (max-width: 1075px){
+
+}
+@media (max-width: 1046px){
+
+}
+
+/* For add scenario button to align*/
+@media (max-width : 991px) {
+   div .add-scenario {
+    position: relative;
+  }
+  .scenario-list input[type="submit"] {
+    float: right;
+  }
+}

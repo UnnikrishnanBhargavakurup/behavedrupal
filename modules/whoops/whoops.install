@@ -1,0 +1,32 @@
+<?php
+
+/**
+ * @file
+ * Install, update, and uninstall functions for the Whoops module.
+ */
+
+/**
+ * Implements hook_requirements().
+ */
+function whoops_requirements($phase) {
+  $requirements = [];
+
+  if ($phase == 'install') {
+    if (!class_exists('Whoops\Run')) {
+      $requirements['whoops_library'] = [
+        'description' => t('The Whoops module requires the <a href=":url">filp/whoops</a> library. Make sure the Whoops package is installed via Composer.', [':url' => 'https://github.com/filp/whoops']),
+        'severity' => REQUIREMENT_ERROR,
+      ];
+    }
+  }
+
+  if ($phase == 'runtime') {
+    $requirements['whoops'] = [
+      'title' => t('Whoops module enabled'),
+      'description' => t('The module registers an error handler which provide debug information, therefore <strong>it is not suitable for a production environment</strong>.'),
+      'severity' => REQUIREMENT_WARNING,
+    ];
+  }
+
+  return $requirements;
+}

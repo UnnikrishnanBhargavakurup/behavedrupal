@@ -1,0 +1,54 @@
+<?php
+
+// Include drupal theme and helper functions.
+require_once dirname(__FILE__) . '/includes/utils.inc';
+require_once dirname(__FILE__) . '/includes/breadcrumb.inc';
+require_once dirname(__FILE__) . '/includes/form.inc';
+require_once dirname(__FILE__) . '/includes/menu.inc';
+require_once dirname(__FILE__) . '/includes/message.inc';
+require_once dirname(__FILE__) . '/includes/item_list.inc';
+require_once dirname(__FILE__) . '/includes/pager.inc';
+//require_once dirname(__FILE__) . '/includes/links.inc';
+require_once dirname(__FILE__) . '/includes/status_report.inc';
+
+function semanticui_theme_registry_alter(&$registry) {
+  foreach (array('process', 'preprocess') as $type) {
+    // Iterate over all preprocess/process files in the current theme.
+    $discovered_files = semanticui_discover_files('semanticui', $type);
+    foreach ($discovered_files as $item) {
+      $callback = "{$theme}_{$type}_{$item->hook}";
+
+      // If there is no hook with that name, continue.
+      if (!array_key_exists($item->hook, $registry)) {
+        continue;
+      }
+
+      // Append the included (pre-)process hook to the array of functions.
+      $registry[$item->hook]["$type functions"][] = $callback;
+
+      // By adding this file to the 'includes' array we make sure that it is
+      // available when the hook is executed.
+      dpm($item->uri);
+      $registry[$item->hook]['includes'][] = $item->uri;
+    }
+  }
+}
+
+/**
+ * Scans for files of a certain type in the current theme's path.
+ */
+function semanticui_discover_files($theme, $type) {
+  $length = -(strlen($type) + 1);
+
+  $path = drupal_get_path('theme', $theme);
+  // Only look for files that match the 'something.preprocess.inc' pattern.
+  $mask = '/.' . $type . '.inc$/';
+
+  // Recursively scan the folder for the current step for (pre-)process
+  // files and write them to the registry.
+  $files = file_scan_directory($path . '/' . $type, $mask);
+  foreach ($files as &$file) {
+    $file->hook = strtr(substr($file->name, 0, $length), '-', '_');
+  }
+  return $files;
+}

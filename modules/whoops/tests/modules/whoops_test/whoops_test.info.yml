@@ -1,0 +1,12 @@
+name: 'Whoops test module'
+type: module
+description: 'Support module for Whoops testing.'
+package: Testing
+# version: VERSION
+# core: 8.x
+
+# Information added by Drupal.org packaging script on 2016-07-23
+version: '8.x-1.0-alpha1'
+core: '8.x'
+project: 'whoops'
+datestamp: 1469306040

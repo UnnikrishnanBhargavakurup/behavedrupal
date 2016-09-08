@@ -1,0 +1,33 @@
+whoops_test.exception:
+  path: '/whoops/exception'
+  defaults:
+    _controller: '\Drupal\whoops_test\Controller\WhoopsTestController::exception'
+    _title: 'Exception'
+  requirements:
+    _access: 'TRUE'
+    _format: 'json|html|hal_json'
+
+whoops_test.http_exception:
+  path: '/whoops/http-exception'
+  defaults:
+    _controller: '\Drupal\whoops_test\Controller\WhoopsTestController::httpException'
+    _title: 'Http Exception'
+  requirements:
+    _access: 'TRUE'
+    _format: 'json|html|hal_json'
+
+whoops_test.error:
+  path: '/whoops/error'
+  defaults:
+    _controller: '\Drupal\whoops_test\Controller\WhoopsTestController::error'
+    _title: 'Error'
+  requirements:
+    _access: 'TRUE'
+
+whoops_test.fatal_error:
+  path: '/whoops/fatal-error'
+  defaults:
+    _controller: '\Drupal\whoops_test\Controller\WhoopsTestController::FatalError'
+    _title: 'Fatal Error'
+  requirements:
+    _access: 'TRUE'

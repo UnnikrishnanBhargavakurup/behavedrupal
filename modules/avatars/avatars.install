@@ -1,0 +1,149 @@
+<?php
+
+/**
+* @file
+* Install, update and uninstall functions for the AK module.
+*/
+
+use Drupal\field\Entity\FieldConfig;
+use Drupal\field\Entity\FieldStorageConfig;
+
+/**
+* Implements hook_install().
+*/
+function avatars_install() {
+  $picture_settings = [
+    'file_extensions' => 'png gif jpg jpeg',
+    'file_directory' => 'pictures',
+    'max_filesize' => '128 KB',
+    'max_resolution' => '1024x1024',
+    'min_resolution' => '100x100',
+    'alt_field' => '',
+    'alt_field_required' => '',
+  ];
+
+  // Shows avatar generator setting
+  if (FieldConfig::loadByName('user', 'user', AK_FIELD_AVATAR_GENERATOR)) {
+    entity_get_form_display('user', 'user', 'default')
+      ->setComponent(AK_FIELD_AVATAR_GENERATOR, [
+        'type' => 'avatars_generator_preview',
+      ])
+      ->save();
+  }
+
+  // Drupals picture
+  if (FieldConfig::loadByName('user', 'user', AK_FIELD_PICTURE_ACTIVE)) {
+    // Hide Drupal picture on form
+    entity_get_form_display('user', 'user', 'default')
+      ->removeComponent(AK_FIELD_PICTURE_ACTIVE)
+      ->save();
+  }
+  else {
+    // Picture may not exist if user did not user 'standard' profile.
+    if (!FieldStorageConfig::loadByName('user', AK_FIELD_PICTURE_ACTIVE)) {
+      FieldStorageConfig::create([
+        'field_name' => AK_FIELD_PICTURE_ACTIVE,
+        'entity_type' => 'user',
+        'type' => 'image',
+      ])->save();
+    }
+
+    FieldConfig::create([
+      'field_name' => AK_FIELD_PICTURE_ACTIVE,
+      'entity_type' => 'user',
+      'bundle' => 'user',
+      'label' => t('User picture'),
+      'description' => t('An image representing your user account. Do not upload your avatars to this field.'),
+    ])
+      ->setSettings($picture_settings)
+      ->save();
+  }
+
+  entity_get_display('user', 'user', 'default')
+    ->setComponent(AK_FIELD_PICTURE_ACTIVE, [])
+    ->save();
+
+  // Create the field the user can upload avatars.
+  if (!FieldStorageConfig::loadByName('user', AK_FIELD_PICTURE_USER)) {
+    FieldStorageConfig::create([
+      'field_name' => AK_FIELD_PICTURE_USER,
+      'entity_type' => 'user',
+      'type' => 'image',
+    ])->save();
+  }
+
+  // attach the field to the user/user bundle
+  if (!FieldConfig::loadByName('user', 'user', AK_FIELD_PICTURE_USER)) {
+    FieldConfig::create([
+      'field_name' => AK_FIELD_PICTURE_USER,
+      'entity_type' => 'user',
+      'bundle' => 'user',
+      'label' => t('User picture upload'),
+      'description' => t('An image representing your user account.'),
+    ])
+    ->setSettings($picture_settings)
+    ->save();
+
+    // Make it visible on form
+    entity_get_form_display('user', 'user', 'default')
+      ->setComponent(AK_FIELD_PICTURE_USER, [])
+      ->save();
+    // Hide it on view
+    entity_get_display('user', 'user', 'default')
+      ->removeComponent(AK_FIELD_PICTURE_USER)
+      ->save();
+  }
+}
+
+/**
+ * Migrate list of enabled avatar generators to plugin configs.
+ */
+function avatars_update_8001() {
+  $config_factory = \Drupal::configFactory();
+
+  // A list of avatar generator plugin ID's ordered by weight.
+  $avatar_settings = $config_factory->getEditable('avatars.settings');
+  $avatar_generators = $avatar_settings->get('avatar_generators');
+  if (is_array($avatar_generators)) {
+    foreach ($avatar_generators as $weight => $avatar_generator) {
+      $avatar_generator = $avatar_generator == '_user_preference' ? 'user_preference' : $avatar_generator;
+      $config_factory->getEditable('avatars.generator.' . $avatar_generator)
+        ->setData([
+          'id' => $avatar_generator,
+          'label' => $avatar_generator,
+          'weight' => $weight,
+          'plugin' => $avatar_generator,
+          'provider' => $avatar_generator,
+          'settings' => [],
+          'status' => TRUE,
+        ])
+        ->save();
+    }
+    $avatar_settings->clear('avatar_generators')->save();
+  }
+}
+
+/**
+ * Remove persist after field instance delete for preference field.
+ *
+ * This was preventing re-install of module
+ */
+function avatars_update_8002() {
+  $config_factory = \Drupal::configFactory();
+  if ($field_storage = $config_factory->getEditable('field.storage.user.avatars_avatar_generator')) {
+    $field_storage->set('persist_with_no_fields', FALSE)->save();
+  }
+}
+
+/**
+ * Update generator preference field to new widget.
+ *
+ * Remove allowed_values_function.
+ */
+function avatars_update_8003() {
+  entity_get_form_display('user', 'user', 'default')
+    ->setComponent(AK_FIELD_AVATAR_GENERATOR, [
+      'type' => 'avatars_generator_preview',
+    ])
+    ->save();
+}

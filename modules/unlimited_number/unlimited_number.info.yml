@@ -1,0 +1,10 @@
+type: module
+name: Unlimited Number
+description: Provides a widget for number fields.
+# core: 8.x
+
+# Information added by Drupal.org packaging script on 2015-09-11
+version: '8.x-1.0-alpha1'
+core: '8.x'
+project: 'unlimited_number'
+datestamp: 1441946655

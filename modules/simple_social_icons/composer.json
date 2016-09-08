@@ -1,0 +1,14 @@
+{
+  "name": "drupal/simple_social_share_block",
+  "type": "drupal-module",
+  "description": "Simple social share block to share current page",
+  "keywords": ["Drupal"],
+  "license": "GPL-2.0+",
+  "homepage": "https://www.drupal.org/project/simple_social_share_block",
+  "minimum-stability": "dev",
+  "support": {
+    "issues": "http://drupal.org/project/issues/simple_social_share_block",
+    "source": "http://cgit.drupalcode.org/simple_social_share_block"
+  },
+  "require": { }
+}

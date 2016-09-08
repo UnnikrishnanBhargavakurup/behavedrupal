@@ -1,0 +1,324 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Standard Meta -->
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+
+<link rel="image_src" type="image/jpeg" href="{{ base_path ~ directory }}/images/logo.png" />
+
+<!-- Site Properities -->
+<meta name="generator" content="DocPad v6.78.4" />
+<title>Behave Drupal - Behaviour Testing In Drupal</title>
+
+<meta name="description" content="Behaviour testing in Drupal using behat." />
+<meta name="keywords" content="behat, BDD, drupal, behaviour testing, behaviour testing in drupal" />
+<link rel="stylesheet" type="text/css" class="ui" href="{{ base_path ~ directory }}/libs/semantic/dist/semantic.min.css">
+<link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/docs.css">
+<link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/rtl.css">
+<link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/home.css">
+<link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/bdd_builder.css">
+<link rel="stylesheet/less" type="text/css" href="{{ base_path ~ directory }}/libs/semantic/src/definitions/elements/button.less" />
+</head>
+
+<body id="example" class="index demo" ontouchstart="">
+  <div class="pusher">
+
+    <div class="full height">
+
+      <div class="following bar">
+        <div class="ui container">
+          <div class="ui large inverted secondary network menu">
+
+            <div class="item">
+              <div class="ui logo shape">
+                <div class="sides">
+                  <div class="active ui side">
+                    <img class="ui image" src="{{ base_path ~ directory }}/images/logo.png">
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Twitter and github -->
+            <div class="right menu">
+              <div class="item">
+                <iframe id="twitter-widget-0" scrolling="no" frameborder="0" allowtransparency="true" class="twitter-share-button twitter-share-button-rendered twitter-tweet-button" title="Twitter Tweet Button" src="http://platform.twitter.com/widgets/tweet_button.b41e99df00581dc95d7fdd63f3283511.en.html#dnt=true&id=twitter-widget-0&lang=en&original_referer=http://behavedrupal.com&size=m&text=Behaviour testing in drupal using behat&time=1468930231577&type=share&url=http%3A%2F%2Fsemantic-ui.com&via=semanticui" style="position: static; visibility: visible; width: 61px; height: 20px;" data-url="http://semantic-ui.com"></iframe>
+                <script type="text/javascript">
+                window.twttr=(function(d,s,id){var t,js,fjs=d.getElementsByTagName(s)[0];if(d.getElementById(id)){return}js=d.createElement(s);js.id=id;js.src="https://platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);return window.twttr||(t={_e:[],ready:function(f){t._e.push(f)}})}(document,"script","twitter-wjs"));
+                </script>
+                <iframe class="github" src="http://ghbtns.com/github-btn.html?user=Behat&repo=Behat&type=watch&count=true" allowtransparency="true" frameborder="0" scrolling="0" width="100" height="20"></iframe>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+      <div class="ui vertical stripe introduction segment">
+        <!-- main heading -->
+        <div class="ui stackable very relaxed center aligned grid container">
+          <div class="row">
+            <div class="twelve wide column">
+              <h1 class="ui header">Behaviour Testing In Drupal</h1>
+            </div>
+          </div>
+        </div>
+          <!-- body -->
+            <div class="ui stackable very relaxed left aligned grid container">
+              <div class="row">
+                <div class="twelve wide column">
+                <div>{{ page.highlighted }}</div>
+                {% if logged_in %}
+                <img src="{{user_picture}}"/>
+                {{ 'Welcome, @username'|t({ '@username': user.name }) }}
+                <h1>hello there</h1>
+                {% endif %}
+                
+                  <h2 class="ui header">1. What is behavior testing?</h2>
+                  <p>Behavior testing is testing your applications behavior(feature) from a user point of view.</p>
+                  <p>In behavior testing we use client conversations as instructions to test the application. We rephrase client conversations to features, scenarios and actions.</p>
+                  <p>Feature: A specific feature in an application (example: user authentication)</p>
+                  <p>Scenario: A flow in that feature (example: login or logout)</p>
+                  <p>Action: A step in that flow (example: clicking on the login button)</p>
+                  <h2 class="ui header">2. Tell me an example</h2>
+                  <p>Following is an example of testing user authentication feature using behavior testing.</p>
+                    <pre>
+Feature: User authentication, log in and out of the site.
+   In order to maintain an account
+   As a site visitor
+   I need to log in and out of the site.
+
+   Scenario: Logs in to the site
+      Given I am on "/"
+      When I follow "Log In"
+      And I fill in "Username" with "user"
+      And I fill in "Password" with "userpassword"
+      And I press "Log in"
+      Then I should see "Log out"
+      And I should see "My account"
+
+   Scenario: Logs out of the site
+      Given I am on "/"
+      When I follow "Log In"
+      And I fill in "Username" with "user"
+      And I fill in "Password" with "userpassword"
+      And I press "Log in"
+      And I follow "Log out"
+      Then I should see "Log in"
+      And I should not see "My account"
+
+   Scenario: Attempts login with wrong credentials.
+      Given I am on "/"
+      When I follow "Log In"
+      And I fill in "Username" with "badusername"
+      And I fill in "Password" with "boguspass"
+      And I press "Log in"
+      Then I should see "Sorry, unrecognized username or password."
+      And I should not see "My account"
+                      </pre>
+                  <h2 class="ui header">3. How we do this behavior testing in Drupal?</h2>
+
+                  <p>We use open source tool behat for behaviorist testing in Drupal.</p>
+
+                  <p>Here we go though a simple step by step process to generate all the behavior testing needs for your Drupal project. We will auto generate all the code for you.</p>
+                  <h2 class="ui header">4. Sit back and add your Drupal site features here!</h2>
+                  <!-- Add pre existing features -->
+                  <div class="pre-existing">
+                  <div class="ui styled accordion">
+                    <div class="title">
+                      <i class="dropdown icon"></i>
+                      Too lazy to add a feature click here to add some pre existing features.
+                    </div>
+                    <div class="content">
+                      <div class="ui segments">
+                        <div class="ui segment">
+                          <p>
+                            <div class="ui toggle checkbox">
+                              <input type="checkbox" name="public">
+                              <label>Authentication</label>
+                            </div>
+                          </p>
+                        </div>
+                        <div class="ui segment">
+                          <p>
+                          <div class="ui toggle checkbox">
+                            <input type="checkbox" name="public">
+                            <label>Contact us</label>
+                          </div>
+                          </p>
+                        </div>
+                        <div class="ui segment">
+                          <p>
+                            <div class="ui toggle checkbox">
+                              <input type="checkbox" name="public">
+                              <label>Authentication</label>
+                            </div>
+                          </p>
+                        </div>
+                        <div class="ui segment">
+                          <p>
+                            <div class="ui toggle checkbox">
+                              <input type="checkbox" name="public">
+                              <label>Authentication</label>
+                            </div>
+                          </p>
+                        </div>
+                        <div class="ui segment">
+                          <p>
+                            <div class="ui toggle checkbox">
+                              <input type="checkbox" name="public">
+                              <label>Authentication</label>
+                            </div>
+                          </p>
+                        </div>
+                        <div class="ui clearing segment">
+                          <div class="ui right floated button">Add</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  </div>
+                  <!-- end of pre existing features -->
+                  <div class="bdd_builder">
+                    <div id="bdd_features" class="ui styled fluid accordion">
+                    </div>
+                  </div>
+                  <div class="ui huge fluid action input">
+                    <input id="feture_name" type="text" placeholder="Type in a feature...">
+                    <div id="add_feature" class="ui button">Add</div>
+                  </div>
+                  <small>example: authentication/contact us/add content etc </small>
+                  <div class="ui basic segment code-generate">
+                     <button class="positive ui button disabled download-code">Generate code now</button>
+                  </div>
+                  <h2 class="ui header">5. How I can run this code?</h2>
+                  <p>Unzip the code to your Drupal root directory and run the following command in terminal.</p>
+<!-- Command to execute behat -->                  
+<pre>
+cd &lt;drupal root&gt;
+composer install --prefer-dist --working-dir=build
+build/bin/phing -f build/phing/build.xml
+</pre>
+                  <h2 class="ui header">6. Disclaimer</h2>
+                  <p>We have covered only generic testing needs for you here. If you need something that not exist here please contact us we will add it or customize this tool for your requirements.</p>
+                </div>
+              </div>
+            </div>
+
+      </div>
+
+      <div class="ui email alternate stripe vertical segment">
+        <div class="ui center aligned grid container">
+          <div class="column">
+            <h3 class="ui header">
+              Semantic is growing fast. Want to see just how much? Sign up and we'll let you know
+            </h3>
+            <form class="ui form" method="post" action="https://semantic-ui.clients.ubivox.com/handlers/post/">
+              <input type="hidden" name="action" value="subscribe" />
+              <input type="hidden" name="lists" value="29450" />
+              <div class="field">
+                <div class="ui huge input">
+                  <input type="text" name="email_address" data-validate="email" placeholder="E-mail">
+                </div>
+                <button type="submit" value="Subscribe" class="ui huge secondary submit button">
+                  Sign-up
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div> 
+
+    </div>
+    <!-- Footer start here -->
+    <div class="ui black inverted vertical footer segment">
+      <div class="ui center aligned container">
+        <div class="ui stackable inverted grid">
+          <div class="three wide column">
+            <h4 class="ui inverted header">Community</h4>
+            <div class="ui inverted link list">
+              <a class="item" href="https://www.transifex.com/organization/semantic-org/" target="_blank">Help Translate</a>
+              <a class="item" href="https://github.com/Semantic-Org/Semantic-UI/issues" target="_blank">Submit an Issue</a>
+              <a class="item" href="https://gitter.im/Semantic-Org/Semantic-UI" target="_blank">Join our Chat</a>
+              <a class="item" href="/cla.html" target="_blank">CLA</a>
+            </div>
+          </div>
+          <div class="three wide column">
+            <h4 class="ui inverted header">Network</h4>
+            <div class="ui inverted link list">
+              <a class="item" href="https://github.com/Semantic-Org/Semantic-UI" target="_blank">GitHub Repo</a>
+              <a class="item" href="http://1.semantic-ui.com">1.x Docs</a>
+              <a class="item" href="http://legacy.semantic-ui.com">0.x Docs</a>
+            </div>
+          </div>
+   
+          <div class="seven wide right floated column">
+            <h4 class="ui inverted teal header">Help Preserve This Project</h4>
+            <p> Support for the continued development of Semantic UI comes directly from the community.</p>
+            <form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_top">
+              <input type="hidden" name="cmd" value="_s-xclick">
+              <input type="hidden" name="hosted_button_id" value="7ZAF2Q8DBZAQL">
+              <button type="submit" class="ui large teal button">Donate Today</button>
+            </form>
+          </div>
+        </div>
+        <div class="ui inverted section divider"></div>
+        <img src="{{ base_path ~ directory }}/images/logo.png" class="ui centered mini image">
+        <div class="ui horizontal inverted small divided link list">
+          <a class="item" href="http://semantic-ui.mit-license.org/" target="_blank">Free & Open Source (MIT)</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <script>
+    (function () {
+      var
+        eventSupport = ('querySelector' in document && 'addEventListener' in window)
+        jsonSupport  = (typeof JSON !== 'undefined'),
+        jQuery       = (eventSupport && jsonSupport)
+          ? '/core/assets/vendor/jquery/jquery.min.js'
+          : '/javascript/library/jquery.legacy.min.js'
+      ;
+      document.write('<script src="' + jQuery + '"><\/script>');
+    }());
+  </script>
+  <style type="text/css">
+ .autocomplete-suggestions {
+    text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+
+    /* core styles should not be changed */
+    position: absolute; display: none; z-index: 9999; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+    overflow-y: scroll;
+}
+.autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
+.autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
+.autocomplete-suggestion.selected { background: #f0f0f0; }
+   
+  </style>
+  <script src="{{ base_path ~ directory }}/libs/js/highlight.min.js"></script>
+  <script src="{{ base_path ~ directory }}/libs/js/easing.min.js"></script>
+
+  <script src="{{ base_path ~ directory }}/libs/semantic/dist/semantic.min.js"></script>
+
+  <script src="{{ base_path ~ directory }}/js/docs.js"></script>
+  <script src="{{ base_path ~ directory }}/js/home.js"></script>
+  <!--//TODO: need to move to modules -->
+  <script src="{{ base_path ~ directory }}/js/actions.js"></script>
+  <script src="{{ base_path ~ directory }}/js/jquery.auto-complete-custom.js"></script>
+  <script src="{{ base_path ~ directory }}/js/behaviour_builder.js"></script>
+  <script>
+  window.less = {
+    async        : true,
+    environment  : 'production',
+    fileAsync    : false,
+    onReady      : false,
+    useFileCache : true
+  };
+  </script>
+  <script src="{{ base_path ~ directory }}/libs/js/less.min.js"></script>
+  <div class="autocomplete-suggestions"></div>
+</body>
+</html>

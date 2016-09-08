@@ -1,0 +1,7 @@
+simple_social_icons:
+  version: 1.x
+  css:
+    theme:
+      styles/simple_social_icons.css: {}
+  js:
+    js/simple_social_icons.js: {}

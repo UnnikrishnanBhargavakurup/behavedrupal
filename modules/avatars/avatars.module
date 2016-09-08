@@ -1,0 +1,209 @@
+<?php
+
+use Drupal\avatars\Entity\AvatarGenerator;
+use Drupal\Core\Field\FieldDefinitionInterface;
+use Drupal\Core\Session\AccountInterface;
+use Drupal\avatars\AvatarPreviewInterface;
+use Drupal\Core\Field\FieldItemListInterface;
+use Drupal\Core\Access\AccessResult;
+use Drupal\Core\Entity\EntityInterface;
+use Drupal\Core\Field\FieldStorageDefinitionInterface;
+use Drupal\Core\Entity\FieldableEntityInterface;
+use Drupal\user\UserInterface;
+
+/**
+ * ID of a `picture` field attached to a user entity.
+ *
+ * The field is the target for the active avatar preference for the user.
+ */
+const AK_FIELD_PICTURE_ACTIVE = 'user_picture';
+
+/**
+ * ID of a `picture` field attached to a user entity.
+ *
+ * The field has a reference to the last picture the user manually updated.
+ */
+const AK_FIELD_PICTURE_USER = 'avatars_user_picture';
+
+/**
+ * ID of a `list_string` field attached to a user entity.
+ *
+ * The field contains the user avatar generator preference.
+ */
+const AK_FIELD_AVATAR_GENERATOR = 'avatars_avatar_generator';
+
+/**
+ * Implements hook_cron().
+ */
+function avatars_cron() {
+  $intervals = \Drupal::config('avatars.settings')->get('refresh_interval');
+  $avatars_preview_storage = \Drupal::entityTypeManager()->getStorage('avatars_preview');
+  /** @var \Drupal\avatars\AvatarGeneratorStorageInterface $avatars_generator_storage */
+  $avatars_generator_storage = \Drupal::entityTypeManager()->getStorage('avatar_generator');
+  $avatars_generators = $avatars_generator_storage->getEnabledAvatarGenerators();
+
+  // Remove expired previews.
+  foreach ($avatars_generators as $avatar_generator) {
+    $definition = $avatar_generator->getPlugin()->getPluginDefinition();
+
+    $query = $avatars_preview_storage
+      ->getQuery()
+      ->condition('avatar_generator', $avatar_generator->id());
+
+    if ($definition['dynamic']) {
+      $offset = $intervals['dynamic'] > 0 ? $intervals['dynamic'] : 0;
+      $query->condition('created', REQUEST_TIME - $offset, '<');
+    }
+    else {
+      $offset = $intervals['static'] > 0 ? $intervals['static'] : 0;
+      if ($offset) {
+        $query->condition('created', REQUEST_TIME - $offset, '<');
+        $query->condition('scope', AvatarPreviewInterface::SCOPE_TEMPORARY, '=');
+      }
+      else {
+        continue;
+      }
+    }
+
+    $ids = $query->execute();
+    $avatars_preview_storage->delete($avatars_preview_storage->loadMultiple($ids));
+  }
+}
+
+/**
+ * Implements hook_entity_field_access().
+ */
+function avatars_entity_field_access($operation, FieldDefinitionInterface $field_definition, AccountInterface $account, FieldItemListInterface $items = NULL) {
+  /** @var \Drupal\avatars\AvatarManager $avatar_manager */
+  $avatar_manager = \Drupal::service('avatars.avatar_manager');
+  /** @var \Drupal\field\Entity\FieldConfig $field_definition */
+  if ($field_definition->getName() == AK_FIELD_PICTURE_ACTIVE && $operation == 'view' && $field_definition->getTargetEntityTypeId() == 'user') {
+    if ($items) {
+      $user = $items->getEntity();
+      $avatar_manager->syncAvatar($user);
+    }
+  }
+  return AccessResult::neutral();
+}
+
+/**
+ * Implements hook_entity_presave().
+ */
+function avatars_entity_presave(EntityInterface $entity) {
+  if ($entity instanceof UserInterface && !$entity->isNew()) {
+    /** @var \Drupal\avatars\AvatarManager $avatar_manager */
+    $avatar_manager = \Drupal::service('avatars.avatar_manager');
+    $avatar_manager->invalidateUserAvatar($entity);
+    // @todo: only notify if value of AK_FIELD_PICTURE_USER changed
+
+    /** @var \Drupal\avatars\AvatarGeneratorStorageInterface $avatars_generator_storage */
+    $avatars_generator_storage = \Drupal::entityTypeManager()->getStorage('avatar_generator');
+    foreach ($avatars_generator_storage->getEnabledAvatarGenerators() as $avatar_generator) {
+      if ($avatar_generator->getPlugin()->getPluginId() == 'user') {
+        $avatar_manager->notifyDynamicChange($avatar_generator, $entity);
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_entity_update().
+ *
+ * Dynamic avatar generators commonly rely on email to generate hash. If email
+ * changes, then destroy existing avatar previews from dynamic generators.
+ */
+function avatars_entity_update(EntityInterface $entity) {
+  if ($entity instanceof UserInterface && isset($entity->original)) {
+    $original = $entity->original;
+    if ($original->getEmail() != $entity->getEmail()) {
+      /** @var \Drupal\avatars\AvatarManager $avatar_manager */
+      $avatar_manager = \Drupal::service('avatars.avatar_manager');
+      /** @var \Drupal\avatars\AvatarGeneratorStorageInterface $avatars_generator_storage */
+      $avatars_generator_storage = \Drupal::entityTypeManager()->getStorage('avatar_generator');
+      foreach ($avatars_generator_storage->getEnabledAvatarGenerators() as $avatar_generator) {
+        $definition = $avatar_generator->getPlugin()->getPluginDefinition();
+        if (!empty($definition['dynamic'])) {
+          $avatar_manager->notifyDynamicChange($avatar_generator, $entity);
+        }
+      }
+    }
+  }
+}
+
+/**
+ * Implements hook_ENTITY_TYPE_storage_load().
+ */
+function avatars_file_storage_load(array $entities) {
+  /** @var $entities \Drupal\file\FileInterface[] */
+  $avatar_preview_storage = \Drupal::entityManager()
+    ->getStorage('avatars_preview');
+
+  // Add cache tags to avatar preview files. These tags will be added when image
+  // formatters are rendered.
+  foreach ($entities as $file) {
+    $avatar_previews = $avatar_preview_storage->loadByProperties([
+      'avatar' => $file->id(),
+    ]);
+    if ($avatar_preview = reset($avatar_previews)) {
+      /** @var AvatarPreviewInterface $avatar_preview */
+      $file->addCacheTags(['avatar_preview']);
+    }
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function avatars_theme() {
+  return [
+    'avatar_preview_radio' => [
+      'render element' => 'element',
+    ],
+  ];
+}
+
+/**
+ * Prepares variables for avatar_preview_radio templates.
+ *
+ * Default template: avatar-preview-radio.html.twig.
+ *
+ * @param array $variables
+ *   An associative array containing:
+ *   - element: An associative array containing the properties of the element.
+ *     Properties used:
+ *     - (optional) image: an image generated by 'image_style' or 'image'
+ *       themes. Image is omitted if unavailable.
+ *     - radio: a radio element.
+ */
+function template_preprocess_avatar_preview_radio(array &$variables) {
+  if (isset($variables['element']['image'])) {
+    // Image is missing for '_none'.
+    $variables['image'] = $variables['element']['image'];
+  }
+  $variables['radio'] = $variables['element']['radio'];
+}
+
+/**
+ * To be consumed by field AK_FIELD_AVATAR_GENERATOR allowed_values_function.
+ *
+ * Implements callback_allowed_values_function().
+ *
+ * @return string[int]
+ */
+function avatars_callback_avatar_generators(FieldStorageDefinitionInterface $definition, FieldableEntityInterface $entity = NULL, &$cacheable = TRUE) {
+  // @todo remove this, add update hook for existing field form displays.
+  /** @var \Drupal\avatars\AvatarGeneratorStorageInterface $avatars_generator_storage */
+  $avatars_generator_storage = \Drupal::entityTypeManager()->getStorage('avatar_generator');
+
+  $options = ['_none' => t('Site default')];
+  foreach ($avatars_generator_storage->getEnabledAvatarGenerators() as $instance) {
+    if ($instance->getPlugin()->getPluginId() == 'user_preference') {
+      continue;
+    }
+    if ($entity instanceof UserInterface) {
+      $options[$instance->id()] = $instance->label();
+    }
+  }
+
+  return $options;
+}

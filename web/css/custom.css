@@ -1,0 +1,401 @@
+ul.collection {
+  margin: 0;
+  list-style: none;
+  background:#fff;
+  padding:0em;
+  min-height: 587px; 
+}
+
+ul.collection li {
+  padding: 1.5em 2em;
+  border-bottom: 1px solid #EEE;
+  cursor: pointer;
+}
+
+ul.collection li:hover { 
+  background-color: #F8F8F8;
+}
+
+ul.collection li.active {
+  background-color: #eee;
+  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #ddd;
+}
+
+ul.collection li:last-child {
+  border-bottom: none;
+  position: absolute;
+  bottom: 0px;
+  right: 0px;
+}
+
+ul.collection li:last-child:hover{
+  background-color: transparent;
+}
+
+ul.collection li.email_last{
+  margin-bottom:0;
+}
+
+.action-wrap {
+  min-height: 361px;
+}
+
+.dialog_add-scenario {
+  width: 314px;
+}
+
+.dialog_add-feature {
+  width: 384px;
+}
+
+#feature-description {
+  height: 10em;
+}
+.add-scenario {
+  position: fixed;
+  right: 2%;
+  z-index: 1000;
+}
+
+section .main-content {
+  min-height: 1000px !important;
+}
+
+div.xs{
+  padding-bottom: 10%;
+}
+
+.btn-close {
+  width: 22px;
+  min-width: 22px;
+  height: 22px;
+  float: right !important;
+}
+
+.autocomplete-suggestions {
+    text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
+
+    /* core styles should not be changed */
+    position: absolute; display: none; z-index: 9999; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
+    overflow-y: scroll;
+}
+.autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
+.autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
+.autocomplete-suggestion.selected { background: #f0f0f0; }
+
+.itm-scenario {
+  display: none;
+}
+
+.itm-scenario.active {
+  display: block;
+  transition: all 0.5s ease;
+}
+
+.mdl-layout {
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.mdl-layout__content {
+  /*padding: 24px;*/
+  flex: none;
+}
+
+.dialog_login {
+  height: 410px !important;
+  padding: 0;
+  width: 372px;
+}
+.dialog_login .mdl-card__supporting-text{
+  width:100%;
+}
+.dialog_login .mdl-textfield__label:after {
+  bottom: 15px;
+}
+.dialog_login .mdl-layout{
+  overflow: hidden;
+}
+
+.menu-right{
+  float: right;
+}
+
+.menu-middle {
+  display: inline;
+  left: 45%;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.download-build {
+  color: #8BC34A;
+}
+
+.btn-pause {
+  padding-right: 0;
+}
+
+.error-msg {
+  opacity: 0;
+  color: #F44336;
+  height: 0px;
+  overflow: hidden;
+}
+
+.error-msg p {
+  float: right;
+  color: #8BC34A;
+}
+
+input[type="text"].invalid {
+  border: 1px solid #F44336;
+}
+
+.scenario-help {
+  clear: both;
+  float: left;
+}
+
+div .help-txt,
+div .help-txt:focus, 
+div .help-txt:active, 
+div .txt-small {
+  font-size: 10px;
+  font-weight: normal;
+  color: rgb(255,64,129);
+}
+
+div .help-txt:hover{
+  font-size: 12px;
+  font-weight: bold;
+  color: rgb(255,64,129);
+  /*
+  text-shadow: 0 0 10px #fff, 0 0 10px #fff, 0 0 10px #fff, 0 0 20px #ff00de, 0 0 35px #ff00de, 0 0 40px #ff00de, 0 0 50px #ff00de, 0 0 75px #ff00de;
+  */
+}
+
+@keyframes neon1 {
+  from {
+    text-shadow: 0 0 10px #fff, 0 0 20px #fff, 0 0 30px #fff, 0 0 40px #FF1177, 0 0 70px #FF1177, 0 0 80px #FF1177, 0 0 100px #FF1177, 0 0 150px #FF1177;
+  }
+  to {
+    text-shadow: 0 0 5px #fff, 0 0 10px #fff, 0 0 15px #fff, 0 0 20px #FF1177, 0 0 35px #FF1177, 0 0 40px #FF1177, 0 0 50px #FF1177, 0 0 75px #FF1177;
+  }
+}
+
+
+div .feature-help,
+div .feature-help:focus,
+div .feature-help:active {
+  position: absolute;
+  right: 2%;
+  bottom: 10%;
+  font-size: 12px;
+  cursor: pointer;
+}
+
+.add-data {
+  float: right;
+  cursor: pointer;
+}
+
+ul.action-list li {
+  overflow: hidden;
+}
+
+.action-data-table {
+  width:100%;
+}
+
+.action-data-table tbody tr td{
+  text-align: left;
+}
+
+.action-data-table tbody tr:last-child td {
+  text-align: left;
+}
+
+.cell-ctl{
+  width: 100%;
+}
+
+.tbl-title {
+  float: left;
+  font-style: italic;
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.action-data {
+  margin-top: 1em;
+}
+
+.tbl-controls {
+  display: none;
+}
+
+div .table-help {
+  position: relative;
+  top: 70%;
+  transform: translateY(-50%);
+  margin-right: .5em;
+  float: right !important;
+}
+
+div .delete-tbl {
+  float: right !important;
+}
+
+.left-side-collapsed .custom-nav li a span {
+  min-width: 220px;
+}
+
+.left-side-inner .nav > li> a{
+  cursor: pointer;
+}
+
+.left-side-inner .nav>li>a:focus, 
+.left-side-inner .nav>li>a:hover {
+  background-color: inherit;
+}
+
+
+dialog .close {
+  float: left !important;
+}
+
+#user_pic {
+  background-repeat: no-repeat;
+  background-position: center; 
+}
+
+.dialog_auth {
+  height: 360px;
+  padding: 0;
+  width: 330px;
+}
+
+.dialog_reg .login-section,
+.dialog_reg .password-reset-section, 
+.dialog_login .registration-section,
+.dialog_login .password-reset-section, 
+.dialog_password_reset .login-section,
+.dialog_password_reset .registration-section {
+  display: none;
+}
+
+.dialog_reg {
+  height: 500px !important;
+}
+
+.dialog_password_reset {
+  height: 342px !important;
+}
+
+/* For password strength monitor*/
+.bar {
+    height: 2px;
+}
+
+.pw-very-weak .bar {
+    background: #d00;
+    width: 30px;
+}
+
+.pw-very-weak .label {
+    color: #d00;
+    padding-left: 0;
+}
+
+.pw-weak .bar {
+    background: #d00;
+    width: 60px;
+}
+
+.pw-weak .label {
+    color: #d00;
+}
+
+.pw-mediocre .bar {
+    background: #f3f01a;
+    width: 90px;
+}
+
+.pw-mediocre .label {
+    color: #f3f01a;
+}
+
+.pw-strong .bar {
+    background: #f3b31a;
+    width: 120px;
+}
+
+.pw-strong .label {
+    color: #f3b31a;
+}
+
+.pw-very-strong .bar {
+    background: #0d0;
+    width: 150px;
+}
+
+.pw-very-strong .label {
+    color: #0d0;
+}
+#pwindicator {
+  width: 150px;
+}
+/* End of password strenth. */
+
+.feedback-dialog {
+  display: none;
+  height: 419px;
+  width: 430px;
+  padding: 0;
+}
+
+.feedback-dialog form{
+  height: 274px;
+  width: 100%;
+}
+
+.feedback-dialog .mdl-textfield {
+  width: 400px;
+}
+
+.mdl-card__supporting-text,
+.mdl-card {
+  width: 100%;
+}
+
+.login-links {
+  margin-bottom: 2.5em;
+}
+
+.login-links 
+.reg-link, 
+.btn_ok,
+dialog .help-txt  {
+  float: right !important;
+}
+
+.save-dialog {
+  width: 400px;
+  height: 297px;
+}
+
+.save-dialog  .mdl-layout__content {
+  width: 100%;
+}
+dialog.mdl-dialog {
+  padding: 0 !important;
+}
+
+dialog .mdl-textfield__label:after, 
+dialog .mdl-selectfield__label:after{
+  bottom: 16px;
+}

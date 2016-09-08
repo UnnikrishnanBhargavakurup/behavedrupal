@@ -1,0 +1,11 @@
+services:
+  # can be removed once https://www.drupal.org/node/2419825 is fixed.
+  serializer.normalizer.behaviour_builder.json:
+    class: Drupal\behaviour_builder\normalizer\JsonDenormalizer
+    tags:
+      - { name: normalizer }
+      
+  #behave.page_cache_request_policy:
+  #  class: Drupal\behaviour_builder\PageCache\BehaveRequestPolicy
+  #  tags:
+  #    - { name: page_cache_request_policy }

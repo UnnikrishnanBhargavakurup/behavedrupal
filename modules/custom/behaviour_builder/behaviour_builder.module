@@ -1,0 +1,35 @@
+<?php
+
+/**
+ * @file
+ * Contains behaviour_builder.module..
+ */
+
+use Drupal\Core\Routing\RouteMatchInterface;
+
+/**
+ * Implements hook_help().
+ */
+function behaviour_builder_help($route_name, RouteMatchInterface $route_match) {
+  switch ($route_name) {
+    // Main module help for the behaviour_builder module.
+    case 'help.page.behaviour_builder':
+      $output = '';
+      $output .= '<h3>' . t('About') . '</h3>';
+      $output .= '<p>' . t('For generating code for behaviour testing in drupal using behat.') . '</p>';
+      return $output;
+
+    default:
+  }
+}
+
+/**
+ * Implements hook_theme().
+ */
+function behaviour_builder_theme($existing, $type, $theme, $path) {
+  return array(
+    'home' => array(
+      'variables' => array('test_var' => NULL),
+    ),
+  );
+}

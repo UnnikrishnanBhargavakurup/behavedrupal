@@ -1,0 +1,15 @@
+services:
+  whoops.error_subscriber:
+    class: Drupal\whoops\EventSubscriber\DefaultErrorSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
+  whoops.exception_subscriber:
+    class: Drupal\whoops\EventSubscriber\DefaultExceptionSubscriber
+    tags:
+      - { name: 'event_subscriber' }
+
+  whoops.json_exception_subscriber:
+    class: Drupal\whoops\EventSubscriber\JsonExceptionSubscriber
+    tags:
+      - { name: 'event_subscriber' }

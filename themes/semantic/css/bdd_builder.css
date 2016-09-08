@@ -1,0 +1,91 @@
+.bdd_builder .accordion {
+  display: none;
+}
+
+.bdd_builder .accordion .title {
+  overflow: hidden;
+}
+
+#bdd_features .content.active {
+  display: block;
+  overflow: hidden;
+}
+
+.accordion,
+.ui.accordion .accordion/* for override from sematic.css*/ {
+  margin-bottom: 0.5em;
+}
+
+.add_scenario_form {
+  margin-top: 2em;
+}
+
+.content .add_description {
+  margin-top: 0.5em;
+}
+
+.help-text {
+  opacity: 0;
+  min-height: 1.5em;
+  color: green;
+  margin-bottom: 0.2em;
+}
+
+.pre-existing .ui.styled.accordion {
+  width:100%;
+}
+
+.table-form {
+  display: none;
+}
+
+#bdd_features .action-advanced.accordion {
+  display: block;
+  border-radius: 0;
+  background: #FFF;
+  box-shadow: none;
+  color: black;
+  margin: 0;
+}
+
+#bdd_features .action-advanced.accordion .content { 
+  padding: 0 1em;
+}
+
+.code-generate {
+  text-align: center;
+}
+
+
+actions {
+  display: block;
+  overflow: hidden;
+}
+
+/* this cause issues in mac safari */
+/*
+actions table {
+  table-layout:fixed;
+  width: 100%;
+}
+*/
+
+#bdd_features tfoot input[type="text"] {
+  width: 100%; /*Showing problems in low resolution screens */
+}
+
+#bdd_features tr td.tbl-actions {
+  text-align: right;
+}
+
+.ui.button.btn-close {
+  background: white;
+}
+
+.ui.button.btn-close:hover {
+  background-color: #CACBCD;
+}
+
+.bdd_scenario {
+  display: none;
+}

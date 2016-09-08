@@ -1,0 +1,45 @@
+<h2>1. What is behavior testing?</h2>
+
+<p>Behavior testing is testing your applications behavior(feature) in different scenarios when enduser is using it(doing some actions).</p>
+<h2>2. Tell me an example</h2>
+<p>Following is an example of testing user authentication feature using behaviour testing.</p>
+<pre>
+Feature: User authentication. Log in and out of the site.
+  In order to maintain an account
+    As a site visitor
+    I need to log in and out of the site.
+
+Scenario: Logs in to the site
+  Given I am on "/"
+  When I follow "Log In"
+    And I fill in "Username" with "user"
+    And I fill in "Password" with "userpassword"
+    And I press "Log in"
+  Then I should see "Log out"
+    And I should see "My account"
+
+Scenario: Logs out of the site
+  Given I am on "/"
+  When I follow "Log In"
+    And I fill in "Username" with "user"
+    And I fill in "Password" with "userpassword"
+    And I press "Log in"
+    And I follow "Log out"
+  Then I should see "Log in"
+    And I should not see "My account"
+
+Scenario: Attempts login with wrong credentials.
+  Given I am on "/"
+  When I follow "Log In"
+    And I fill in "Username" with "badusername"
+    And I fill in "Password" with "boguspass"
+    And I press "Log in"
+  Then I should see "Sorry, unrecognized username or password."
+    And I should not see "My account"
+
+</pre>
+<h2>2. So how we do this behavior testing in Drupal?</h2>
+
+<p>We use opensource tool behat for behaviorist testing in Drupal.</p>
+
+<p>Here we go though a simple step by step process to generate all the behavior testing needs for your Drupal project. We will auto generate all the code for you.</p>

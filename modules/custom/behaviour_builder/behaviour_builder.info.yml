@@ -1,0 +1,5 @@
+name: Behaviour builder
+type: module
+description: For generating code for behaviour testing in drupal using behat.
+core: 8.x
+package: BDD

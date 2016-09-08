@@ -1,0 +1,12 @@
+bdd_builder.home:
+  path: '/index.html'
+  defaults:
+    _controller: '\Drupal\behaviour_builder\Controller\BehaviourBuilderController::home'
+  requirements:
+    _permission: 'access content'
+bdd_builder.ide:
+  path: '/ide.html'
+  defaults:
+    _controller: '\Drupal\behaviour_builder\Controller\BehaviourBuilderController::ide'
+  requirements:
+    _permission: 'access content'
