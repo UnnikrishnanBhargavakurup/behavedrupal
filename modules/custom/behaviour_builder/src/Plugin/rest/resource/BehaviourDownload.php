@@ -19,6 +19,7 @@ use Drupal\Core\File\FileSystem;
 use \ZipArchive;
 use \RecursiveIteratorIterator;
 use \RecursiveDirectoryIterator;
+use Drupal\behaviour_builder;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -138,6 +139,7 @@ class BehaviourDownload extends ResourceBase {
    *
    */
   private function prepareBuild($features = array(), $base_url = "http://localhost/") {
+    
     $unique_name = uniqid();
     $build_path = 'public://downloads/'. $unique_name .'/build/build';
     file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
@@ -157,6 +159,7 @@ class BehaviourDownload extends ResourceBase {
     if($base_url != 'http://localhost/') {
       $this->addBasePath(drupal_realpath('public://downloads/'. $unique_name .'/build/build/tests/behat/behat.local.yml'), $base_url);
     }
+
     $destination = "public://downloads/". $unique_name ."/build/build/tests/behat/features/";
     file_prepare_directory($destination, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
     drupal_mkdir($destination, NULL, TRUE);
