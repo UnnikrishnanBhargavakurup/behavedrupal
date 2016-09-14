@@ -1,0 +1,74 @@
+<?php
+
+/**
+ * @file
+ * Install, update and uninstall functions for behavedrupal module.
+ */
+
+/**
+ * Implements hook_schema().
+ */
+function behaviour_builder_schema() {
+  $schema['behave_builds'] = array(
+    'description' => 'Stores builds for downloading the features for the user.',
+    'fields' => array(
+      'id' => array(
+        'description' => 'Primary Key: unique ID for the build.',
+        'type' => 'serial',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+      ),
+      'session' => array(
+        'description' => 'unique id for the current user session',
+        'type' => 'varchar_ascii',
+        'length' => 50,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'uid' => array(
+        'description' => 'Id of the user session belongs to',
+        'type' => 'int',
+        'unsigned' => TRUE,
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'ip' => array(
+        'description' => 'IP address',
+        'type' => 'varchar_ascii',
+        'length' => 40,
+        'not null' => TRUE,
+        'default' => '',
+      ),
+      'created' => array(
+        'description' => 'Unix timestamp of when build saved.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'updated' => array(
+        'description' => 'Unix timestamp of when build updated.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'build_no' => array(
+        'description' => 'build number for this workspace.',
+        'type' => 'int',
+        'not null' => TRUE,
+        'default' => 0,
+      ),
+      'data' => array(
+        'description' => 'Data for the current workspace build',
+        'type' => 'blob',
+        'not null' => TRUE,
+        'size' => 'big',
+      ),
+    ),
+    'indexes' => array(
+      'session' => array('session'),
+      'uid' => array('uid'),
+    ),
+    'primary key' => array('id'),
+  );
+  return $schema;
+}
