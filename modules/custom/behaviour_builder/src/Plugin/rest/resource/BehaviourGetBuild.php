@@ -106,13 +106,7 @@ class BehaviourGetBuild extends ResourceBase {
    *   Throws exception expected.
    */
   public function get($id) {
-    if(isset($_SESSION['behave_drupal']['SESSIONWORKSPACE'])) {
-      $session = $_SESSION['behave_drupal']['SESSIONWORKSPACE'];
-    }
-    else {
-      $session = $id;
-    }
-    $data = array();
+    $session = filter_var($id, FILTER_SANITIZE_STRING);
     $saved_data = $this->connection
       ->select('behave_builds', 'b')
       ->fields('b', array('data', 'build_no'))
@@ -137,6 +131,6 @@ class BehaviourGetBuild extends ResourceBase {
         return $response;
       }
     }
-    return new ResourceResponse(array("result" => $data));
+    return new ResourceResponse(array());
   }
 }
