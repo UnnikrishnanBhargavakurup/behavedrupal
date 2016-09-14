@@ -1,10 +1,5 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\unlimited_number\Plugin\Field\FieldWidget\UnlimitedNumberWidget.
- */
-
 namespace Drupal\unlimited_number\Plugin\Field\FieldWidget;
 
 use Drupal\Core\Field\Plugin\Field\FieldWidget\NumberWidget;
@@ -43,16 +38,16 @@ class UnlimitedNumberWidget extends NumberWidget {
 
     $element['label_unlimited'] = [
       '#type' => 'textfield',
-      '#title' => t('Unlimited Label'),
+      '#title' => $this->t('Unlimited Label'),
       '#default_value' => $this->getSetting('label_unlimited'),
-      '#description' => t('Text that will be used for the unlimited radio.'),
+      '#description' => $this->t('Text that will be used for the unlimited radio.'),
     ];
 
     $element['label_number'] = [
       '#type' => 'textfield',
-      '#title' => t('Number Label'),
+      '#title' => $this->t('Number Label'),
       '#default_value' => $this->getSetting('label_number'),
-      '#description' => t('Text that will be used for the number radio.'),
+      '#description' => $this->t('Text that will be used for the number radio.'),
     ];
 
     return $element;

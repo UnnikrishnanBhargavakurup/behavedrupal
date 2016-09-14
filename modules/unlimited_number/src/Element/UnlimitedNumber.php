@@ -1,16 +1,9 @@
 <?php
 
-/**
- * @file
- * Contains \Drupal\inline_entity_form\Element\UnlimitedNumber.
- */
-
 namespace Drupal\unlimited_number\Element;
 
-use Drupal\Core\Render\Element;
 use Drupal\Core\Render\Element\FormElement;
 use Drupal\Core\Form\FormStateInterface;
-use Drupal\Component\Utility\SafeMarkup;
 
 /**
  * Provides an unlimited or number radios element
@@ -72,7 +65,7 @@ class UnlimitedNumber extends FormElement {
     ];
     $element['unlimited_number']['unlimited']['radio'] = [
       '#type' => 'radio',
-      '#title' => !empty($element['#options']['unlimited']) ? SafeMarkup::checkPlain($element['#options']['unlimited']) : t('Unlimited'),
+      '#title' => !empty($element['#options']['unlimited']) ? $element['#options']['unlimited'] : t('Unlimited'),
       '#return_value' => 'unlimited',
       '#parents' => array_merge($element['#parents'], ['unlimited_number']),
       '#default_value' => $value == static::UNLIMITED ? 'unlimited' : NULL,
@@ -89,7 +82,7 @@ class UnlimitedNumber extends FormElement {
 
     $element['unlimited_number']['limited']['radio'] = [
       '#type' => 'radio',
-      '#title' => !empty($element['#options']['limited']) ? SafeMarkup::checkPlain($element['#options']['limited']) : t('Limited'),
+      '#title' => !empty($element['#options']['limited']) ? $element['#options']['limited'] : t('Limited'),
       '#return_value' => 'limited',
       '#parents' => array_merge($element['#parents'], ['unlimited_number']),
       '#default_value' => is_numeric($value) ? 'limited' : NULL,
@@ -175,4 +168,5 @@ class UnlimitedNumber extends FormElement {
     $element['#has_garbage_value'] = TRUE;
     return NULL;
   }
+
 }
