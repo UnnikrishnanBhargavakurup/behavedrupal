@@ -88,16 +88,14 @@ class EarlyRenderingControllerWrapperSubscriber implements EventSubscriberInterf
    *   The controller event.
    */
   public function onController(FilterControllerEvent $event) {
-    if ($event->getRequest()->getMethod() == 'GET') {
-      $controller = $event->getController();
+    $controller = $event->getController();
 
-      // See \Symfony\Component\HttpKernel\HttpKernel::handleRaw().
-      $arguments = $this->controllerResolver->getArguments($event->getRequest(), $controller);
+    // See \Symfony\Component\HttpKernel\HttpKernel::handleRaw().
+    $arguments = $this->controllerResolver->getArguments($event->getRequest(), $controller);
 
-      $event->setController(function () use ($controller, $arguments) {
-        return $this->wrapControllerExecutionInRenderContext($controller, $arguments);
-      });
-    }
+    $event->setController(function() use ($controller, $arguments) {
+      return $this->wrapControllerExecutionInRenderContext($controller, $arguments);
+    });
   }
 
   /**
