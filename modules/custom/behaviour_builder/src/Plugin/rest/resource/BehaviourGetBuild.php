@@ -10,26 +10,24 @@ use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Psr\Log\LoggerInterface;
 use Drupal\rest\Plugin\rest\resource;
 use Drupal\Core\Url;
-use Drupal\Core\Form\FormState;
 use Symfony\Component\HttpFoundation\Response;
-use Drupal\Core\Entity\EntityFormBuilderInterface;
-use Drupal\Core\Entity\EntityTypeManagerInterface;
 use Drupal\node\Entity\Node;
-use Drupal\Core\Entity\Query\QueryFactory;
-
-use Drupal\Core\Database\Connection;
-use Drupal\Core\Database\Database;
-use Drupal\Core\Database\DatabaseException;
+use Drupal\Core\File\FileSystem;
+use \ZipArchive;
+use \RecursiveIteratorIterator;
+use \RecursiveDirectoryIterator;
 
 use Drupal\behaviour_builder\BehaveCommon;
+
 /**
  * Provides a resource to get view modes by entity and bundle.
  *
  * @RestResource(
- *   id = "behaviour_get_build",
- *   label = @Translation("Behaviour builder get build"),
+ *   id = "behaviour_download_build",
+ *   label = @Translation("Behaviour download build"),
  *   uri_paths = {
- *     "canonical" = "/behave/build/{id}"
+ *     "canonical" = "/behave/download-build",
+ *     "https://www.drupal.org/link-relations/create" = "/behave/download-build"
  *   },
  *   serialization_class = "Drupal\behaviour_builder\normalizer\JsonDenormalizer",
  * )
@@ -42,13 +40,6 @@ class BehaviourGetBuild extends ResourceBase {
    * @var \Drupal\Core\Session\AccountProxyInterface
    */
   protected $currentUser;
-
-  /**
-   * The database connection object.
-   *
-   * @var \Drupal\Core\Database\Connection
-   */
-  protected $connection; 
   
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -72,13 +63,10 @@ class BehaviourGetBuild extends ResourceBase {
     $plugin_definition,
     array $serializer_formats,
     LoggerInterface $logger,
-    AccountProxyInterface $current_user,
-    QueryFactory $entity_query,
-    Connection $connection) {
+    AccountProxyInterface $current_user) {
     parent::__construct($configuration, $plugin_id, $plugin_definition, $serializer_formats, $logger);
 
     $this->currentUser = $current_user;
-    $this->connection = $connection;
   }
 
   /**
@@ -91,9 +79,7 @@ class BehaviourGetBuild extends ResourceBase {
       $plugin_definition,
       $container->getParameter('serializer.formats'),
       $container->get('logger.factory')->get('behaviour_builder'),
-      $container->get('current_user'),
-      $container->get('entity.query'),
-      $container->get('database')
+      $container->get('current_user')
     );
   }
 
@@ -105,32 +91,49 @@ class BehaviourGetBuild extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function get($id) {
-    $session = filter_var($id, FILTER_SANITIZE_STRING);
-    $saved_data = $this->connection
-      ->select('behave_builds', 'b')
-      ->fields('b', array('data', 'build_no'))
-      ->condition('b.session', $session)
-      ->condition('b.created', time() - (60 * 60 * 24 * 10), '>')
-      ->execute()->fetch(\PDO::FETCH_OBJ);
-    if(isset($saved_data) && !empty($saved_data)) {
-      $features = json_decode($saved_data->data);
-      $build_path = 'public://downloads/'. $session .'/features/features/';
-      file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
-      foreach ($features as $feature) {
-        BehaveCommon::writeFeatureData($feature, $build_path);
+  public function post($data) {
+    $url = '';
+    if(isset($data['base_url']) && isset($_SESSION['behave_drupal']['SESSIONWORKSPACE'])) {
+      $session = $_SESSION['behave_drupal']['SESSIONWORKSPACE'];
+      $build_path = 'public://downloads/'. $session .'/build/build';
+      file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
+      //BehaveCommon::delete($build_path);
+      $dest = drupal_realpath('public://downloads/'. $session .'/build/build/');
+      $sorce = drupal_realpath(drupal_get_path('module', 'behaviour_builder') . '/build_template/build');
+      foreach (
+       $iterator = new \RecursiveIteratorIterator(
+        new \RecursiveDirectoryIterator($sorce, \RecursiveDirectoryIterator::SKIP_DOTS),
+        \RecursiveIteratorIterator::SELF_FIRST) as $item
+      ) {
+        if ($item->isDir()) {
+          mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        } else {
+          copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
+        }
       }
-      BehaveCommon::archive('public://downloads/'. $session .'/features/', 'public://downloads/'. $session .'/features.zip');
-      if(file_exists('public://downloads/'. $session .'/features.zip')) {
-        $response = new Response();
-        $response->headers->set('Content-Type', 'application/zip');
-        $response->headers->set('Content-Disposition', 'attachment; filename=features.zip');
-        $response->headers->set('Content-Length', filesize('public://downloads/'. $session .'/features.zip'));
-        $response->sendHeaders();
-        $response->setContent(file_get_contents('public://downloads/'. $session .'/features.zip'));
-        return $response;
+      // add base_url in local behat config
+      if($base_url != 'http://localhost/') {
+        BehaveCommon::replaceInFile(
+          'LOCALHOST', 
+          $data['base_url'],
+          drupal_realpath('public://downloads/'. $session .'/build/build/tests/behat/behat.local.yml')
+        );
+      }
+      // add session for building the project form comandline
+      BehaveCommon::replaceInFile(
+        'SESSIONID', 
+        $session,
+        drupal_realpath('public://downloads/'. $session .'/build/build/phing/build.properties')
+      );
+      // archive the file
+      BehaveCommon::archive('public://downloads/'. $session .'/build/', 'public://downloads/'. $session .'/build.zip');
+      if(file_exists('public://downloads/'. $session .'/build.zip')) {
+        $url = Url::fromUri(file_create_url('public://downloads/'. $session .'/build.zip'))->getUri();
       }
     }
-    return new ResourceResponse(array());
+    else {
+      //something went wrong here.
+    }
+    return new ResourceResponse(array("url" => $url));
   }
 }
