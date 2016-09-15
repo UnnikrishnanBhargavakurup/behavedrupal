@@ -70,15 +70,21 @@
     </target>
 
     <target name="check_config" description="Check system configuration for Java and PHP." >
+
+      <property name="canInstall" value="true" />
+
       <!-- Scan Java version-->
       <exec level="debug" command="java -version" outputProperty="javaVersionParagraph" />
+
       <php level="debug" expression="substr('${javaVersionParagraph}', 14, 5)" returnProperty="javaVersion" />
-      <php level="debug" expression="version_compare('${javaVersion}', '1.6') >= 0" returnProperty="javaVersionCheck" />
+
+      <php level="debug" expression="version_compare('${javaVersion}', '1.6.0') >= 0" returnProperty="javaVersionCheck" />
+
       <php level="debug" expression="version_compare('${javaVersion}', '0.1') >= 0" returnProperty="javaInstalled" />
 
       <!-- Scan PHP version -->
       <php level="debug" expression="version_compare(PHP_VERSION, '5.3') >= 0" returnProperty="phpversioncheck" />
-      <property name="canInstall" value="true" />
+
       <if>
         <equals arg1="${javaVersionCheck}" arg2="true" />
         <then>
@@ -108,21 +114,23 @@
           <warn level="error" message="[ ] PHP version ${php.version} should be at least 5.3" />
         </else>
       </if>
+
       <!--  We need java and php for this -->
-      <fail message="System requrement not met pease check your java and php installactions.">
-        <condition>
-          <equals arg1="canInstall" arg2="false" />
-        </condition>
-      </fail> 
+      <if>
+        <equals arg1="${canInstall}" arg2="false" />
+        <then>
+          <fail message="System requrement not met pease check your java and php installactions." />
+        </then>
+      </if>
 
       <!-- set default browser if not specified in comman line. -->
       <if>
         <not>
           <isset property="browser" />
         </not>
-          <echo message="Browser not specified in commanline taking chrome as default."\>
-          <property name="browser" value="chrome" />
         <then>
+          <echo message="Browser not specified in commanline, taking chrome as default." />
+          <property name="browser" value="chrome" />
         </then>
       </if>
 
@@ -162,7 +170,6 @@
           <filereplace browser="firefox" file="${behat.local}" />
           <php expression="'-Dwebdriver.gecko.driver=${firefox.driver}'" returnProperty="selenium.browser"/>
         </then>
-      </elseif>
       <elseif>
         <equals arg1="${browser}" arg2="chrome" />
         <then>
@@ -195,7 +202,6 @@
         <then>
           <phingcall target="setup-webdriver-firefox" />
         </then>
-      </elseif>
       <elseif>
         <equals arg1="${browser}" arg2="chrome" />
         <then>
@@ -213,9 +219,7 @@
     <!-- End of webdrivers setup -->
 
     <!-- Set up firefox driver -->
-    <target name="setup-webdriver-firefox"
-          depends="init"
-          unless="project.setup_webdriver_firefox">
+    <target name="setup-webdriver-firefox" unless="project.setup_webdriver_firefox">
       <if>
         <os family="mac" />
         <then>
@@ -256,7 +260,6 @@
 
     <!-- Set up chrome driver -->
     <target name="setup-webdriver-chrome"
-          depends="init"
           unless="project.setup_webdriver_chrome">
       <if>
         <os family="mac" />
@@ -298,7 +301,6 @@
 
     <!-- Set up opera driver -->
     <target name="setup-webdriver-opera"
-          depends="init"
           unless="project.setup_webdriver_opera">
       <if>
         <os family="mac" />

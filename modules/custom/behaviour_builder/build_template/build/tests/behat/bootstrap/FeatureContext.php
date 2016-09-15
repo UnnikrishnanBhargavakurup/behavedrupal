@@ -199,6 +199,73 @@ JS;
     $this->assertSession()->elementExists('css', 'input[value=Next][type=submit]');
     return new Given('I should not see "is protected from cancellation, and was not cancelled."');
   }
+  //http://stackoverflow.com/questions/28510155/how-to-get-the-mink-selenium-2-driver-to-wait-for-the-page-to-load-with-behat
+  /**
+   * @When I wait for :text to appear
+   * @Then I should see :text appear
+   * @param $text
+   * @throws \Exception
+   */
+  public function iWaitForTextToAppear($text)
+  {
+      $this->spin(function(FeatureContext $context) use ($text) {
+          try {
+              $context->assertPageContainsText($text);
+              return true;
+          }
+          catch(ResponseTextException $e) {
+              // NOOP
+          }
+          return false;
+      });
+  }
+
+
+  /**
+   * @When I wait for :text to disappear
+   * @Then I should see :text disappear
+   * @param $text
+   * @throws \Exception
+   */
+  public function iWaitForTextToDisappear($text)
+  {
+      $this->spin(function(FeatureContext $context) use ($text) {
+          try {
+              $context->assertPageContainsText($text);
+          }
+          catch(ResponseTextException $e) {
+              return true;
+          }
+          return false;
+      });
+  }
+
+  /**
+   * Based on Behat's own example
+   * @see http://docs.behat.org/en/v2.5/cookbook/using_spin_functions.html#adding-a-timeout
+   * @param $lambda
+   * @param int $wait
+   * @throws \Exception
+   */
+  public function spin($lambda, $wait = 60)
+  {
+      $time = time();
+      $stopTime = $time + $wait;
+      while (time() < $stopTime)
+      {
+          try {
+              if ($lambda($this)) {
+                  return;
+              }
+          } catch (\Exception $e) {
+              // do nothing
+          }
+
+          usleep(250000);
+      }
+
+      throw new \Exception("Spin function timed out after {$wait} seconds");
+  }
 
   /**
    * @AfterStep
@@ -211,7 +278,7 @@ JS;
         return;
       }
       $this->getSession()->resizeWindow(1440, 900, 'current');
-      file_put_contents('./screenshot-fail.png', $this->getSession()->getDriver()->getScreenshot());
+      file_put_contents('build/screenshot-fail.png', $this->getSession()->getDriver()->getScreenshot());
     }
   }
 

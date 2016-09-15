@@ -9,7 +9,7 @@ class FileReplaceTask extends Task {
 
     public function main() {
       $file_contents = file_get_contents($this->file);
-      $file_contents = preg_replace("/browser_name:\s?firefox|chrome|phantomjs|opera/m", 'browser_name: '. $this->browser, $file_contents);
+      $file_contents = preg_replace("/browser_name:.*$/m", 'browser_name: '. $this->browser, $file_contents);
       file_put_contents($this->file, $file_contents);
     }
 
