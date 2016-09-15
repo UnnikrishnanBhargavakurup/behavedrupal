@@ -1,0 +1,408 @@
+<!--
+  name: build.xml
+  description: The main project build file for setting up the enviorment for behaviour testing.
+-->
+
+<!--
+ commandline params -Dbrowser=firefox
+
+ https://github.com/qinty/phpunit-selenium-env/blob/master/build.xml
+
+ http://stackoverflow.com/questions/6517501/selenium-2-how-to-check-that-server-is-running-and-stop-the-server
+
+ http://stackoverflow.com/questions/5142139/how-to-check-if-selenium-server-is-running-in-background
+-->
+<project name="behavedrupal" default="build" phingVersion="2.8.2">
+
+    <!-- Additional task classes -->
+    <includepath classpath="${project.basedir}/phingcludes"/>
+
+    <taskdef name="behat" classname="phingcludes.BehatTask"/>
+
+    <taskdef name="backgroundexec" classname="phingcludes.BackgroundExecTask"/>
+
+    <taskdef name="filereplace" classname="phingcludes.FileReplaceTask"/>
+
+    <!-- end of tasks -->
+    
+    <property file="${project.basedir}/build.properties" override="true"/>
+
+
+    <!-- Application -->
+    <property name="repo.root.relative" value="${project.basedir}/../.."/>
+    <resolvepath propertyName="repo.root" file="${repo.root.relative}"/>
+
+    <!-- Composer & Behat -->
+    <property name="composer.bin" value="${repo.root}/build/bin"/>
+
+    <property name="features"
+              value="${repo.root}/build/tests/behat/features" />
+
+    <property name="behat_root"
+              value="${repo.root}/build/tests/behat" />
+
+    <property name="behat.config"
+              value="${repo.root}/build/tests/behat/behat.yml"/>
+    <property name="behat.local"
+              value="${repo.root}/build/tests/behat/behat.local.yml"/>
+
+    <property name="phantomjs.bin"
+              value="${composer.bin}/phantomjs" />
+
+    <property name="selenium.bin"
+              value="${composer.bin}/selenium-server-standalone-3.0.0-beta3.jar" />
+
+    <property name="chrome.driver"
+              value="${composer.bin}/webdriver/chromedriver" />
+
+    <property name="firefox.driver"
+              value="${composer.bin}/webdriver/geckodriver" />
+
+    <property name="opera.driver"
+              value="${composer.bin}/webdriver/geckodriver" />
+
+    <!-- Targets       -->
+
+    <target name="build"
+            description="Run all the behaviour test features defined."
+            depends="test:behat">
+        <backgroundexec pid="selenium_pid" command="stop" />
+    </target>
+
+    <target name="check_config" description="Check system configuration for Java and PHP." >
+      <!-- Scan Java version-->
+      <exec level="debug" command="java -version" outputProperty="javaVersionParagraph" />
+      <php level="debug" expression="substr('${javaVersionParagraph}', 14, 5)" returnProperty="javaVersion" />
+      <php level="debug" expression="version_compare('${javaVersion}', '1.6') >= 0" returnProperty="javaVersionCheck" />
+      <php level="debug" expression="version_compare('${javaVersion}', '0.1') >= 0" returnProperty="javaInstalled" />
+
+      <!-- Scan PHP version -->
+      <php level="debug" expression="version_compare(PHP_VERSION, '5.3') >= 0" returnProperty="phpversioncheck" />
+      <property name="canInstall" value="true" />
+      <if>
+        <equals arg1="${javaVersionCheck}" arg2="true" />
+        <then>
+          <echo>[x] Java version ${javaVersion}</echo>
+        </then>
+        <else>
+          <property name="canInstall" value="false" />
+          <if>
+            <equals arg1="${javaInstalled}" arg2="false" />
+            <then>
+              <warn level="error" message="[ ] Java is not installed or accessible." />
+            </then>
+            <else>
+              <warn level="error" message="[ ] Java version ${javaVersion} should be at least 1.6" />
+            </else>
+          </if>
+        </else>
+      </if>
+
+      <if>
+        <equals arg1="${phpversioncheck}" arg2="true" />
+        <then>
+          <echo>[x] PHP version ${php.version}</echo>
+        </then>
+        <else>
+          <property name="canInstall" value="false" />
+          <warn level="error" message="[ ] PHP version ${php.version} should be at least 5.3" />
+        </else>
+      </if>
+      <!--  We need java and php for this -->
+      <fail message="System requrement not met pease check your java and php installactions.">
+        <condition>
+          <equals arg1="canInstall" arg2="false" />
+        </condition>
+      </fail> 
+
+      <!-- set default browser if not specified in comman line. -->
+      <if>
+        <not>
+          <isset property="browser" />
+        </not>
+          <echo message="Browser not specified in commanline taking chrome as default."\>
+          <property name="browser" value="chrome" />
+        <then>
+        </then>
+      </if>
+
+
+    </target>
+    <target name="init" depends="check_config">
+
+      <condition property="project.setup_selenium" value="true">
+        <available file="selenium-server-standalone-3.0.0-beta3.jar" type="file" filepath="${composer.bin}" />
+      </condition>
+      
+      <if>
+        <available file='${composer.bin}/webdriver' type='dir' />
+        <then>
+          <condition property="project.setup_webdriver_firefox" value="true">
+            <available file="geckodriver" type="file" filepath="${composer.bin}/webdriver" />
+          </condition>
+
+          <condition property="project.setup_webdriver_chrome" value="true">
+            <available file="chromedriver" type="file" filepath="${composer.bin}/webdriver" />
+          </condition>
+
+          <condition property="project.setup_webdriver_opera" value="true">
+            <available file="operadriver" type="file" filepath="${composer.bin}/webdriver" />
+          </condition>
+        </then>
+        <else>
+          <mkdir dir="${composer.bin}/webdriver" />
+        </else>
+      </if>
+      <!-- we need to rewrite browser in configuration -->
+      <chmod file="${behat.local}" mode="0755" />
+
+      <if>
+        <equals arg1="${browser}" arg2="firefox" />
+        <then>
+          <filereplace browser="firefox" file="${behat.local}" />
+          <php expression="'-Dwebdriver.gecko.driver=${firefox.driver}'" returnProperty="selenium.browser"/>
+        </then>
+      </elseif>
+      <elseif>
+        <equals arg1="${browser}" arg2="chrome" />
+        <then>
+          <filereplace browser="chrome" file="${behat.local}" />
+          <php expression="'-Dwebdriver.chrome.driver=${chrome.driver}'" returnProperty="selenium.browser"/>
+        </then>
+      </elseif>
+      <elseif>
+        <equals arg1="${browser}" arg2="opera" />
+        <then>
+          <filereplace browser="opera" file="${behat.local}" />
+          <php expression="'-Dwebdriver.opera.driver=${opera.driver}'" returnProperty="selenium.browser"/>
+        </then>
+      </elseif>
+      </if>
+    </target>
+
+    <!-- set up selenium server for the fist time -->
+    <target name="setup-selenium-server" depends="init" unless="project.setup_selenium">
+
+      <httpget url="${selenium_server.url}"
+             dir="${composer.bin}"
+             />
+    </target>
+
+    <!-- Set up webdrivers for the test -->
+    <target name="setup-webdriver" depends="setup-selenium-server">
+      <if>       
+        <equals arg1="${browser}" arg2="firefox" />
+        <then>
+          <phingcall target="setup-webdriver-firefox" />
+        </then>
+      </elseif>
+      <elseif>
+        <equals arg1="${browser}" arg2="chrome" />
+        <then>
+          <phingcall target="setup-webdriver-chrome" />
+        </then>
+      </elseif>
+      <elseif>
+        <equals arg1="${browser}" arg2="opera" />
+        <then>
+          <phingcall target="setup-webdriver-opera" />
+        </then>
+      </elseif> 
+      </if>
+    </target>
+    <!-- End of webdrivers setup -->
+
+    <!-- Set up firefox driver -->
+    <target name="setup-webdriver-firefox"
+          depends="init"
+          unless="project.setup_webdriver_firefox">
+      <if>
+        <os family="mac" />
+        <then>
+          <httpget url="${firefox.mac_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" />
+          <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
+        </then>
+      <elseif>
+        <os family="unix" />
+        <then>
+          <httpget url="${firefox.unix_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-linux64.tar.gz" />
+          <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
+        </then>
+      </elseif>
+      <elseif>
+        <os family="windows" />
+        <then>
+          <httpget url="${firefox.win_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.tar.gz" />
+          <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
+        </then>
+      </elseif>
+      </if>
+      <property name="project.setup_webdriver_firefox"
+              value="true" />
+    </target>
+    <!-- End of firefox driver setup -->
+
+    <!-- Set up chrome driver -->
+    <target name="setup-webdriver-chrome"
+          depends="init"
+          unless="project.setup_webdriver_chrome">
+      <if>
+        <os family="mac" />
+        <then>
+          <httpget url="${chrome.mac_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <unzip file="${composer.bin}/webdriver/chromedriver_mac64.zip" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/chromedriver_mac64.zip" />
+          <chmod file="${composer.bin}/webdriver/chromedriver" mode="0755" />
+        </then>
+      <elseif>
+        <os family="unix" />
+        <then>
+          <httpget url="${chrome.unix_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <unzip file="${composer.bin}/webdriver/chromedriver_linux64.zip" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/chromedriver_linux64.zip" />
+          <chmod file="${composer.bin}/webdriver/chromedriver" mode="0755" />
+        </then>
+      </elseif>
+      <elseif>
+        <os family="windows" />
+        <then>
+          <httpget url="${chrome.win_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <unzip file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.zip" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.zip" />
+          <chmod file="${composer.bin}/webdriver/chromedriver" mode="0755" />
+        </then>
+      </elseif>
+      </if>
+      <property name="project.setup_webdriver_chrome"
+              value="true" />
+    </target>
+    <!-- End of chrome driver setup -->
+
+    <!-- Set up opera driver -->
+    <target name="setup-webdriver-opera"
+          depends="init"
+          unless="project.setup_webdriver_opera">
+      <if>
+        <os family="mac" />
+        <then>
+          <httpget url="${opera.mac_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" />
+          <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
+        </then>
+      <elseif>
+        <os family="unix" />
+        <then>
+          <httpget url="${opera.unix_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-linux64.tar.gz" />
+          <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
+        </then>
+      </elseif>
+      <elseif>
+        <os family="windows" />
+        <then>
+          <httpget url="${opera.win_url}"
+             dir="${composer.bin}/webdriver"
+             />
+          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.tar.gz" />
+          <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
+        </then>
+      </elseif>
+      </if>
+      <property name="project.setup_webdriver_opera"
+              value="true" />
+    </target>
+    <!-- End of opera driver setup -->
+
+    <!-- Launch  phantomjs enviorment -->
+    <target name="phantomjs:launch"
+          description="Launches a GhostDriver.">
+      <exec command="${phantomjs.bin} --webdriver=${server.port}"
+          passthru="true"
+          spawn="true"
+          checkreturn="true" />
+    </target>
+    <!-- End of phantomjs enviorment -->
+
+    <target name="selenium_server:launch"
+          description="Launching selenium server." depends="setup-webdriver">
+      <backgroundexec pid="selenium_pid" command="start" executable="java ${selenium.browser} -jar ${selenium.bin} -port ${server.port}" />
+    </target>
+    
+    <!-- Set up the enviorment before running the test -->
+    <target name="setup_environment" description="Setup selenium or phantomjs headless browser">
+      <if>
+        <equals arg1="${browser}" arg2="phantomjs" />
+        <then>
+          <phingcall target="phantomjs:launch" />
+        </then>
+      <else>
+        <phingcall target="selenium_server:launch" />
+      </else>
+      </if>      
+    </target>
+    <!-- Enf of enviorment setup -->
+
+    <!-- Set up the enviorment before running the test -->
+    <target name="download_features" description="Download features from current workspace data." depends="setup_environment">
+      <if>
+        <available file='${features}' type='dir' />
+        <then>
+          <delete dir="${features}" includeemptydirs="true" verbose="false" failonerror="true" />
+        </then>
+      </if>
+      <httpget filename="features.zip" url="${behave_server}/behave/features/${session_id}?_format=json" dir="${behat_root}" />
+      <unzip file="${behat_root}/features.zip" todir="${behat_root}" />
+      <delete file="${behat_root}/features.zip" />
+    </target>
+    <!-- Enf of enviorment setup -->
+
+
+    <!-- Running the test here -->
+    <target name="test:behat" description="Behat testing for behavedrupal" depends="download_features">
+        <!-- If behat.local.yml doesn't exist, behat will be a sad panda so create a stub to appease it. -->
+        <if>
+            <not>
+                <available file="${behat.local}" property="behat_local_exists" value="exists"/>
+            </not>
+            <then>
+                <echo message="# Local behat settings." file="${behat.local}"
+                      append="false"/>
+            </then>
+        </if>
+        <!-- Run behat. Any settings in behat.yml or behat.local.yml will be used. -->
+        <!-- haltonerror="true" -->
+        <behat executable="${composer.bin}/behat"
+               config="${behat.config}"
+               verbose="true"
+               strict="true"
+               returnProperty="behatPass"/>
+
+    </target>
+    <!-- Enf behat testing -->
+
+</project>
