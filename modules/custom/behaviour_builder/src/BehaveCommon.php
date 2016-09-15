@@ -17,9 +17,9 @@ class BehaveCommon {
   public static function replaceInFile($key, $replace, $file_path) {
     $content = file_get_contents($file_path);
     //replace something in the file string - this is a VERY simple example
-    $behat_local = str_replace($key, $replace, $content);
+    $content_processed = str_replace($key, $replace, $content);
     //write the entire string
-    file_put_contents($file_path, $content);    
+    file_put_contents($file_path, $content_processed);    
   }
 
   /**
@@ -137,23 +137,22 @@ class BehaveCommon {
    * Prepare build 
    */
   public static function prepareBuild($usr_folder, $base_url, $token) {
-    $build_path = 'public://downloads/'. $usr_folder .'/build/build';
-    file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY);
-    $dest = drupal_realpath('public://downloads/'. $usr_folder .'/build/build/');
-    foreach (
-     $iterator = new \RecursiveIteratorIterator(
-      new \RecursiveDirectoryIterator(drupal_realpath('public://build_template/build'), \RecursiveDirectoryIterator::SKIP_DOTS),
-      \RecursiveIteratorIterator::SELF_FIRST) as $item
-    ) {
-      if ($item->isDir()) {
-        mkdir($dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-      } else {
-        copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
-      }
+   
+  }
+
+  /**
+   * delete recursively 
+   */
+  public static function delete($path) {
+    $dir = drupal_realpath($path);
+    $files = new RecursiveIteratorIterator(
+      new RecursiveDirectoryIterator($dir, RecursiveDirectoryIterator::SKIP_DOTS),
+      RecursiveIteratorIterator::CHILD_FIRST
+    );
+    foreach ($files as $fileinfo) {
+      $todo = ($fileinfo->isDir() ? 'rmdir' : 'unlink');
+      $todo($fileinfo->getRealPath());
     }
-    // add base_url in local behat config
-    if($base_url != 'http://localhost/') {
-      self::replaceInFile('http://localhost/', $base_url, drupal_realpath('public://downloads/'. $usr_folder .'/build/build/tests/behat/behat.local.yml'));
-    }    
+    rmdir($dir);
   }
 }
