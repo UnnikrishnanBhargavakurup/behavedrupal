@@ -1427,20 +1427,19 @@
   $("#download_build").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
-    var base_path = $("#base_path").val();
-    if(base_path != "") {
+    var base_url = $("#base_path").val();
+    if(base_url != "") {
       $.ajax({
-        url : "/behave/download/?_format=json",
+        url : "/behave/download-build/?_format=json",
         method : "POST",
         beforeSend: function (request) {
           request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
           request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
         },
-        dataType: "json",
         data : JSON.stringify({
-          'data': get_data(),
-          'base_url' : base_path
+          "base_url" : base_url
         }),
+        dataType: "json",
         error: function(response) {
         },
         success : function(response) {
