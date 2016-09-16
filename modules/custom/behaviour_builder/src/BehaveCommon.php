@@ -90,7 +90,8 @@ class BehaveCommon {
           if(
               strrpos(strtolower($action->action), "ajax") !== false ||
               strrpos(strtolower($action->action), "javascript") !== false ||
-              strrpos(strtolower($action->action), "jautocomplet") !== false 
+              strrpos(strtolower($action->action), "jautocomplet") !== false ||
+              strrpos(strtolower($action->action), "click") !== false
             ) 
           {
             array_push($tags, "@javascript");
