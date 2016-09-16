@@ -199,7 +199,7 @@ JS;
     $this->assertSession()->elementExists('css', 'input[value=Next][type=submit]');
     return new Given('I should not see "is protected from cancellation, and was not cancelled."');
   }
-  //http://stackoverflow.com/questions/28510155/how-to-get-the-mink-selenium-2-driver-to-wait-for-the-page-to-load-with-behat
+
   /**
    * @When I wait for :text to appear
    * @Then I should see :text appear
@@ -208,18 +208,40 @@ JS;
    */
   public function iWaitForTextToAppear($text)
   {
-      $this->spin(function(FeatureContext $context) use ($text) {
-          try {
-              $context->assertPageContainsText($text);
-              return true;
-          }
-          catch(ResponseTextException $e) {
-              // NOOP
-          }
-          return false;
-      });
+    $this->spin(function(FeatureContext $context) use ($text) {
+      try {
+        $this->getSession()->getPage()->find('xpath', "//*[contains(text(), '". $text ."')]");
+        //  $context->assertPageContainsText($text);
+        return true;
+      }
+      catch(ResponseTextException $e) {
+          // NOOP
+      }
+      return false;
+    });
   }
 
+  /**
+   * @Given I set browser window size to :width x :height
+   */
+  public function iSetBrowserWindowSizeToX($width, $height) {
+    return $this->getSession()->resizeWindow((int)$width, (int)$height, 'current');
+  }
+
+  /**
+   * @When I query element with :cssselector and click
+   */
+  public function iQueryElementWithCSS($cssselector) {
+    return $this->getSession()->getPage()->find('css', $cssselector)->click();
+  }
+
+  /**
+   * @When I execute js script :script 
+   */
+  public function iExecuteJSScript($script) {
+    $this->getSession()->executeScript($script);
+    return true;
+  }
 
   /**
    * @When I wait for :text to disappear
@@ -229,15 +251,15 @@ JS;
    */
   public function iWaitForTextToDisappear($text)
   {
-      $this->spin(function(FeatureContext $context) use ($text) {
-          try {
-              $context->assertPageContainsText($text);
-          }
-          catch(ResponseTextException $e) {
-              return true;
-          }
-          return false;
-      });
+    $this->spin(function(FeatureContext $context) use ($text) {
+      try {
+        return !$this->getSession()->getPage()->find('xpath', "//*[contains(text(), '". $text ."')]");
+      }
+      catch(ResponseTextException $e) {
+        return true;
+      }
+      return false;
+    });
   }
 
   /**
@@ -249,22 +271,21 @@ JS;
    */
   public function spin($lambda, $wait = 60)
   {
-      $time = time();
-      $stopTime = $time + $wait;
-      while (time() < $stopTime)
-      {
-          try {
-              if ($lambda($this)) {
-                  return;
-              }
-          } catch (\Exception $e) {
-              // do nothing
-          }
-
-          usleep(250000);
+    $time = time();
+    $stopTime = $time + $wait;
+    while (time() < $stopTime) {
+      try {
+        if ($lambda($this)) {
+          return;
+        }
+      } 
+      catch (\Exception $e) {
+        // do nothing
       }
+      usleep(250000);
+    }
 
-      throw new \Exception("Spin function timed out after {$wait} seconds");
+    throw new \Exception("Spin function timed out after {$wait} seconds");
   }
 
   /**
@@ -278,19 +299,17 @@ JS;
         return;
       }
       $this->getSession()->resizeWindow(1440, 900, 'current');
-      file_put_contents('build/screenshot-fail.png', $this->getSession()->getDriver()->getScreenshot());
+      file_put_contents('./screenshot-fail.png', $this->getSession()->getDriver()->getScreenshot());
     }
   }
 
-/** @BeforeFeature */
-/*
-public static function setupFeature(BeforeFeatureScope $scope){ 
-              $feature = $scope->getFeature();
-              
-            foreach ($feature->getScenarios() as $tmp) {
-             print_r($tmp);
-           }
-}*/
+  /**
+   * @BeforeStep
+   */
+  public function beforeStep()
+  {
+   $this->getSession()->getDriver()->maximizeWindow();
+  }
 
   /**
    * Selects a user in the VBO list.

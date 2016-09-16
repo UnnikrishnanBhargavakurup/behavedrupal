@@ -352,7 +352,7 @@
 
     <target name="selenium_server:launch"
           description="Launching selenium server." depends="setup-webdriver">
-      <backgroundexec pid="selenium_pid" command="start" executable="java ${selenium.browser} -jar ${selenium.bin} -port ${server.port}" />
+      <backgroundexec pid="selenium_pid" command="start" executable="java ${selenium.browser} -jar ${selenium.bin} -port ${server.port} &gt; /dev/null 2&gt;&amp;1" />
     </target>
     
     <!-- Set up the enviorment before running the test -->
