@@ -609,7 +609,7 @@
                         <div class="line"></div>
                     </div>
                     <div>
-                        <div class="title">Download the features</div>
+                        <div class="title">Download the build</div>
                         <div class="body" style="padding-bottom: 0;text-align:center">
                           <div>
                             <button id="download_build" class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent">
@@ -625,12 +625,26 @@
                         <div class="line"></div>
                     </div>
                     <div>
-                        <div class="title">Install & Run</div>
+                        <div class="title">Install</div>
                         <div class="body">
-                         <p>Unzip the code to your drupal root directory & run the following commands</p>
+                         <p>Unzip the build to your drupal root directory & run the following commands</p>
 <pre class="language-markup">
   cd &lt;drupal root&gt;
   composer install --prefer-dist --working-dir=build
+</pre>
+                        </div>
+                    </div>
+                </div>
+                <div class="step">
+                    <div>
+                        <div class="circle">4</div>
+                        <div class="line"></div>
+                    </div>
+                    <div>
+                        <div class="title">Run</div>
+                        <div class="body">
+                         <p>To run the test use the following command, whenever you change anything in workspace run the following command to see that change in action.</p>
+<pre class="language-markup">
   build/bin/phing -f build/phing/build.xml                            
 </pre>
                         </div>

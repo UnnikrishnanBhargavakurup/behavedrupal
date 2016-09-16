@@ -705,6 +705,21 @@ var action_data = [
 		"tag" : ""
 	},
 	{
+		"t" : "Given I set browser window size to :width x :height",
+		"d" : [],
+		"tag" : ""
+	},
+	{
+		"t" : "When I query element with :cssselector and click",
+		"d" : [],
+		"tag" : ""
+	},
+	{
+		"t" : "When I execute js script :script",
+		"d" : [],
+		"tag" : ""
+	},
+	{
 		"t" : "When I wait for :text to disappear",
 		"d" : [],
 		"tag" : ""
@@ -753,4 +768,8 @@ var help_data = {
 	":arg1" : "Please specify a arg1 for :arg1 palce holder", 
 	":arg2" : "Please specify a arg2 for :arg2 palce holder", 
 	":iframe" : "Please specify a iframe for :iframe palce holder", 
+	":width" : "Please specify a width for :width palce holder", 
+	":height" : "Please specify a height for :height palce holder", 
+	":cssselector" : "Please specify a cssselector for :cssselector palce holder", 
+	":script" : "Please specify a script for :script palce holder", 
 };
