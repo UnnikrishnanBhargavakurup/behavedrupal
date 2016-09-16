@@ -690,7 +690,14 @@
     }
     else {
       hide_help();
-      addAction(action_txt);
+      var action_index = $(this).data('edit-index');
+      if(typeof action_index !== 'undefined') {
+        $("#"+ action_index).find('span').text(action_txt);
+        $(this).removeData('edit-index');
+      }
+      else {
+        addAction(action_txt);
+      }
       active_scenario.find('input:text').val('');
     }
     /*
@@ -1116,8 +1123,11 @@
     var action_ui = '<li id="action-'+ action_cnt +'" class="list-group-item">\
                        <i class="fa fa-bolt text-warning" aria-hidden="true"></i>\
                        <span>'+ action_txt +'</span>\
-                       <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close">\
+                       <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
                          <i class="material-icons">close</i>\
+                       </button>\
+                       <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
+                         <i class="material-icons">mode_edit</i>\
                        </button>';
     var data_patterns = action_txt.toLowerCase().match(/\w*:(?!\w)/g);  
     // we need to add some sample data for this action.
@@ -1248,8 +1258,11 @@
           action_ui += '<li id="action-'+ action_cnt +'" class="list-group-item">\
                        <i class="fa fa-bolt text-warning" aria-hidden="true"></i>\
                        <span>'+ action_txt +'</span>\
-                       <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close">\
+                       <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
                          <i class="material-icons">close</i>\
+                       </button>\
+                       <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
+                         <i class="material-icons">mode_edit</i>\
                        </button>';
 
           var data_patterns = action_txt.toLowerCase().match(/\w*:(?!\w)/g);  
@@ -1456,6 +1469,20 @@
     $('.run-error-msg').hide(); 
   });
 
+  /**
+   * Move dropdown to visibility.
+   */
+  $(".scenario-list").on( "click", ".btn-edit", function(e) {
+    e.preventDefault();
+    e.stopPropagation(); 
+    var action_txt = $(this).siblings('span').text();
+    var action_index = $(this).parent().attr('id');
+    $(this).closest('.panel-body').find('.action_txt').val(action_txt);
+    $(this).closest('.panel-body').find(':submit').data('edit-index', action_index);
+  });
+  /**
+   * Move dropdown to visibility.
+   */
   $(".scenario-list").on( "focusin", ".action_txt", function(e) {
     e.preventDefault();
     e.stopPropagation();

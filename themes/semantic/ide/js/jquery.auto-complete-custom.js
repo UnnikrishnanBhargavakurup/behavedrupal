@@ -72,7 +72,7 @@ function attach_autocomplete(selector) {
         else if (e.which == 13 || e.which == 9) {
           var sel = $('.autocomplete-suggestion.selected', dropDown);
           if (sel.length && dropDown.is(':visible')) { 
-              autocomplete_conf.onSelect(e, sel.data('val'), sel); 
+              //autocomplete_conf.onSelect(e, sel.data('val'), sel); 
               setTimeout(function() { 
                 dropDown.hide(); 
               }, 20); 
@@ -116,6 +116,9 @@ function attach_autocomplete(selector) {
         else {
           that.last_val = val;
           dropDown.hide();
+        }
+        if(val == "") {
+          $(".itm-scenario :submit").removeData('edit-index');
         }
       }
     });
@@ -268,6 +271,16 @@ function attach_autocomplete(selector) {
       }
     };
 
+    /**
+     * For accessing using mouse.
+     */
+    $('.autocomplete-suggestions').on('click', '.autocomplete-suggestion', function(e) {
+      e.preventDefault();
+      $(this).addClass('selected');
+      that.val($(this).data('val')); 
+      // we use this in behaviour_builder.js for accessing table data if any.
+      that.data('data-index', $(this).data('data-index'));     
+    });
   }(jQuery));   
 };
 
@@ -340,18 +353,18 @@ function renderItem(item, search, index) {
 }
 
 (function($) {
-    $(window).on('resize.autocomplete', function() {
-        if(!last_elm) {
-          return;
-        }
-        $('.autocomplete-suggestions').css({
-          top: last_elm.offset().top + last_elm.outerHeight(),
-          left: last_elm.offset().left,
-          width: last_elm.outerWidth()
-        });
-        if (!$('.autocomplete-suggestions').maxHeight) $('.autocomplete-suggestions').maxHeight = parseInt($('.autocomplete-suggestions').css('max-height'));
-        if (!$('.autocomplete-suggestions').suggestionHeight) $('.autocomplete-suggestions').suggestionHeight = $('.autocomplete-suggestion', $('.autocomplete-suggestions')).first().outerHeight();
-        if ($('.autocomplete-suggestions').suggestionHeight)
-        $('.autocomplete-suggestions').scrollTop(0);    
+  $(window).on('resize.autocomplete', function() {
+    if(!last_elm) {
+      return;
+    }
+    $('.autocomplete-suggestions').css({
+      top: last_elm.offset().top + last_elm.outerHeight(),
+      left: last_elm.offset().left,
+      width: last_elm.outerWidth()
     });
+    if (!$('.autocomplete-suggestions').maxHeight) $('.autocomplete-suggestions').maxHeight = parseInt($('.autocomplete-suggestions').css('max-height'));
+    if (!$('.autocomplete-suggestions').suggestionHeight) $('.autocomplete-suggestions').suggestionHeight = $('.autocomplete-suggestion', $('.autocomplete-suggestions')).first().outerHeight();
+    if ($('.autocomplete-suggestions').suggestionHeight)
+    $('.autocomplete-suggestions').scrollTop(0);    
+  });
 }(jQuery));  

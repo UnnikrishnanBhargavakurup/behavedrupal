@@ -93,6 +93,14 @@ div.xs{
   float: right !important;
 }
 
+.action-list .list-group-item .action-btn {
+  visibility: hidden;
+}
+
+.action-list .list-group-item:hover .action-btn {
+  visibility: visible;
+}
+
 .autocomplete-suggestions {
     text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
 
@@ -100,9 +108,24 @@ div.xs{
     position: absolute; display: none; z-index: 9999; max-height: 254px; overflow: hidden; overflow-y: auto; box-sizing: border-box;
     overflow-y: scroll;
 }
-.autocomplete-suggestion { position: relative; padding: 0 .6em; line-height: 23px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 1.02em; color: #333; }
-.autocomplete-suggestion b { font-weight: normal; color: #1f8dd6; }
-.autocomplete-suggestion.selected { background: #f0f0f0; }
+.autocomplete-suggestion { 
+  position: relative; 
+  padding: 0 .6em; 
+  line-height: 23px; 
+  white-space: nowrap; 
+  overflow: hidden; 
+  text-overflow: ellipsis; 
+  font-size: 1.02em; 
+  color: #333;
+  cursor: pointer; 
+}
+.autocomplete-suggestion b { 
+  font-weight: normal; 
+  color: #1f8dd6; 
+}
+.autocomplete-suggestion.selected { 
+  background: #f0f0f0; 
+}
 
 .itm-scenario {
   display: none;
@@ -571,7 +594,7 @@ dialog .mdl-layout__content {
 
 .dialog-run {
   width: 600px;
-  height: 665px;
+  height: 754px;
   top: 5%;
 }
 
@@ -618,14 +641,24 @@ dialog .mdl-layout__content {
 .stepper .step:last-child .line { 
   display: none !important; 
 }
+
+.stepper .step:last-child {
+  padding-bottom: 10px;
+}
+
 .stepper .title { 
   line-height: 32px; 
   font-weight: 500; 
 }
+
 .stepper .body {    
-  padding-bottom: 28px;
-    padding-top: 8px;
+  padding: 0;
 }
+
+.stepper .body pre{
+  margin-bottom: 0;
+}
+
 .stepper .description {
   line-height: 0.1;
     font-size: 1em;

@@ -277,127 +277,127 @@ var action_data = [
 	{
 		"t" : "Given I am an anonymous user",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am not logged in",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am logged in as a user with the :role roles",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am logged in as a/an :role",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am logged in as a user with the :role roles and I have the following fields:",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am logged in as :name",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am logged in as a user with the :permissions permissions",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Then I should see the text :text in the :rowText row",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Then I should not see the text :text in the :rowText row",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I click :link in the :rowText row",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Then I should see the :link in the :rowText row",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given the cache has been cleared",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I run cron",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am viewing a/an :type content with the title :title",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given a/an :type content with the title :title",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am viewing my :type content with the title :title",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given :type content:",
 		"d" : [["title", "author", "status", "created"], ["My title", "Joe Editor", "1", "2014-10-17 8:00am"]],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am viewing a/an :type content:",
 		"d" : [["title", "author", "status", "created"], ["My title", "Joe Editor", "1", "2014-10-17 8:00am"]],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Then I should be able to edit a/an :type content",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given I am viewing a/an :vocabulary term with the name :name",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given a/an :vocabulary term with the name :name",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given users:",
 		"d" : [["name", "mail", "roles"], ["user foo", "foo@bar.com", "role1, role2"]],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given :vocabulary terms:",
 		"d" : [["term1"], ["term2"], ["term3"]],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given the/these following languages are available:",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Then I break",
 		"d" : [],
-		"tag" : "api"
+		"tag" : ""
 	},
 	{
 		"t" : "Given am on homepage",
@@ -410,12 +410,12 @@ var action_data = [
 		"tag" : ""
 	},
 	{
-		"t" : "Given am on :page",
+		"t" : "Given am on \":page\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When go to :page",
+		"t" : "When go to \":page\"",
 		"d" : [],
 		"tag" : ""
 	},
@@ -435,27 +435,27 @@ var action_data = [
 		"tag" : ""
 	},
 	{
-		"t" : "When press :button",
+		"t" : "When press \":button\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When follow :link",
+		"t" : "When follow \":link\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When fill in :field with :value",
+		"t" : "When fill in \":field\" with \":value\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When fill in :field with:",
+		"t" : "When fill in \":field\" with:",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When fill in :value for :field",
+		"t" : "When fill in \":value\" for \":field\"",
 		"d" : [],
 		"tag" : ""
 	},
@@ -465,32 +465,32 @@ var action_data = [
 		"tag" : ""
 	},
 	{
-		"t" : "When select :option from :select",
+		"t" : "When select \":option\" from \":select\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When additionally select :option from :select",
+		"t" : "When additionally select \":option\" from \":select\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When check :option",
+		"t" : "When check \":option\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When uncheck :option",
+		"t" : "When uncheck \":option\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "When attach the file :path to :field",
+		"t" : "When attach the file \":path\" to \":field\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should be on :page",
+		"t" : "Then should be on \":page\"",
 		"d" : [],
 		"tag" : ""
 	},
@@ -500,7 +500,7 @@ var action_data = [
 		"tag" : ""
 	},
 	{
-		"t" : "Then the (?i)url(?-i) should match :pattern",
+		"t" : "Then the (?i)url(?-i) should match \":pattern\"",
 		"d" : [],
 		"tag" : ""
 	},
@@ -515,102 +515,102 @@ var action_data = [
 		"tag" : ""
 	},
 	{
-		"t" : "Then should see :text",
+		"t" : "Then should see \":text\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should not see :text",
+		"t" : "Then should not see \":text\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should see text matching :pattern",
+		"t" : "Then should see text matching \":pattern\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should not see text matching :pattern",
+		"t" : "Then should not see text matching \":pattern\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the response should contain :text",
+		"t" : "Then the response should contain \":text\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the response should not contain :text",
+		"t" : "Then the response should not contain \":text\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should see :text in the :element element",
+		"t" : "Then should see \":text\" in the \":element\" element",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should not see :text in the :element element",
+		"t" : "Then should not see \":text\" in the \":element\" element",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the :element element should contain :value",
+		"t" : "Then the \":element\" element should contain \":value\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the :element element should not contain :value",
+		"t" : "Then the \":element\" element should not contain \":value\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should see an? :element element",
+		"t" : "Then should see an? \":element\" element",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should not see an? :element element",
+		"t" : "Then should not see an? \":element\" element",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the :field field should contain :value",
+		"t" : "Then the \":field\" field should contain \":value\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the :field field should not contain :value",
+		"t" : "Then the \":field\" field should not contain \":value\"",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then should see :num :element elements?",
+		"t" : "Then should see :num \":element\" elements?",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the :checkbox checkbox should be checked",
+		"t" : "Then the \":checkbox\" checkbox should be checked",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the checkbox :checkbox is checked",
+		"t" : "Then the checkbox \":checkbox\" is checked",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the :checkbox checkbox should not be checked",
+		"t" : "Then the \":checkbox\" checkbox should not be checked",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the checkbox :checkbox should be unchecked",
+		"t" : "Then the checkbox \":checkbox\" should be unchecked",
 		"d" : [],
 		"tag" : ""
 	},
 	{
-		"t" : "Then the checkbox :checkbox is unchecked",
+		"t" : "Then the checkbox \":checkbox\" is unchecked",
 		"d" : [],
 		"tag" : ""
 	},
@@ -626,91 +626,6 @@ var action_data = [
 	},
 	{
 		"t" : "Then show last response",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given I am logged in as a user named :username with the :role role that doesn't force password change",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then I logout",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given a user named :username with role :role exists",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given I visit the user edit page for :username",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then I should be able to change the :role_name role",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then I should not be able to change the :role_name role",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then the :arg1 select list should be set to :arg2;",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given the iframe in element :element has id :id",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given fill in :text in WYSIWYG editor :iframe",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given I should be able to block the user",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given I should not be able to block the user",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Given I visit the user cancel page for :username",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then I should be able to cancel the account :username",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "When I wait for :text to appear",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then I should see :text appear",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "When I wait for :text to disappear",
-		"d" : [],
-		"tag" : ""
-	},
-	{
-		"t" : "Then I should see :text disappear",
 		"d" : [],
 		"tag" : ""
 	}
@@ -748,9 +663,4 @@ var help_data = {
 	":pattern" : "Please specify a pattern for :pattern palce holder", 
 	":element" : "Please specify a element for :element palce holder", 
 	":num" : "Please specify a num for :num palce holder", 
-	":username" : "Please specify a username for :username palce holder", 
-	":role_name" : "Please specify a role_name for :role_name palce holder", 
-	":arg1" : "Please specify a arg1 for :arg1 palce holder", 
-	":arg2" : "Please specify a arg2 for :arg2 palce holder", 
-	":iframe" : "Please specify a iframe for :iframe palce holder", 
 };

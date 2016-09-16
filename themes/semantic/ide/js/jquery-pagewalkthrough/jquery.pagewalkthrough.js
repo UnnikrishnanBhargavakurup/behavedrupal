@@ -642,6 +642,7 @@
     }
 
     $a = $('<a />', {
+      href : '#',
       id: id,
       html: btn.i18n
     });
