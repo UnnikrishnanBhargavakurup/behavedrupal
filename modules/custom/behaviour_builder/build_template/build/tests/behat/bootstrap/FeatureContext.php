@@ -17,7 +17,8 @@ use Behat\Behat\Hook\Scope\AfterFeatureScope;
  */
 class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
 {
-
+  
+  protected $screenshot_path;
   /**
    * Initializes context.
    *
@@ -25,7 +26,8 @@ class FeatureContext extends RawDrupalContext implements SnippetAcceptingContext
    * You can also pass arbitrary arguments to the
    * context constructor through behat.yml.
    */
-  public function __construct() {
+  public function __construct($parameters) {
+    $this->screenshot_path = $parameters['screenshot_path'];
   }
 
   /**
@@ -298,15 +300,24 @@ JS;
       if (!($driver instanceof Selenium2Driver)) {
         return;
       }
+      $featureFolder = preg_replace('/\W/', '_', $scope->getFeature()->getTitle());
+      $scenario = current($scope->getFeature()->getScenarios());
+      $scenarioName = $scenario->getTitle();
+      $fileName = preg_replace('/\W/', '_', $scenarioName) . '.png';
+      $path = $this->screenshot_path .'/'. $featureFolder;
+      //create screenshots directory if it doesn't exist
+      if (!file_exists($path)) {
+        mkdir($path, 0777, TRUE);
+      }
       $this->getSession()->resizeWindow(1440, 900, 'current');
-      file_put_contents('./screenshot-fail.png', $this->getSession()->getDriver()->getScreenshot());
+      file_put_contents($path .'/'. $fileName, $this->getSession()->getDriver()->getScreenshot());
     }
   }
 
   /**
    * @BeforeStep
    */
-  public function beforeStep()
+  public function beforeStep() 
   {
    $this->getSession()->getDriver()->maximizeWindow();
   }
