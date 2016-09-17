@@ -4,7 +4,9 @@
 -->
 
 <!--
- commandline params -Dbrowser=firefox
+ commandline params:
+ 
+ -Dskip_download -Dbrowser=phantomjs
 
  https://github.com/qinty/phpunit-selenium-env/blob/master/build.xml
 
@@ -389,25 +391,30 @@
 
     <!-- Set up the enviorment before running the test -->
     <target name="download_features" description="Download features from current workspace data." depends="setup_environment">
-      <!--
       <if>
-        <available file='${features}' type='dir' />
+        <not>
+          <isset property="skip_download" />
+        </not>
         <then>
-          <delete dir="${features}" includeemptydirs="true" verbose="false" failonerror="true" />
+          <if>
+            <available file='${features}' type='dir' />
+            <then>
+              <delete dir="${features}" includeemptydirs="true" verbose="false" failonerror="true" />
+            </then>
+          </if>
+          <httpget filename="features.zip" url="${behave_server}/behave/features/${session_id}?_format=json" dir="${behat_root}" />
+          <if>
+            <available file='${behat_root}/features.zip' type='file' />
+            <then>
+              <unzip file="${behat_root}/features.zip" todir="${behat_root}" />
+              <delete file="${behat_root}/features.zip" />
+            </then>
+            <else>
+              <fail message="Unable to download features, your session might have expired please downlaod the build and run the command." />
+            </else>
+          </if>
         </then>
       </if>
-      <httpget filename="features.zip" url="${behave_server}/behave/features/${session_id}?_format=json" dir="${behat_root}" />
-      <if>
-        <available file='${behat_root}/features.zip' type='file' />
-        <then>
-          <unzip file="${behat_root}/features.zip" todir="${behat_root}" />
-          <delete file="${behat_root}/features.zip" />
-        </then>
-        <else>
-          <fail message="Unable to download features, your session might have expired please downlaod the build and run the command." />
-        </else>
-      </if>
-    -->
     </target>
     <!-- Enf of enviorment setup -->
 
