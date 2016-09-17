@@ -8,7 +8,9 @@ default:
         - Drupal\DrupalExtension\Context\MinkContext
         - Drupal\DrupalExtension\Context\MessageContext
         - Drupal\DrupalExtension\Context\DrushContext
-        - FeatureContext
+        - FeatureContext:
+            parameters:
+              screenshot_path: %paths.base%/screenshots
       paths:
         features: %paths.base%/features
   extensions:
