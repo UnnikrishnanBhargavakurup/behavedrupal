@@ -63,12 +63,21 @@
     <property name="opera.driver"
               value="${composer.bin}/webdriver/geckodriver" />
 
+    <property name="junit"
+              value="${behat_root}/junit" />
+
     <!-- Targets       -->
 
     <target name="build"
             description="Run all the behaviour test features defined."
             depends="test:behat">
-        <backgroundexec pid="selenium_pid" command="stop" />
+      <!-- for phantomjs we dont need selenium -->
+      <if>
+        <isset property="selenium.launched" />
+        <then>
+          <backgroundexec pid="selenium_pid" command="stop" />
+        </then>
+      </if>
     </target>
 
     <target name="check_config" description="Check system configuration for Java and PHP." >
@@ -184,6 +193,12 @@
         <then>
           <filereplace browser="opera" file="${behat.local}" />
           <php expression="'-Dwebdriver.opera.driver=${opera.driver}'" returnProperty="selenium.browser"/>
+        </then>
+      </elseif>
+      <elseif>
+        <equals arg1="${browser}" arg2="phantomjs" />
+        <then>
+          <filereplace browser="phantomjs" file="${behat.local}" />
         </then>
       </elseif>
       </if>
@@ -344,7 +359,7 @@
 
     <!-- Launch  phantomjs enviorment -->
     <target name="phantomjs:launch"
-          description="Launches a GhostDriver.">
+          description="Launches a GhostDriver." depends="init">
       <exec command="${phantomjs.bin} --webdriver=${server.port}"
           passthru="true"
           spawn="true"
@@ -353,8 +368,9 @@
     <!-- End of phantomjs enviorment -->
 
     <target name="selenium_server:launch"
-          description="Launching selenium server." depends="setup-webdriver">
+          description="Launching selenium server." depends="setup-webdriver" unless="selenium.launched">
       <backgroundexec pid="selenium_pid" command="start" executable="java ${selenium.browser} -jar ${selenium.bin} -port ${server.port} &gt; /dev/null 2&gt;&amp;1" />
+      <property name="selenium.launched" value="true" />
     </target>
     
     <!-- Set up the enviorment before running the test -->
@@ -373,6 +389,7 @@
 
     <!-- Set up the enviorment before running the test -->
     <target name="download_features" description="Download features from current workspace data." depends="setup_environment">
+      <!--
       <if>
         <available file='${features}' type='dir' />
         <then>
@@ -390,6 +407,7 @@
           <fail message="Unable to download features, your session might have expired please downlaod the build and run the command." />
         </else>
       </if>
+    -->
     </target>
     <!-- Enf of enviorment setup -->
 
@@ -412,7 +430,8 @@
                config="${behat.config}"
                verbose="true"
                strict="true"
-               returnProperty="behatPass"/>
+               returnProperty="behatPass"
+               format="format=pretty --out=std --format=junit --out=${junit}"/>
 
     </target>
     <!-- Enf behat testing -->

@@ -131,6 +131,11 @@ class BehatTask extends Task
   protected $options = array();
 
   /**
+   * Out put format 
+   */
+  protected $format = null;
+
+  /**
    * Set the path to the Behat executable.
    *
    * @param string $str The executable
@@ -299,6 +304,18 @@ class BehatTask extends Task
   }
 
   /**
+   * The Phing formatter.
+   *
+   * @param string $str The Phing property.
+   *
+   * @return void
+   */
+  public function setFormat($str)
+  {
+    $this->format = "". $str;
+  }
+
+  /**
    * The Phing property the return code should be assigned to.
    *
    * @param string $str The Phing property.
@@ -420,6 +437,10 @@ class BehatTask extends Task
 
     if ($this->dryRun) {
       $this->options[] = 'dry-run';
+    }
+
+    if ($this->format) {
+      $this->options[] = $this->format;
     }
 
     if ($this->haltonerror) {
