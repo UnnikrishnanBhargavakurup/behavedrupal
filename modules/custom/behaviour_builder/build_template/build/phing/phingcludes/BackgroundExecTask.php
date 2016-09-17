@@ -24,13 +24,12 @@ class BackgroundExecTask extends Task {
     }
 
     protected function start() {
-      $output = array();
-      exec($this->executable . ' > /dev/null &', $output, $pid);
-      self::$pidMap[$this->pid] = $pid;
+      $pid = exec($this->executable . ' > /dev/null 2>&1 & echo $!;');
+      self::$pidMap[$this->id] = $pid;
     }
 
     protected function stop() {
-      exec("kill ". self::$pidMap[$this->pid]);
+      exec("kill ". self::$pidMap[$this->id]);
     }
 
     public function setCommand($command) {
@@ -45,3 +44,14 @@ class BackgroundExecTask extends Task {
       $this->id = "" . $id;
     }
 }
+/*
+    <exec command="${phantomjs.bin} --webdriver=${server.port}"
+          passthru="true"
+          spawn="true"
+          checkreturn="true" /> 
+
+ <backgroundexec pid="phantomjs_pid" 
+        command="start" 
+        executable="${phantomjs.bin} --webdriver=${server.port}" 
+      />  
+*/
