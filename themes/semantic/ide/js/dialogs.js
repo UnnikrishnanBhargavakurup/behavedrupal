@@ -690,7 +690,7 @@
       hide_help();
       var action_index = $(this).data('edit-index');
       if(typeof action_index !== 'undefined') {
-        $("#"+ action_index).find('span').text(action_txt);
+        $("#"+ action_index).find('span.action_itm').text(action_txt);
         $(this).removeData('edit-index');
       }
       else {
@@ -1119,7 +1119,7 @@
   function addAction(action_txt) {
     var action_ui = '<li id="action-'+ action_cnt +'" class="list-group-item">\
                        <i class="fa fa-bolt text-warning" aria-hidden="true"></i>\
-                       <span>'+ action_txt +'</span>\
+                       <span class="action_itm">'+ action_txt +'</span>\
                        <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
                          <i class="material-icons">close</i>\
                        </button>\
@@ -1206,7 +1206,7 @@
           if (features[feature_no].scenarios.hasOwnProperty(scenario_name)) {
             var _actions = [];
             $("#scenario-" + features[feature_no].scenarios[scenario_name].id +" li").each(function() {
-              var action_txt = $(this).find("span").html();
+              var action_txt = $(this).find("span.action_itm").html();
               var data = [];
               // need to get all data here
               if($(this).find("table").length > 0) {
@@ -1246,7 +1246,9 @@
     if(_features == null) {
       return;
     }
+    //clean everything before adding from saved data.
     clean();
+
     for(var i = 0; i < _features.length; i++) {
 
       // add feature to workspace.
@@ -1258,6 +1260,7 @@
         addScenario(_features[i].scenarios[j].name, true);
 
         var action_ui  = "";
+
         for (var k = 0; k < _features[i].scenarios[j].actions.length; k++) {
 
           var action_txt = _features[i].scenarios[j].actions[k].action;
@@ -1265,7 +1268,7 @@
 
           action_ui += '<li id="action-'+ action_cnt +'" class="list-group-item">\
                        <i class="fa fa-bolt text-warning" aria-hidden="true"></i>\
-                       <span>'+ action_txt +'</span>\
+                       <span class="action_itm">'+ action_txt +'</span>\
                        <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
                          <i class="material-icons">close</i>\
                        </button>\
@@ -1273,12 +1276,15 @@
                          <i class="material-icons">mode_edit</i>\
                        </button>';
 
-          var data_patterns = action_txt.toLowerCase().match(/\w*:(?!\w)/g);  
+          var data_patterns = action_txt.toLowerCase().match(/\w*:(?![^\s$])/g);  
           // we need to add data for this action.
           if(data_patterns)  {
             action_ui += '<div class="action-data">';
-            for (var i = 0; i < action_data.length; i++) {
-              action_ui += addTable(action_cnt, data_patterns[i], action_data[i]);
+            // add data table here.
+            for (var p_i = 0; p_i < action_data.length; p_i++) {
+              if(typeof data_patterns[p_i] !== 'undefined') {
+                action_ui += addTable(action_cnt, data_patterns[p_i], action_data[p_i]);
+              }
             };
             action_ui += '</div>';
             var data_vars = JSON.stringify(data_patterns);
@@ -1487,6 +1493,7 @@
     $(this).closest('.panel-body').find('.action_txt').val(action_txt);
     $(this).closest('.panel-body').find(':submit').data('edit-index', action_index);
   });
+
   /**
    * Move dropdown to visibility.
    */
