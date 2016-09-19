@@ -3,6 +3,7 @@
 (function($) {
   var dialog_scenario = document.querySelector('.dialog_add-scenario');
   var showDialogButton = document.querySelector('.add-scenario');
+
   if (!dialog_scenario.showModal) {
     dialogPolyfill.registerDialog(dialog_scenario);
   }
@@ -157,7 +158,6 @@
           error: function(data) {
             $(".profile_details .mdl-spinner").removeClass('is-active');
             window.behave.isLoggedin = 0;
-            console.log(data);
           },
           success : function(data) {
             if(data.hasOwnProperty('error')) {
@@ -416,7 +416,6 @@
       dataType: "json",
       data : {},
       error: function(data) {
-        console.log(data);
       },
       success : function(data) {
           //success code
@@ -594,7 +593,6 @@
   dialog_run.querySelector('.btn_ok').addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    console.log(get_data());
     dialog_run.close();
   });
 
@@ -909,7 +907,6 @@
     active_scenario.find('.error-msg span').html(msg);
     $('.scenario-help').hide();
     active_scenario.find('.error-msg').animate({opacity: 1, height : '20px'}, 50);
-    console.log("here");
     active_scenario.find('input:text').blur();
   }
 
@@ -1011,7 +1008,7 @@
    * Add a new feature here.
    */
   function addFeature(feature_name, description) {
-    // we don't want duplicate features  
+    // we don't want duplicate features in a project 
     if(feature_list.hasOwnProperty(feature_name)) {
       return;
     }   
@@ -1129,7 +1126,12 @@
                        <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
                          <i class="material-icons">mode_edit</i>\
                        </button>';
-    var data_patterns = action_txt.toLowerCase().match(/\w*:(?!\w)/g);  
+    /**
+     * a word that endwith : 
+     * and not followed by anything that is not a space or end of string
+     */
+    //TODO : need to optimize this regex.                   
+    var data_patterns = action_txt.toLowerCase().match(/\w*:(?![^\s$])/g);  
     // we need to add some sample data for this action.
     if(data_patterns)  {
       //action_ui += '<div class="action-data"></div>';
@@ -1246,9 +1248,15 @@
     }
     clean();
     for(var i = 0; i < _features.length; i++) {
+
+      // add feature to workspace.
       addFeature(_features[i].name, _features[i].description);
+
       for (var j = 0; j < _features[i].scenarios.length; j++) {
+
+        // add the scenario to the feature.
         addScenario(_features[i].scenarios[j].name, true);
+
         var action_ui  = "";
         for (var k = 0; k < _features[i].scenarios[j].actions.length; k++) {
 
@@ -1285,7 +1293,6 @@
         }
         $("#scenario-"+ j +" .action-list").append(action_ui);
       }
-      active_feature++;
     }
   };
   
