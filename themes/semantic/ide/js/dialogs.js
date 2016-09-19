@@ -1129,9 +1129,11 @@
     /**
      * a word that endwith : 
      * and not followed by anything that is not a space or end of string
+     * we dont need to match anything within quotes
      */
-    //TODO : need to optimize this regex.                   
-    var data_patterns = action_txt.toLowerCase().match(/\w*:(?![^\s$])/g);  
+    //TODO : need to optimize this regex.   
+    var _action_txt = action_txt.toLowerCase().replace(/['"][^"']+["']|(\+)/g, "");                
+    var data_patterns = _action_txt.match(/\w*:(?![^\s$])/g);  
     // we need to add some sample data for this action.
     if(data_patterns)  {
       //action_ui += '<div class="action-data"></div>';
@@ -1275,8 +1277,14 @@
                        <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
                          <i class="material-icons">mode_edit</i>\
                        </button>';
-
-          var data_patterns = action_txt.toLowerCase().match(/\w*:(?![^\s$])/g);  
+          /**
+           * a word that endwith : 
+           * and not followed by anything that is not a space or end of string
+           * we dont need to match anything within quotes
+           */
+          //TODO : need to optimize this regex.
+          var _action_txt = action_txt.toLowerCase().replace(/['"][^"']+["']|(\+)/g, "");
+          var data_patterns = _action_txt.match(/\w*:(?![^\s$])/g);  
           // we need to add data for this action.
           if(data_patterns)  {
             action_ui += '<div class="action-data">';
@@ -1286,7 +1294,9 @@
                 action_ui += addTable(action_cnt, data_patterns[p_i], action_data[p_i]);
               }
             };
+
             action_ui += '</div>';
+            // we need this later.
             var data_vars = JSON.stringify(data_patterns);
             action_ui += '<div class="tbl-controls">';
             action_ui += '<a class="scenario-help help-txt help-link" data-index="4" href="#">Help?</a>';
