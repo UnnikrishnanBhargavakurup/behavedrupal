@@ -96,8 +96,12 @@ class BehaviourGetBuild extends ResourceBase {
     if(isset($data['base_url']) && isset($_SESSION['behave_drupal']['SESSIONWORKSPACE'])) {
       $session = $_SESSION['behave_drupal']['SESSIONWORKSPACE'];
       $build_path = 'public://downloads/'. $session .'/build/build';
+      // we need to cleaup the folder may be there exist some previous builds. 
+      if (file_exists(drupal_realpath($build_path))) {
+        file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
+        file_unmanaged_delete_recursive($build_path);
+      }
       file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
-      //BehaveCommon::delete($build_path);
       $dest = drupal_realpath('public://downloads/'. $session .'/build/build/');
       $sorce = drupal_realpath(drupal_get_path('module', 'behaviour_builder') . '/build_template/build');
       foreach (

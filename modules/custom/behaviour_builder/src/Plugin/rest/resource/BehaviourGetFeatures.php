@@ -109,8 +109,13 @@ class BehaviourGetFeatures extends ResourceBase {
     if(isset($saved_data) && !empty($saved_data)) {
       $features = json_decode($saved_data->data);
       $build_path = 'public://downloads/'. $session .'/features/features/';
+      // we need to cleaup the folder may be there exist some previous builds. 
+      if (file_exists(drupal_realpath($build_path))) {
+        file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
+        file_unmanaged_delete_recursive($build_path);
+      }
       file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
-      //BehaveCommon::delete($build_path);
+
       foreach ($features as $feature) {
         BehaveCommon::writeFeatureData($feature, $build_path);
       }
