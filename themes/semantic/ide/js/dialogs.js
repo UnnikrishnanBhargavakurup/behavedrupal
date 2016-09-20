@@ -348,9 +348,9 @@
           $(".save-dialog .mdl-spinner").removeClass('is-active');
         },
         success : function(data) {
-          var created = new Date(data.created);
+          var created = new Date(data.created * 1000);
           $(".dialog-open tbody").prepend('<tr>\
-                      <td class="project-title">{{data.name}}</td>\
+                      <td class="project-title">'+ data.title +'</td>\
                       <td>'+ created.getDate() + '/' + (created.getMonth() + 1) + '/' + created.getFullYear() +'</td>\
                       <td data-id="'+ data.pid +'">\
                         <button class="mdl-button mdl-js-button mdl-button--icon delete_project">\

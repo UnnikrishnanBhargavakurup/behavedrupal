@@ -129,7 +129,11 @@ class BehaviourSave extends ResourceBase {
       $errors = $node->validate();
       if($errors->count() == 0) {
         $node->save();
-        return new ResourceResponse(array("pid" => $node->id(), "created" => $node->getCreatedTime()));
+        return new ResourceResponse(array(
+          "title" => $node->getTitle(), 
+          "pid" => $node->id(), 
+          "created" => $node->getCreatedTime()
+        ));
       }
       else {
         return new ResourceResponse(array("error" => $errors->getFieldNames()));
