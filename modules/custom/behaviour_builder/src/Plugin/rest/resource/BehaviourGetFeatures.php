@@ -136,7 +136,6 @@ class BehaviourGetFeatures extends ResourceBase {
         return $response;
       }
     }
-
     return new ResourceResponse(array());
   }
 }
