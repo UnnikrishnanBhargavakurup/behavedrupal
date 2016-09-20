@@ -99,6 +99,11 @@ class BehaviourGetFeatures extends ResourceBase {
    *   Throws exception expected.
    */
   public function get($id) {
+    /**
+     * id should get from the url because this is going to be accessed from
+     * command line not from web so it might have a different session.
+     * so we cannot get id from session.
+     */
     $session = filter_var($id, FILTER_SANITIZE_STRING);
     $saved_data = $this->connection
       ->select('behave_builds', 'b')
@@ -106,6 +111,7 @@ class BehaviourGetFeatures extends ResourceBase {
       ->condition('b.session', $session)
       ->condition('b.created', time() - (60 * 60 * 24 * 10), '>')
       ->execute()->fetch(\PDO::FETCH_OBJ);
+
     if(isset($saved_data) && !empty($saved_data)) {
       $features = json_decode($saved_data->data);
       $build_path = 'public://downloads/'. $session .'/features/features/';
@@ -114,8 +120,8 @@ class BehaviourGetFeatures extends ResourceBase {
         file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
         file_unmanaged_delete_recursive($build_path);
       }
-      file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
 
+      file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
       foreach ($features as $feature) {
         BehaveCommon::writeFeatureData($feature, $build_path);
       }
@@ -130,6 +136,7 @@ class BehaviourGetFeatures extends ResourceBase {
         return $response;
       }
     }
+
     return new ResourceResponse(array());
   }
 }

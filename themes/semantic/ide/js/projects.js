@@ -32,7 +32,7 @@
     e.stopPropagation();
     var pid = $(this).parent().data("id");
     $.ajax({
-      url : "/behave/download/?_format=json",
+      url : "/behave/get/"+ pid +"/file?_format=json",
       method : "POST",
       beforeSend: function (request) {
         request.setRequestHeader("Content-Type", "application/json; charset=utf-8");

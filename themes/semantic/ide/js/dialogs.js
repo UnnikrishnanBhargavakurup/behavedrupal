@@ -506,7 +506,7 @@
     e.stopPropagation();
     var pid = $(this).parent().data("id");
     $.ajax({
-      url : "/behave/get/"+ pid +"?_format=json",
+      url : "/behave/get/"+ pid +"/json?_format=json",
       method : "GET",
       beforeSend: function (request) {
         request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
