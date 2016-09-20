@@ -56,7 +56,7 @@ ul.collection li.email_last{
   margin-bottom:0;
 }
 
-.action-wrap {
+.action-wrap .action-list {
   min-height: 361px;
 }
 
@@ -817,6 +817,9 @@ footer  p {
 
 #msg_body {
   color: black;
+  overflow: hidden;
+  padding-bottom: 10px;
+  padding-right: 0;
 }
 
 body #jpWalkthrough #jpwTooltip #tooltipInner {
@@ -837,4 +840,8 @@ body #jpWalkthrough #jpwTooltip #tooltipInner {
   display: none;
   position: absolute;
   color: red;
+}
+
+.scenario-list {
+  position: inherit;
 }

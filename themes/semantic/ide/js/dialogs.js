@@ -680,6 +680,8 @@
   $(".scenario-list").on('click', '.itm-scenario input:submit', function(e) {
     e.preventDefault();
     e.stopPropagation();
+    // some thimes it is showing error.
+    active_scenario = active_scenario || $(this).closest('.itm-scenario');
     var action_txt = active_scenario.find('input:text').val();
     
     var help_patterns = action_txt.toLowerCase().match(/(^|\s):(\w+)/g);
@@ -1105,8 +1107,13 @@
     };
     scenario_cnt++;
     //componentHandler.upgradeDom(); - for updating the meterial js.
-    var el = $('.action-list:last-child')[0];
-    var sortable = Sortable.create(el);
+    //var el = $('.action-list:last-child')[0];
+    //var sortable = Sortable.create(el);
+    $(".action-list:last-child").sortable({
+      "connectWith": '.action-list',
+      "appendTo": '.action-list',
+    });
+
   };
 
   var action_cnt = 0;
@@ -1533,6 +1540,11 @@
 
   // auto save on every minute.
   window.setInterval(autosave, 2 * 1000);
+
+})(jQuery);
+
+(function($){
+
 })(jQuery);
 
 /**
