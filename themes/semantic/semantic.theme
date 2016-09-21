@@ -11,6 +11,7 @@ function semantic_preprocess_html(&$variables) {
     $query = \Drupal::entityQuery('node');
     $query->condition('type', 'projects');
     $query->condition('uid', $uid);
+    $query->sort('created', 'DESC');
     $nids = $query->execute();
     $nodes = entity_load_multiple('node', $nids, TRUE);
     $result = array();
