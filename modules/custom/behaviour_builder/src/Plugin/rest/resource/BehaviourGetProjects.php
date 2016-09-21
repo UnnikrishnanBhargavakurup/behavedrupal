@@ -14,6 +14,7 @@ use Drupal\node\Entity\Node;
 use Drupal\Core\Entity\Query\QueryFactory;
 use Drupal\Core\Url;
 
+use Drupal\behaviour_builder\BehaveCommon;
 /**
  * Provides a resource to get view modes by entity and bundle.
  *
@@ -109,7 +110,7 @@ class BehaviourGetProjects extends ResourceBase {
       if(!empty($nids)) {
         $node = entity_load('node', array_values($nids)[0]);
         if($type === 'file') {
-          return $this->getFeatures($node->get('body')->value);
+          return new ResourceResponse(array("url" => $this->getFeatures($node->get('body')->value)));
         }
         return new ResourceResponse(array("data" => $node->get('body')->value));
       }
