@@ -20,6 +20,8 @@
       },
       success : function(data) {
         $(col).closest('tr').remove();
+        // remove this form save dialogbox.
+        $('#saved_projects option[value="'+ pid +'"]').remove();
       }
     });
   });
@@ -33,17 +35,16 @@
     var pid = $(this).parent().data("id");
     $.ajax({
       url : "/behave/get/"+ pid +"/file?_format=json",
-      method : "POST",
+      method : "GET",
       beforeSend: function (request) {
         request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
         request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
       },
       dataType: "json",
-      data : JSON.stringify({'id': pid}),
       error: function(response) {
       },
       success : function(response) {
-        downloadFile(response.url);
+        downloadFile(response.url, "features.zip");
       }
     });
   });
