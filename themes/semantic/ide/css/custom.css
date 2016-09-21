@@ -93,14 +93,6 @@ div.xs{
   float: right !important;
 }
 
-.action-list .list-group-item .action-btn {
-  visibility: hidden;
-}
-
-.action-list .list-group-item:hover .action-btn {
-  visibility: visible;
-}
-
 .autocomplete-suggestions {
     text-align: left; cursor: default; border: 1px solid #ccc; border-top: 0; background: #fff; box-shadow: -1px 1px 3px rgba(0,0,0,.1);
 
@@ -829,7 +821,7 @@ body #jpWalkthrough #jpwTooltip #tooltipInner {
 /*End of message dialogbox*/
 
 .avatar_left {
-  width: 86%;
+  width: 84%;
 }
 
 .avatar_left p {
@@ -844,4 +836,66 @@ body #jpWalkthrough #jpwTooltip #tooltipInner {
 
 .scenario-list {
   position: inherit;
+}
+
+.feature-actions {
+  display: block;
+  overflow: hidden;
+  width: 8%;
+}
+
+.action-list .list-group-item .action-btn,
+.feature-item .btn-edit,
+.panel-heading .btn-edit {
+  visibility: hidden;
+}
+
+.action-list .list-group-item:hover .action-btn,
+.feature-item:hover .btn-edit,
+.panel-heading:hover .btn-edit {
+  visibility: visible;
+}
+
+.panel-heading .btn-edit, 
+.feature-item .btn-edit {
+  height: 22px;
+  width: 22px;
+}
+
+.feature-item .btn-edit {
+  height: 30px;
+}
+
+.panel-heading .btn-edit i,
+.feature-item .btn-edit i {
+  font-size: 20px;
+}
+
+.feature-actions .btn-edit {
+  margin-top: 10px;
+}
+
+
+.feature-editor :focus,
+.feature-n-ctl:focus,
+.panel-heading .edit_s_name:focus {
+  outline: none;
+  border: 1px solid #aaa;
+}
+.panel-heading .edit_s_name {
+  width: 90%;
+  font-weight: normal;
+}
+
+.feature-n-ctl,
+.feature-dis-ctl {
+  width: 100%;
+  border: 1px solid #ccc;
+}
+
+.feature-item .error {
+  display: none;
+  color: #F44336;
+  padding: 0;
+  margin: 0;
 }

@@ -1018,12 +1018,17 @@
     var feature_ui = '<li id="feature-'+ feature_cnt +'" class="collection-item avatar email-unread feature-item active" data-id="'+ feature_cnt +'">\
                         <i class="fa fa-cogs icon_1"></i>\
                         <div class="avatar_left">\
-                          <span class="email-title">'+ feature_name +'</span>\
-                          <p class="truncate grey-text ultra-small">'+ description +'</p>\
+                          <span class="email-title feature-n">'+ feature_name +'</span>\
+                          <p class="truncate grey-text ultra-small feature-dis">'+ description +'</p>\
                         </div>\
-                        <button data-target="'+ feature_cnt +'" class="mdl-button mdl-js-button mdl-button--icon btn-close pull-right feature-close">\
-                          <i class="material-icons">close</i>\
-                        </button>\
+                        <div class="feature-actions">\
+                          <button data-target="'+ feature_cnt +'" class="mdl-button mdl-js-button mdl-button--icon btn-close pull-right feature-close">\
+                            <i class="material-icons">close</i>\
+                          </button>\
+                          <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit">\
+                            <i class="material-icons">mode_edit</i>\
+                          </button>\
+                        </div>\
                         <div class="clearfix"></div>\
                       </li>';
     $(".itm-scenario").removeClass('active');
@@ -1060,6 +1065,9 @@
                             <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;<span class="s_name">'+ scenario_name +'</span>\
                             <button data-fid="'+ active_feature +'" data-target="#scenario-'+ scenario_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close scenario_close">\
                               <i class="material-icons">close</i>\
+                            </button>\
+                            <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit">\
+                              <i class="material-icons">mode_edit</i>\
                             </button>\
                           </div>\
                           <div class="panel-body panel-body-com-m">\
@@ -1486,7 +1494,7 @@
         error: function(response) {
         },
         success : function(response) {
-          downloadFile(response.url);
+          downloadFile(response.url, "build.zip");
         }
       });
     }
@@ -1500,15 +1508,106 @@
   });
 
   /**
-   * Move dropdown to visibility.
+   * edit an action text.
    */
-  $(".scenario-list").on( "click", ".btn-edit", function(e) {
+  $(".scenario-list").on("click", ".list-group-item .btn-edit", function(e) {
     e.preventDefault();
     e.stopPropagation(); 
     var action_txt = $(this).siblings('span').text();
     var action_index = $(this).parent().attr('id');
     $(this).closest('.panel-body').find('.action_txt').val(action_txt);
     $(this).closest('.panel-body').find(':submit').data('edit-index', action_index);
+  });
+
+  /**
+   * edit feature text and description.
+   */
+  $(".feature-list").on("click", ".btn-edit", function(e) {
+    e.preventDefault();
+    //e.stopPropagation(); 
+    $('.feature-item .error').hide();
+    var feature_name = $(this).closest('.feature-item').find('.feature-n').text().trim();
+    var feature_description = $(this).closest('.feature-item').find('.feature-dis').text().trim();
+    $(this).closest('.feature-item').find('.feature-n').html("<div class='error'>feature aready exist</div><div><input type='text' class='feature-n-ctl' value='"+ feature_name +"'></div>");
+    $(this).closest('.feature-item').find('.feature-dis').html("\
+      <div class='feature-editor'>\
+        <label>Description :</label>\
+        <textarea class='feature-dis-ctl'>"+ feature_description +"</textarea>\
+        <div class='pull-right'>\
+          <button data-name='" + feature_name + "' data-dis='" + feature_description + "' class='mdl-button mdl-js-button mdl-button--primary cancel-edt-featre'>\
+            Cancel\
+          </button>\
+          <button data-name='" + feature_name + "' data-dis='" + feature_description + "' class='mdl-button mdl-js-button mdl-button--accent save-edt-featre'>\
+            Save\
+          </button>\
+        </div>\
+      </div>");
+    $(this).hide();
+  });
+  
+  /**
+   * cancel feature edit.
+   */
+  $(".feature-list").on("click", ".cancel-edt-featre", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(this).closest('.feature-item').find('.feature-n').text($(this).data('name').trim());
+    $(this).closest('.feature-item').find('.feature-dis').text($(this).data('dis').trim());
+    $('.feature-item .btn-edit').show();
+    $('.feature-item .error').hide();
+  });
+
+  /**
+   * save feature edit.
+   */
+  $(".feature-list").on("click", ".save-edt-featre", function(e) {
+    e.preventDefault();
+    e.stopPropagation(); 
+    $('.feature-item .error').hide();
+    var name = $(this).closest('.feature-item').find('.feature-n-ctl').val().trim();
+    var old_name = $(this).data('name');
+    if(feature_list.hasOwnProperty(name) && old_name != name) {
+      $(this).closest('.feature-item').find('.error').show();
+      return;
+    }
+    var description = $(this).closest('.feature-item').find('.feature-dis-ctl').val().trim();
+    $(this).closest('.feature-item').find('.feature-n').text(name);
+    $(this).closest('.feature-item').find('.feature-dis').text(description); 
+    features[active_feature].name = name;
+    features[active_feature].description = description;
+    $('.feature-item .btn-edit').show();
+  });
+
+  /**
+   * Edit scenario name.
+   */
+  $(".scenario-list").on("click", ".itm-scenario .panel-heading .btn-edit", function(e) {
+    e.preventDefault();
+    e.stopPropagation(); 
+    var cur_name = $(this).parent().find('.s_name').text().trim();
+    $(this).parent().find('.s_name').html("<input class='edit_s_name' data-old='"+ cur_name +"' type='text' value='"+ cur_name +"'>");
+    $(this).parent().find('.edit_s_name').focus();
+  });
+
+  /**
+   * Save edited scenario name.
+   */
+  $(".scenario-list").on("blur", ".itm-scenario .panel-heading .edit_s_name", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    var scenario_name = $(this).val().trim();
+    var old_value = $(this).data('old');
+    if(features[active_feature].scenarios.hasOwnProperty(scenario_name) && old_value != scenario_name) {
+      return;
+    }
+    else if(old_value != scenario_name) {
+      features[active_feature].scenarios[scenario_name] = Object.assign(features[active_feature].scenarios[old_value]);
+      delete features[active_feature].scenarios[old_value];
+      $(this).parent().text(scenario_name);
+    }
+    else {
+      $(this).parent().text(scenario_name);
+    }
   });
 
   /**
@@ -1552,12 +1651,15 @@
  * @param path
  *  path to the archive file to download.
  */
-function downloadFile(path) {
+function downloadFile(path, file) {
+  if(path == "") {
+    return;
+  }
   var link = document.createElement('a');
   link.href = path;
   link.className = 'down_link';
   link.target = '_blank';
-  link.download = "build.zip";
+  link.download = file;
   document.body.appendChild(link);
   link.click();  
   document.body.removeChild(link);  
