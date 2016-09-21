@@ -800,6 +800,7 @@
         $("dialog:visible")[0].close();
       }
     }
+    $('.cancel-edt-featre').trigger('click');
   });
   
   /**
@@ -1325,6 +1326,8 @@
         $("#scenario-"+ j +" .action-list").append(action_ui);
       }
     }
+    // select the fist feature from the list as default.
+    $('.feature-list li:first-child').trigger('click');
   };
   
   /**
@@ -1478,6 +1481,7 @@
   $("#download_build").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
+    // we need a base path from which we go to other locations
     var base_url = $("#base_path").val();
     if(base_url != "") {
       $.ajax({
@@ -1499,11 +1503,16 @@
       });
     }
     else {
+      // this is needed
       $('.run-error-msg').show();       
     }
   });
-
-  $("#base_path").keydown(function(event) {
+  
+  /**
+   * Hide the error message.
+   */
+  $("#base_path").keydown(function(e) {
+    e.stopPropagation();
     $('.run-error-msg').hide(); 
   });
 
@@ -1512,7 +1521,7 @@
    */
   $(".scenario-list").on("click", ".list-group-item .btn-edit", function(e) {
     e.preventDefault();
-    e.stopPropagation(); 
+    //e.stopPropagation(); 
     var action_txt = $(this).siblings('span').text();
     var action_index = $(this).parent().attr('id');
     $(this).closest('.panel-body').find('.action_txt').val(action_txt);
@@ -1577,13 +1586,21 @@
     features[active_feature].description = description;
     $('.feature-item .btn-edit').show();
   });
+  
+  /**
+   * remove the error message om keydown.
+   */
+  $(".feature-list").on("keydown", '.feature-n-ctl', function(e) {
+    e.stopPropagation();
+    $(this).closest('.feature-n').find('.error').hide();
+  });
 
   /**
    * Edit scenario name.
    */
   $(".scenario-list").on("click", ".itm-scenario .panel-heading .btn-edit", function(e) {
     e.preventDefault();
-    e.stopPropagation(); 
+    //e.stopPropagation(); 
     var cur_name = $(this).parent().find('.s_name').text().trim();
     $(this).parent().find('.s_name').html("<input class='edit_s_name' data-old='"+ cur_name +"' type='text' value='"+ cur_name +"'>");
     $(this).parent().find('.edit_s_name').focus();
