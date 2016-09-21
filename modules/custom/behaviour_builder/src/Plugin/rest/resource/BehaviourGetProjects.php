@@ -137,7 +137,7 @@ class BehaviourGetProjects extends ResourceBase {
    */
   private function getFeatures($data = "") {
 
-    if(!isset($_SESSION['behave_drupal']['SESSIONWORKSPACE']) || $data = "") {
+    if(!isset($_SESSION['behave_drupal']['SESSIONWORKSPACE']) || $data == "") {
       return "";
     }
     else {
@@ -145,6 +145,7 @@ class BehaviourGetProjects extends ResourceBase {
     }
 
     $features = json_decode($data);
+    
     $build_path = 'public://downloads/'. $session .'/features/features/';
     // we need to cleaup the folder may be there exist some previous builds. 
     if (file_exists(drupal_realpath($build_path))) {
@@ -153,12 +154,13 @@ class BehaviourGetProjects extends ResourceBase {
     }
 
     file_prepare_directory($build_path, FILE_MODIFY_PERMISSIONS | FILE_CREATE_DIRECTORY | FILE_EXISTS_REPLACE);
+
     foreach ($features as $feature) {
       BehaveCommon::writeFeatureData($feature, $build_path);
     }
     BehaveCommon::archive('public://downloads/'. $session .'/features/', 'public://downloads/'. $session .'/features.zip');
     if(file_exists('public://downloads/'. $session .'/features.zip')) {
-      return Url::fromUri('public://downloads/'. $session .'/features.zip');
+      return Url::fromUri(file_create_url('public://downloads/'. $session .'/features.zip'))->getUri();
     }
     else {
       return "";
