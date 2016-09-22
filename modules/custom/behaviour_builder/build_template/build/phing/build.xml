@@ -333,8 +333,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
           <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.mac_url}"
              dir="${composer.bin}/webdriver"
              />
-          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
-          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" />
+          <untar file="${composer.bin}/webdriver/operadriver_mac64.zip" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/operadriver_mac64.zip" />
           <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
         </then>
       <elseif>
@@ -343,8 +343,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
           <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.unix_url}"
              dir="${composer.bin}/webdriver"
              />
-          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
-          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-linux64.tar.gz" />
+          <untar file="${composer.bin}/webdriver/operadriver_linux64.zip" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/operadriver_linux64.zip" />
           <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
         </then>
       </elseif>
@@ -354,8 +354,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
           <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.win_url}"
              dir="${composer.bin}/webdriver"
              />
-          <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
-          <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.tar.gz" />
+          <untar file="${composer.bin}/webdriver/operadriver_win32.zip" todir="${composer.bin}/webdriver" />
+          <delete file="${composer.bin}/webdriver/operadriver_win32.zip" />
           <chmod file="${composer.bin}/webdriver/geckodriver" mode="0755" />
         </then>
       </elseif>
