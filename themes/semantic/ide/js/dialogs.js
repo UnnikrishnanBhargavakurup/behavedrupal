@@ -22,8 +22,9 @@
       </div>');
       return;
     }
-    dialog_scenario.showModal();
+    dialog_scenario.show();
   });
+
   dialog_scenario.querySelector('.close').addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
@@ -50,7 +51,7 @@
   showDialogButton_feature.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    dialog_feature.showModal();
+    dialog_feature.show();
   });
 
   dialog_feature.querySelector('.close').addEventListener('click', function(e) {
@@ -83,7 +84,7 @@
     e.preventDefault();
     e.stopPropagation();
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
-    dialog_login.showModal();
+    dialog_login.show();
   });
   dialog_login.querySelector('.close').addEventListener('click', function(e) {
     e.preventDefault();
@@ -269,7 +270,7 @@
   showDialogButton_feedback.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    dialog_feedback.showModal();
+    dialog_feedback.show();
   });
 
   dialog_feedback.querySelector('.close').addEventListener('click', function(e) {
@@ -289,7 +290,7 @@
     e.preventDefault();
     e.stopPropagation();
     if(window.behave.isLoggedin) {
-      dialog_save.showModal();
+      dialog_save.show();
     }
     else {
       showMessage('\
@@ -381,7 +382,7 @@
   showDialogButton_profile.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    dialog_profile.showModal();
+    dialog_profile.show();
   });
 
   dialog_profile.querySelector('.cancel').addEventListener('click', function(e) {
@@ -470,7 +471,7 @@
     e.preventDefault();
     e.stopPropagation();
     if(window.behave.isLoggedin) {
-      dialog_open.showModal();
+      dialog_open.show();
     }
     else {
       showMessage('\
@@ -497,7 +498,7 @@
   $("#open_projects").click(function(e) {
     e.stopPropagation();
     e.preventDefault();
-    dialog_open.showModal();
+    dialog_open.show();
   });
 
   // open a saved project.
@@ -530,7 +531,7 @@
   showDialogButton_templates.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    dialog_templates.showModal();
+    dialog_templates.show();
   });
 
   dialog_templates.querySelector('.close').addEventListener('click', function(e) {
@@ -550,7 +551,7 @@
     e.stopPropagation();
     if($(".action-list li").length > 0) {
       $(".run-error-msg").hide();
-      dialog_run.showModal();
+      dialog_run.show();
     }
     else {
       if($(".feature-item").length == 0) {
@@ -1363,7 +1364,7 @@
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
     $("#messages").hide();
-    dialog_login.showModal();
+    dialog_login.show();
   });
   
   /**
@@ -1374,7 +1375,7 @@
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_reg').removeClass('dialog_login dialog_password_reset');
     $("#messages").hide();
-    dialog_login.showModal();
+    dialog_login.show();
   });
 
   /**
@@ -1384,7 +1385,7 @@
     e.preventDefault();
     e.stopPropagation();
     $("#messages").hide();
-    dialog_feature.showModal();
+    dialog_feature.show();
   });
 
 
