@@ -4,9 +4,9 @@
 -->
 
 <!--
- commandline params:
+ commandline:
  
- -Dskip_download -Dbrowser=phantomjs
+build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
 
  https://github.com/qinty/phpunit-selenium-env/blob/master/build.xml
 
@@ -248,7 +248,7 @@
       <if>
         <os family="mac" />
         <then>
-          <httpget url="${firefox.mac_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${firefox.mac_url}"
              dir="${composer.bin}/webdriver"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
@@ -258,7 +258,7 @@
       <elseif>
         <os family="unix" />
         <then>
-          <httpget url="${firefox.unix_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${firefox.unix_url}"
              dir="${composer.bin}/webdriver"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
@@ -269,7 +269,7 @@
       <elseif>
         <os family="windows" />
         <then>
-          <httpget url="${firefox.win_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${firefox.win_url}"
              dir="${composer.bin}/webdriver"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
@@ -289,7 +289,7 @@
       <if>
         <os family="mac" />
         <then>
-          <httpget url="${chrome.mac_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${chrome.mac_url}"
              dir="${composer.bin}/webdriver"
              />
           <unzip file="${composer.bin}/webdriver/chromedriver_mac64.zip" todir="${composer.bin}/webdriver" />
@@ -299,7 +299,7 @@
       <elseif>
         <os family="unix" />
         <then>
-          <httpget url="${chrome.unix_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${chrome.unix_url}"
              dir="${composer.bin}/webdriver"
              />
           <unzip file="${composer.bin}/webdriver/chromedriver_linux64.zip" todir="${composer.bin}/webdriver" />
@@ -310,7 +310,7 @@
       <elseif>
         <os family="windows" />
         <then>
-          <httpget url="${chrome.win_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${chrome.win_url}"
              dir="${composer.bin}/webdriver"
              />
           <unzip file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.zip" todir="${composer.bin}/webdriver" />
@@ -330,7 +330,7 @@
       <if>
         <os family="mac" />
         <then>
-          <httpget url="${opera.mac_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.mac_url}"
              dir="${composer.bin}/webdriver"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
@@ -340,7 +340,7 @@
       <elseif>
         <os family="unix" />
         <then>
-          <httpget url="${opera.unix_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.unix_url}"
              dir="${composer.bin}/webdriver"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
@@ -351,7 +351,7 @@
       <elseif>
         <os family="windows" />
         <then>
-          <httpget url="${opera.win_url}"
+          <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.win_url}"
              dir="${composer.bin}/webdriver"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
