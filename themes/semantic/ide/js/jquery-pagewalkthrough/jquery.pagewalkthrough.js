@@ -337,7 +337,6 @@
 
     targetElement = options._element.find(step.wrapper);
     scrollParent = getScrollParent(targetElement);
-
     $jpwOverlay.show();
 
     if (step.popup.type !== 'modal' && step.popup.type !== 'nohighlight') {
@@ -364,7 +363,6 @@
       // @todo make it so we don't have to destroy and recreate this element for
       // each step
       $jpwOverlay.appendTo($jpWalkthrough);
-
       // Overlay hole
       $('<div>')
         .addClass('overlay-hole')
@@ -879,7 +877,7 @@
         );
       }).eq(0);
 
-    return position === 'fixed' ? $() : !scrollParent.length ?
+    return position === 'fixed' ? element : !scrollParent.length ?
       $('html, body') : scrollParent;
   }
 
@@ -893,12 +891,14 @@
   /* Next button clicks
    */
   $(document).on('click', '#jpwNext', function() {
+    $.pagewalkthrough.step = "next";
     $.pagewalkthrough('next');
   });
 
   /* Previous button clicks
    */
   $(document).on('click', '#jpwPrevious', function() {
+    $.pagewalkthrough.step = "previous";
     $.pagewalkthrough('prev');
   });
 

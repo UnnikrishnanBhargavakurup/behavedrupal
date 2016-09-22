@@ -35,20 +35,135 @@
   });
   //http://jsfiddle.net/warby_/tsqu05mj/2/
   //document.cookie.indexOf("has_js")
+
   $('body').pagewalkthrough({
     name: 'behave-ide',
     onCookieLoad: function() {
     },
-    steps: [{
-      popup: {
-        type: 'modal',
-        content: 'Hello there!, let us walk through here for a moment, it will make you comfortable :)'
+    steps: [
+      {
+        popup: {
+          type: 'modal',
+          content: '#walkthrough-1',
+          width: '400'
+        }
       },
-      onLeave: function() {
-        console.log(arguments)
-        return true
+      {
+        popup: {
+          content: '#walkthrough-2',
+          type: 'modal',
+          width: '400'
+        }
+      },
+      {
+        wrapper: '.feature-list li:last-child',
+        popup: {
+          content: '#walkthrough-3',
+          type: 'tooltip',
+          position: 'top'
+        },
+        onLeave: function() {
+          $("#add-feature").trigger('click');
+          return true
+        }
+      },
+      {
+        wrapper: '.dialog_add-feature',
+        popup: {
+          content: '#walkthrough-4',
+          type: 'tooltip',
+          position: 'right'
+        },
+        onLeave: function() {
+          $("#feature-name").val("Authentication");
+          $("#feature-description").val("For posting an issue user shoud be able to login to drupal.");
+          $(".btn_add-feature").trigger('click');
+          return true
+        }
+      },
+      {
+        wrapper: '.add-scenario',
+        popup: {
+          content: '#walkthrough-5',
+          type: 'tooltip',
+          position: 'left'
+        },
+        onLeave: function() {
+          $("#add-scenario").trigger('click');  
+          return true
+        }
+      },
+      {
+        wrapper: '.dialog_add-scenario',
+        popup: {
+          content: '#walkthrough-6',
+          type: 'tooltip',
+          position: 'right'
+        },
+        onLeave: function() {
+          $("#scenario-name").val('Login');
+          $(".btn_add-scenario").trigger('click');
+          return true
+        }
+      },
+      {
+        wrapper: '.scenario-list .active .action_txt',
+        popup: {
+          content: '#walkthrough-7',
+          type: 'tooltip',
+          position: 'top'
+        },
+        onLeave: function() {
+          $(".scenario-list .active .action_txt").focus();
+          $(".scenario-list .active .action_txt").val('Given I am at "/user"');
+          $('.scenario-list .active input[type="submit"]').trigger('click');
+          return true
+        }
+      },
+      { 
+        wrapper: '#run',
+        popup: {
+          content: '#walkthrough-8',
+          type: 'tooltip',
+          position: 'right'
+        },
+        onLeave: function() { 
+          $(".dialog-run")[0].show();
+          return true
+        }
+      },
+      {
+        wrapper: '#base_path',
+        popup: {
+          content: '#walkthrough-9',
+          type: 'tooltip',
+          position: 'right'
+        },
+        onLeave: function() {
+          $("#base_path").val('http://drupal.org');
+          return true
+        }
+      },
+      {
+        wrapper: '#download_build',
+        popup: {
+          content: '#walkthrough-10',
+          type: 'tooltip',
+          position: 'bottom'
+        },
+        onLeave: function() {
+          $("#download_build").trigger('click');
+          return true
+        }
+      },
+      {
+        popup: {
+          content: '#walkthrough-11',
+          type: 'modal',
+          width: '400'
+        }
       }
-    }]   
+    ]   
   });
 
   $('#userpass').pwstrength(); 
