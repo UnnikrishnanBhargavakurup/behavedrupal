@@ -585,9 +585,18 @@ dialog .mdl-layout__content {
 }
 
 .dialog-run {
-  width: 600px;
+  width: 650px;
   height: 754px;
   top: 5%;
+}
+
+.dialog-run .scrollbar {
+  height: 609px;
+  padding: 0;
+}
+
+.dialog-run  pre {
+  white-space: pre-wrap;
 }
 
 .config_dis {

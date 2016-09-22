@@ -580,6 +580,7 @@
           </div>
           <div class="mdl-card__supporting-text">
             <form action="#">
+              <div class="scrollbar scrollbar-projects dialog-scrollbar">
               <!-- markup -->
               <div class="stepper">
                 <div class="step">
@@ -651,6 +652,37 @@
                         </div>
                     </div>
                 </div>
+                <div class="step">
+                    <div>
+                        <div class="circle">5</div>
+                        <div class="line"></div>
+                    </div>
+                    <div>
+                        <div class="title">Aditional commanline options</div>
+                        <div class="body">
+<p>1) If you want to specify a browser for running the test use -Dbrowser commanline option.</p>
+<pre class="language-markup">
+  build/bin/phing -f build/phing/build.xml -Dbrowser=firefox                            
+</pre>
+<p>
+  <small>
+    <b>For -Dbrowser option you can use firefox, chrome, opera or <a target="_balnk" href="http://phantomjs.org/">phantomjs</a></b>
+  </small>
+</p>
+<p>2) If you don't want to update the features from workspace you can use -DskipDownload option.<p>
+<pre class="language-markup">
+  build/bin/phing -f build/phing/build.xml -DskipDownload                            
+</pre>
+<p>(example:  if you directly edit the features in your file system.)</p>
+<p>3) You can use these options together also</p>
+<pre class="language-markup">
+  build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=firefox                          
+</pre>
+
+                        </div>
+                    </div>
+                </div>
+              </div>
               </div>
             </form>
           </div>
