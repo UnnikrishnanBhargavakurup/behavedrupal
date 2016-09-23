@@ -40,6 +40,9 @@
     name: 'behave-ide',
     onCookieLoad: function() {
     },
+    onBeforeShow: function() {
+      $(".help_sample .feature-close").trigger('click');
+    },
     steps: [
       {
         popup: {
@@ -56,18 +59,18 @@
         }
       },
       {
-        wrapper: '.feature-list li:last-child',
+        wrapper: '#add-feature',
         popup: {
           content: '#walkthrough-3',
           type: 'tooltip',
           position: 'top'
-        },
-        onLeave: function() {
-          $("#add-feature").trigger('click');
-          return true
         }
       },
       {
+        onEnter: function() {
+          $("#add-feature").trigger('click');
+          return true
+        },
         wrapper: '.dialog_add-feature',
         popup: {
           content: '#walkthrough-4',
@@ -78,6 +81,7 @@
           $("#feature-name").val("Authentication");
           $("#feature-description").val("For posting an issue user shoud be able to login to drupal.");
           $(".btn_add-feature").trigger('click');
+          $(".feature-item:nth-last-child(2)").addClass('help_sample');
           return true
         }
       },
@@ -87,13 +91,13 @@
           content: '#walkthrough-5',
           type: 'tooltip',
           position: 'left'
-        },
-        onLeave: function() {
-          $("#add-scenario").trigger('click');  
-          return true
         }
       },
       {
+        onEnter: function() {
+          $("#add-scenario").trigger('click');
+          return true
+        },
         wrapper: '.dialog_add-scenario',
         popup: {
           content: '#walkthrough-6',
@@ -101,8 +105,13 @@
           position: 'right'
         },
         onLeave: function() {
-          $("#scenario-name").val('Login');
-          $(".btn_add-scenario").trigger('click');
+          if($('.scenario-list .active').length == 0) {
+            $("#scenario-name").val('Login');
+            $(".btn_add-scenario").trigger('click');
+          }
+          else if($(".dialog_add-scenario")[0].open) {
+            $(".dialog_add-scenario")[0].close();
+          }
           return true
         }
       },
@@ -114,30 +123,39 @@
           position: 'top'
         },
         onLeave: function() {
-          $(".scenario-list .active .action_txt").focus();
-          $(".scenario-list .active .action_txt").val('Given I am at "/user"');
-          $('.scenario-list .active input[type="submit"]').trigger('click');
+          $(".scenario-list .active").focus();
+          if($(".scenario-list .active .list-group-item").length == 0) {
+            $(".scenario-list .active .action_txt").focus();
+            $(".scenario-list .active .action_txt").val('Given I am at "/user"');
+            $('.scenario-list .active input[type="submit"]').trigger('click');
+          }
           return true
         }
       },
       { 
+        onEnter: function() {
+          if($(".dialog-run")[0].open) {
+            $(".dialog-run")[0].close();
+          }
+          return true
+        },
         wrapper: '#run',
         popup: {
           content: '#walkthrough-8',
           type: 'tooltip',
           position: 'right'
-        },
-        onLeave: function() { 
-          $(".dialog-run")[0].show();
-          return true
         }
       },
       {
+        onEnter: function() {
+          $(".dialog-run")[0].show();
+          return true
+        },
         wrapper: '#base_path',
         popup: {
           content: '#walkthrough-9',
           type: 'tooltip',
-          position: 'right'
+          position: 'bottom'
         },
         onLeave: function() {
           $("#base_path").val('http://drupal.org');
@@ -150,13 +168,13 @@
           content: '#walkthrough-10',
           type: 'tooltip',
           position: 'bottom'
-        },
-        onLeave: function() {
-          $("#download_build").trigger('click');
-          return true
         }
       },
       {
+        onEnter: function() {
+          $("#download_build").trigger('click');
+          return true
+        },
         popup: {
           content: '#walkthrough-11',
           type: 'modal',
