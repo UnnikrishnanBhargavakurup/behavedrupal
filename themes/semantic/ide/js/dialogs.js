@@ -517,6 +517,7 @@
       error: function(response) {
       },
       success : function(response) {
+        // set deta in workspace from autosave data.
         set_data(JSON.parse(response.data));
       }
     });
@@ -1324,7 +1325,7 @@
           action_ui += '</li>';
           action_cnt++;
         }
-        $("#scenario-"+ j +" .action-list").append(action_ui);
+        $("#scenario-"+ (scenario_cnt - 1) +" .action-list").append(action_ui);
       }
     }
     // select the fist feature from the list as default.
