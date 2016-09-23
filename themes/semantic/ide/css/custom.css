@@ -752,7 +752,9 @@ footer  p {
   overflow: hidden;
 }
 
-
+dialog {
+  z-index:100;
+}
 
 
 /* Message dilaog box.*/
