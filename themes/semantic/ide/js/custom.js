@@ -45,17 +45,22 @@
     },
     steps: [
       {
+        wrapper: '#help',
         popup: {
-          type: 'modal',
+          type: 'tooltip',
           content: '#walkthrough-1',
-          width: '400'
+          position: 'right'
         }
       },
       {
+        onEnter: function() {
+          $("body").css({"scrollTop": 0});
+          return true;
+        },
         popup: {
           content: '#walkthrough-2',
           type: 'modal',
-          width: '400'
+          width: '600'
         }
       },
       {
@@ -63,13 +68,14 @@
         popup: {
           content: '#walkthrough-3',
           type: 'tooltip',
-          position: 'top'
+          position: 'top',
+          width: '400'
         }
       },
       {
         onEnter: function() {
           $("#add-feature").trigger('click');
-          return true
+          return true;
         },
         wrapper: '.dialog_add-feature',
         popup: {
@@ -82,7 +88,7 @@
           $("#feature-description").val("For posting an issue user shoud be able to login to drupal.");
           $(".btn_add-feature").trigger('click');
           $(".feature-item:nth-last-child(2)").addClass('help_sample');
-          return true
+          return true;
         }
       },
       {
@@ -96,7 +102,7 @@
       {
         onEnter: function() {
           $("#add-scenario").trigger('click');
-          return true
+          return true;
         },
         wrapper: '.dialog_add-scenario',
         popup: {
@@ -112,7 +118,7 @@
           else if($(".dialog_add-scenario")[0].open) {
             $(".dialog_add-scenario")[0].close();
           }
-          return true
+          return true;
         }
       },
       {
@@ -120,7 +126,8 @@
         popup: {
           content: '#walkthrough-7',
           type: 'tooltip',
-          position: 'top'
+          position: 'top',
+          width: '600'
         },
         onLeave: function() {
           $(".scenario-list .active").focus();
@@ -128,8 +135,9 @@
             $(".scenario-list .active .action_txt").focus();
             $(".scenario-list .active .action_txt").val('Given I am at "/user"');
             $('.scenario-list .active input[type="submit"]').trigger('click');
+            $(".scenario-list .active .action_txt").blur();
           }
-          return true
+          return true;
         }
       },
       { 
@@ -137,29 +145,33 @@
           if($(".dialog-run")[0].open) {
             $(".dialog-run")[0].close();
           }
-          return true
+          return true;
         },
-        wrapper: '#run',
+        wrapper: '.nav-stacked #run',
         popup: {
           content: '#walkthrough-8',
           type: 'tooltip',
-          position: 'right'
+          position: 'right',
+          width: '600'
         }
       },
       {
         onEnter: function() {
-          $(".dialog-run")[0].show();
-          return true
+          if(!$(".dialog-run")[0].open) {
+            $(".dialog-run")[0].show();
+          }
+          return true;
         },
         wrapper: '#base_path',
         popup: {
           content: '#walkthrough-9',
           type: 'tooltip',
-          position: 'bottom'
+          position: 'bottom',
+          width: '500'
         },
         onLeave: function() {
           $("#base_path").val('http://drupal.org');
-          return true
+          return true;
         }
       },
       {
@@ -167,18 +179,81 @@
         popup: {
           content: '#walkthrough-10',
           type: 'tooltip',
-          position: 'bottom'
+          position: 'bottom',
+          width: '500'
         }
       },
       {
         onEnter: function() {
+          if(!$(".dialog-run")[0].open) {
+            $(".dialog-run")[0].show();
+            $("#base_path").val('http://drupal.org');
+          }
           $("#download_build").trigger('click');
-          return true
+          return true;
         },
+        wrapper: 'pre.language-markup:eq(1)',
         popup: {
           content: '#walkthrough-11',
-          type: 'modal',
-          width: '400'
+          type: 'tooltip',
+          position: 'top',
+          width: '500'
+        }
+      },
+      {
+        onEnter: function() {
+          if($(".dialog-run")[0].open) {
+            $(".dialog-run")[0].close();
+          }
+          return true;
+        },
+        wrapper: '#templates',
+        popup: {
+          content: '#walkthrough-12',
+          type: 'tooltip',
+          position: 'right'
+        }
+      },
+      {
+        wrapper: '#clear_all',
+        popup: {
+          content: '#walkthrough-13',
+          type: 'tooltip',
+          position: 'right',
+          width: '500'
+        }
+      },
+      {
+        wrapper: '#save',
+        popup: {
+          content: '#walkthrough-14',
+          type: 'tooltip',
+          position: 'right',
+          width: '500'
+        }
+      },
+      {
+        wrapper: '#open',
+        popup: {
+          content: '#walkthrough-15',
+          type: 'tooltip',
+          position: 'right'
+        }
+      },
+      {
+        wrapper: '#feedback',
+        popup: {
+          content: '#walkthrough-16',
+          type: 'tooltip',
+          position: 'right'
+        }
+      },
+      {
+        wrapper: '.usr-profile',
+        popup: {
+          content: '#walkthrough-17',
+          type: 'tooltip',
+          position: 'left'
         }
       }
     ]   
