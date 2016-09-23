@@ -372,8 +372,8 @@
              // Recommended to be at least twice the inset box-shadow spread
             padding: '20px',
             position: 'absolute',
-            top: targetElement.offset().top - 20, // top/left minus padding
-            left: targetElement.offset().left - 20,
+            top: targetElement.offset().top, // top/left minus padding
+            left: targetElement.offset().left,
             'z-index': 999998,
             'box-shadow': '0 0 1px 10000px rgba(0, 0, 0, 0.6)'
         })
@@ -891,14 +891,12 @@
   /* Next button clicks
    */
   $(document).on('click', '#jpwNext', function() {
-    $.pagewalkthrough.step = "next";
     $.pagewalkthrough('next');
   });
 
   /* Previous button clicks
    */
   $(document).on('click', '#jpwPrevious', function() {
-    $.pagewalkthrough.step = "previous";
     $.pagewalkthrough('prev');
   });
 
