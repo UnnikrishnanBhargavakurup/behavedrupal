@@ -798,7 +798,7 @@
     $(".scenario-list .cell-ctl").blur();
     // if there is an open dilaog we need to close it.
     if($("dialog:visible").length == 1 && $(event.target).closest('dialog > div').length == 0) {
-      if(!$(event.target).hasClass('down_link')) {
+      if(!$(event.target).hasClass('down_link') && !$.pagewalkthrough('isActive')) {
         $("dialog:visible")[0].close();
       }
     }
