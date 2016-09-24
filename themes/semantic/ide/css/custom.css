@@ -825,9 +825,11 @@ dialog {
   padding-right: 0;
 }
 
-body #jpWalkthrough #jpwTooltip #tooltipInner {
+body #jpWalkthrough #jpwTooltip #tooltipInner,
+body #jpWalkthrough #jpwTooltip #tooltipInner p {
   font-family: verdana;
-  line-height: 37px;
+  line-height: 37px !important;
+  font-size: 22px !important;
 }
 /*End of message dialogbox*/
 
