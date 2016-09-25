@@ -185,17 +185,34 @@
         <div id="page-wrapper">
           <div class="graphs">
             <div class="xs">
-
-              <div class="site-content cf" id="messages">
-                <div class="boxed-group dangerzone">
-                  <h4>Behavedrupal</h4>
+              <!-- For showing messages --> 
+              <div class="site-content cf messages" id="message_window">
+                <div class="boxed-group">
+                  <h4 class="msg-title"><span>Behavedrupal</span> 
+                    <button class="mdl-button mdl-js-button mdl-button--icon message-close btn-close pull-right">
+                      <i class="material-icons">close</i>
+                    </button>
+                  </h4>
                   <div class="boxed-group-inner">
-                    <section id="msg_body">
-                    </section>
+                    <section class="msg_body"></section>
                   </div>
                 </div>
               </div>
-
+              <!-- End of messages -->
+              <!-- For showing messages --> 
+              <div class="site-content cf messages help-window" id="help_window">
+                <div class="boxed-group">
+                  <h4 class="msg-title"><span>Help</span> 
+                    <button class="mdl-button mdl-js-button mdl-button--icon message-close btn-close pull-right">
+                      <i class="material-icons">close</i>
+                    </button>
+                  </h4>
+                  <div class="boxed-group-inner">
+                    <section class="msg_body"></section>
+                  </div>
+                </div>
+              </div>
+              <!-- End of messages -->
               <div class="col-md-4 email-list1">
                 <h3 class="blank1">Features</h3>
                 <ul class="collection feature-list">
