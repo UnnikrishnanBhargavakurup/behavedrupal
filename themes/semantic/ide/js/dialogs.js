@@ -365,6 +365,8 @@
                         </button>\
                       </td>\
                     </tr>');
+          // adding to save as dilaogs.
+          $("#saved_projects > option:first-child").after("<option value="+ data.pid +">"+ data.title +"</option>");
             //success code
           dialog_save.close();
           $(".save-dialog .mdl-spinner").removeClass('is-active');
@@ -792,8 +794,9 @@
    * TODO: need to find exact issue.
    */
   $(document).click(function(event) {
-    if($("#messages:visible").length > 0 && $(event.target).closest('#messages > div').length == 0) {
-      $("#messages").hide();
+    // hide all the message boxes.
+    if($(".messages:visible").length > 0 && $(event.target).closest('.messages > div').length == 0) {
+      $(".messages").hide();
     }
     $(".scenario-list .cell-ctl").blur();
     // if there is an open dilaog we need to close it.
@@ -1350,11 +1353,11 @@
   }
   
   /**
-   * show a message to user for prerequirements.
+   * show a message to user.
    */
   function showMessage(message) {
-    $("#msg_body").html(message);
-    $("#messages").show();
+    $("#message_window .msg_body").html(message);
+    $("#message_window").show();
   }; 
 
   /**
@@ -1662,7 +1665,13 @@
 })(jQuery);
 
 (function($){
-
+  $("dialog").draggable({ handle:'.mdl-card__title'});
+  $(".messages").draggable({ handle:'H4'});
+  $(".messages").on('click', '.message-close', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(".messages").hide();
+  });
 })(jQuery);
 
 /**
