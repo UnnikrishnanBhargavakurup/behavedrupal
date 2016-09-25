@@ -25,17 +25,72 @@
     e.preventDefault();
     e.stopPropagation();
     var index  = $(this).data('index');
+    var scenario_name = $(this).closest('.itm-scenario').find('.s_name').text();
+    console.log(index);
     switch(index) {
       case 1:
+        
         break;
       case 2:
+        showMessage('\
+        <p>Here we add actions for the scenarios, an action is something that we do in a scenario.\
+        Like <strong>clicking on the login button</strong>, <br/><strong>navigate to a "/user" page</strong>\
+        or <strong>filling value in login form</strong>. Here we need to add actions to "<strong>'+ scenario_name +'</strong>" scenario.\
+        </p>\
+        <p>An action should start with the following keywords. <strong>Give, When, And, Or, But</strong> and <strong>Then</strong>.</p>\
+        <p>Following is example for actions in login scenario.<br/>\
+        <strong>\
+        <br/>Given I am at "/user"\
+        <br/>And fill in "username" with "user"\
+        <br/>And fill in "password" with "password"\
+        <br/>And I press the "Login" button\
+        <br/>Then I should see the link "logout"\
+        </strong>\
+        </p>\
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');
+          break;
+        case 3:
+        var action_text = $(".action_txt").val();
+        showMessage('\
+        Words start with <strong>:</strong> are placeholders for values, we shoud replace those pleaseholders with a value\
+        in single or double quotes. Like <strong>:path</strong> should be replaces to "/user" or "http://drupal.org/user"\
+        <p>Following are the common please holders we use in an action<br/>\
+        <br/><strong>:path</strong>      - an internal or external path like "/user" or "http://drupal.org/user"\
+        <br/><strong>:filed</strong>     - a filed name like "username" or "email"\
+        <br/><strong>:value</strong>     - something that you want to use as value for a filed like "foo@example.com"\
+        <br/><strong>:message</strong>   - message that show in a page after some action like "Sorry, unrecognized username or password. Have you forgotten your password?"\
+        <br/><strong>:region</strong>    - A region in you theme like "footer" or "header"\
+        <br/>You can specify the regions from your drupal site in behat.local.yml file like the following (this file will be in the build you download later)\
+<pre class="language-markup">region_map:\
+<br/>  right sidebar: "#aside .region-sidebar-second"\
+<br/>  content: "#content"\
+<br/>  # Header regions\
+<br/>  left header: "#header-left"\
+<br/>  top header: "#nav-header"\
+<br/>  right header: "#header-right"\
+</pre>\
+        </p>\
+        ');
         break;
       default:
     }    
   });
+
+  /**
+   * show a message to user.
+   */
+  function showMessage(message) {
+    $("#help_window .msg_body").html(message);
+    $("#help_window").show();
+  };
+
   //http://jsfiddle.net/warby_/tsqu05mj/2/
   //document.cookie.indexOf("has_js")
-
+  //http://stripgenerator.com/
   $('body').pagewalkthrough({
     name: 'behave-ide',
     onCookieLoad: function() {
@@ -49,7 +104,8 @@
         popup: {
           type: 'tooltip',
           content: '#walkthrough-1',
-          position: 'right'
+          position: 'right',
+          width: '600'
         }
       },
       {
@@ -134,6 +190,14 @@
           if($(".scenario-list .active .list-group-item").length == 0) {
             $(".scenario-list .active .action_txt").focus();
             $(".scenario-list .active .action_txt").val('Given I am at "/user"');
+            $('.scenario-list .active input[type="submit"]').trigger('click');
+            $(".scenario-list .active .action_txt").val('And fill in "username" with "user"');
+            $('.scenario-list .active input[type="submit"]').trigger('click');
+            $(".scenario-list .active .action_txt").val('And fill in "password" with "password"');
+            $('.scenario-list .active input[type="submit"]').trigger('click');
+            $(".scenario-list .active .action_txt").val('And I press the "Login" button');
+            $('.scenario-list .active input[type="submit"]').trigger('click');
+            $(".scenario-list .active .action_txt").val('Then I should see the message containing "Sorry, unrecognized username or password. Have you forgotten your password?"');
             $('.scenario-list .active input[type="submit"]').trigger('click');
             $(".scenario-list .active .action_txt").blur();
           }
@@ -263,7 +327,7 @@
 
   $('.info dd').each(function() {  $(this).css({width: $(this).text()+'%'});});
 
-  $('#messages .close').on('click', function(e) {
+  $('.messages .close').on('click', function(e) {
     e.stopPropagation();
     e.preventDefault();
     $(this).parent().hide();
