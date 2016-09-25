@@ -235,7 +235,16 @@ div .feature-help:active {
 
 ul.action-list li {
   overflow: hidden;
-  cursor:move;
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+ul.action-list li:active { 
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
 }
 
 .action-data-table {
@@ -723,7 +732,7 @@ dialog .mdl-layout__content {
   transform-origin:0 0;
 }
 
-#messages {
+.messages {
   position: fixed;
   width: 100%;
   top: 25%;
@@ -773,6 +782,7 @@ dialog {
 ::backdrop {
   background-color: rgba(0, 0, 0, 0.5);
 }
+
 .boxed-group {
   width: 90%;
   max-width: 680px;
@@ -780,11 +790,21 @@ dialog {
   margin-right: auto;
   margin-left: auto;
 }
+
+#help_window .boxed-group {
+  max-width: 880px;
+}
+
+#help_window {
+  top:15%;
+}
+
 .boxed-group h3,
 .boxed-group h4 {
   font-weight: 400;
   margin: 0;
 }
+
 .boxed-group h4 {
   padding: 12px 20px;
   color: #fff;
@@ -818,11 +838,10 @@ dialog {
   background-color: #fff;
 }
 
-#msg_body {
+.messages .msg_body {
   color: black;
   overflow: hidden;
   padding-bottom: 10px;
-  padding-right: 0;
 }
 
 body #jpWalkthrough #jpwTooltip #tooltipInner,
@@ -920,4 +939,23 @@ body #jpWalkthrough #jpwTooltip #tooltipInner p {
 
 .itm-scenario .panel-body {
   border-top: 1px solid #ddd;
+}
+
+.mdl-card__title, 
+.messages h4.msg-title {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+.ui-draggable-dragging .mdl-card__title,  
+.ui-draggable-dragging h4.msg-title {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.msg-title .btn-close {
+  margin-top: 5px;
 }
