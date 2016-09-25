@@ -60,7 +60,7 @@
         in single or double quotes. Like <strong>:path</strong> should be replaces to "/user" or "http://drupal.org/user"\
         <p>Following are the common please holders we use in an action<br/>\
         <br/><strong>:path</strong>      - an internal or external path like "/user" or "http://drupal.org/user"\
-        <br/><strong>:filed</strong>     - a filed name like "username" or "email"\
+        <br/><strong>:filed</strong>     - a filed name like "username" or "email" in a form\
         <br/><strong>:value</strong>     - something that you want to use as value for a filed like "foo@example.com"\
         <br/><strong>:message</strong>   - message that show in a page after some action like "Sorry, unrecognized username or password. Have you forgotten your password?"\
         <br/><strong>:region</strong>    - A region in you theme like "footer" or "header"\
@@ -71,10 +71,22 @@
 <br/>  # Header regions\
 <br/>  left header: "#header-left"\
 <br/>  top header: "#nav-header"\
-<br/>  right header: "#header-right"\
 </pre>\
         </p>\
         ');
+        break;
+      case 5:
+        showMessage('\
+        Words end with <strong>:</strong> are placeholders for tabular data\
+<pre class="language-markup">region_map:\
+<br/>  right sidebar: "#aside .region-sidebar-second"\
+<br/>  content: "#content"\
+<br/>  # Header regions\
+<br/>  left header: "#header-left"\
+<br/>  top header: "#nav-header"\
+</pre>\
+        </p>\
+        ');      
         break;
       default:
     }    
