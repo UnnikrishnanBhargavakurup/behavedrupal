@@ -21,15 +21,24 @@
   /**
    * For showing help topic related to current context.
    */
-  $(".xs").on('click', '.help-link', function(e) {
+  $("body").on('click', '.help-link', function(e) {
     e.preventDefault();
     e.stopPropagation();
+
     var index  = $(this).data('index');
     var scenario_name = $(this).closest('.itm-scenario').find('.s_name').text();
     console.log(index);
     switch(index) {
       case 1:
-        
+        showMessage('<p>This is the workspace we are going to use most of our time in this application, \
+          here we add <strong>Features</strong>, <strong>Scenarios</strong> and <strong>Actions</strong> for behavior testing.</p>\
+          <p>First thing you might be doing here is adding features of your application here, \
+          for that we need to click the Add Feature button from the left pane.</p>\
+            <p>After adding a feature we need to define scenarios in that feature; scenario is a flow in an application \
+          like <strong>Login</strong> or <strong>Logout</strong> we add scenario by clicking \
+          Add Scenario button in top right side of the workspace.</p>\
+          <p>After adding a scenario we need to define actions for that scenario; action is step we do in a scenario \
+          like pressing a button or filling up a form.</p>');      
         break;
       case 2:
         showMessage('\
@@ -54,13 +63,12 @@
         </div>');
           break;
         case 3:
-        var action_text = $(".action_txt").val();
         showMessage('\
-        Words start with <strong>:</strong> are placeholders for values, we shoud replace those pleaseholders with a value\
+        Words start with <strong>:</strong> are placeholders for values, we should replace those please holders with a value\
         in single or double quotes. Like <strong>:path</strong> should be replaces to "/user" or "http://drupal.org/user"\
         <p>Following are the common please holders we use in an action<br/>\
         <br/><strong>:path</strong>      - an internal or external path like "/user" or "http://drupal.org/user"\
-        <br/><strong>:filed</strong>     - a filed name like "username" or "email" in a form\
+        <br/><strong>:field</strong>     - a filed name like "user name" or "E-mail" in a form\
         <br/><strong>:value</strong>     - something that you want to use as value for a filed like "foo@example.com"\
         <br/><strong>:message</strong>   - message that show in a page after some action like "Sorry, unrecognized username or password. Have you forgotten your password?"\
         <br/><strong>:region</strong>    - A region in you theme like "footer" or "header"\
@@ -75,18 +83,51 @@
         </p>\
         ');
         break;
+      case 4:
       case 5:
+        var action_text = $(this).closest('.list-group-item').find('.action_itm').text();
         showMessage('\
-        Words end with <strong>:</strong> are placeholders for tabular data\
-<pre class="language-markup">region_map:\
-<br/>  right sidebar: "#aside .region-sidebar-second"\
-<br/>  content: "#content"\
-<br/>  # Header regions\
-<br/>  left header: "#header-left"\
-<br/>  top header: "#nav-header"\
-</pre>\
+        <p>Words end with <strong>:</strong> are placeholders for tabular data for a action\
+        for example suppose you want to check whether administrator roles has access to edit page content. Your scenario\
+        would be like the following:\
         </p>\
-        ');      
+<pre class="language-markup"> Scenario: An administrator should be able to edit page content\
+<br/>   Given "page" nodes:\
+<br/>     | title      | body          | status  |\
+<br/>     | Test page  | test content  | 1       |\
+<br/>   When I go to "admin/content"\
+<br/>   And I click "edit" in the "Test page" row\
+<br/>   Then I should not see "Access denied"\
+</pre>\
+<p>Here we need to add a dataset for the action <strong>'+ action_text +'</strong> we can do that by clicking the "click here"\
+ place holders in the table controller. if we want we can add more rows by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">expand_more</i></button>\
+ button in the table footer and columns by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">chevron_right</i></button> buttons in table header.\
+After adding the data click somewhere else to save it.</p>');      
+        break;
+      case 6:
+        showMessage('\
+        <p>Here we specify the base url from which we access all the internal path in our application. For example if you add \
+<strong>http://localhost/my_site</strong> for this field and if you have an action like <strong>Given I am at "/user"</strong> then\
+behat will try to access the page using the URL <strong>http://localhost/my_site/user</strong></p>\
+This will be added in behat.local.yml (this file will be in the build you download in next step). \
+<pre class="language-markup">base_url: "http://localhost/my_site"</pre>');      
+        break;
+      case 7:
+        showMessage('\
+        <p>Here we can open a saved project to workspace by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">folder_open</i></button> button,\
+         delete a saved project by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">delete</i></button> button and\
+          download features from a saved project by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">file_download</i></button> button.</p>');      
+        break;
+      case 8:
+        showMessage('\
+          <p>Here we save workspace data as project, we have two options here either we can save it as a new project or \
+          we can save to an existing project.</p> \
+          <p>We can load saved project to workspace from the open project from the left side menu <i class="fa fa-folder-open" aria-hidden="true"></i></p> \
+          <p>Note: we also have an auto save feature which will preserve current workspace data in session.</p>\
+          ');      
+        break;
+      case 9:
+        showMessage('<p>From here we can add common test cases in Drupal. Select features you want to add to your project and click the add button</p>');      
         break;
       default:
     }    
