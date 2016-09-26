@@ -17,7 +17,7 @@
       <div class="clearfix"> </div>\
       <div class="clearfix"> </div>\
       <div style="display:block;overflow:hidden;">\
-        <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="3" href="#">Help?</a>\
+        <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="1" href="#">Help?</a>\
         <button id="add_feature" style="float:right;" type="button" class="mdl-button mdl-js-button mdl-button--primary">Ok</button>\
       </div>');
       return;
@@ -562,7 +562,7 @@
         <span>Please add a features, scenarios and actions before running the test</span>\
         <div class="clearfix"> </div>\
         <div style="display:block;overflow:hidden;">\
-          <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="3" href="#">Help?</a>\
+          <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="1" href="#">Help?</a>\
           <button style="float:right;" id="add_feature" type="button" class="mdl-button mdl-js-button mdl-button--primary">Ok</button>\
         </div>');
         return;
@@ -572,7 +572,7 @@
         <span>Please add scenarios and actions for the test.</span>\
         <div class="clearfix"> </div>\
         <div style="display:block;overflow:hidden;">\
-          <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="3" href="#">Help?</a>\
+          <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="1" href="#">Help?</a>\
           <button style="float:right;" id="add_feature" type="button" class="mdl-button mdl-js-button mdl-button--primary">Ok</button>\
         </div>');  
       }
@@ -581,7 +581,7 @@
         <span>Please add at least one action before running the test.</span>\
         <div class="clearfix"> </div>\
         <div style="display:block;overflow:hidden;">\
-          <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="3" href="#">Help?</a>\
+          <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="1" href="#">Help?</a>\
           <button style="float:right;" id="add_feature" type="button" class="mdl-button mdl-js-button mdl-button--primary">Ok</button>\
         </div>');  
       }    
