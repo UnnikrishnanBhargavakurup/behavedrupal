@@ -557,14 +557,20 @@
       dialog_run.show();
     }
     else {
+      var message_txt = '';
       if($(".feature-item").length == 0) {
-        showMessage('\
-        <span>Please add a features, scenarios and actions before running the test</span>\
-        <div class="clearfix"> </div>\
+        if(("#saved_projects option").length > 1) {
+          message_txt += '<span>Please add a features, scenarios and actions or open a saved project before running the test</span>';
+        }
+        else {
+          message_txt += '<span>Please add a features, scenarios and actions before running the test</span>';
+        }
+        message_txt += '<div class="clearfix"> </div>\
         <div style="display:block;overflow:hidden;">\
           <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="1" href="#">Help?</a>\
           <button style="float:right;" id="add_feature" type="button" class="mdl-button mdl-js-button mdl-button--primary">Ok</button>\
-        </div>');
+        </div>';
+        showMessage(message_txt);
         return;
       }
       if($(".itm-scenario").length == 0) {
