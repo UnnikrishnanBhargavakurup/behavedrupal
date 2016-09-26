@@ -85,7 +85,11 @@
 <br/>  top header: "#nav-header"\
 </pre>\
         </p>\
-        ');
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');
         break;
       case 4:
       case 5:
@@ -106,7 +110,12 @@
 <p>Here we need to add a dataset for the action <strong>'+ action_text +'</strong> we can do that by clicking the "click here"\
  place holders in the table controller. if we want we can add more rows by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">expand_more</i></button>\
  button in the table footer and columns by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">chevron_right</i></button> buttons in table header.\
-After adding the data click somewhere else to save it.</p>');      
+After adding the data click somewhere else to save it.</p>\
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');      
         break;
       case 6:
         showMessage('\
@@ -114,13 +123,23 @@ After adding the data click somewhere else to save it.</p>');
 <strong>http://localhost/my_site</strong> for this field and if you have an action like <strong>Given I am at "/user"</strong> then\
 behat will try to access the page using the URL <strong>http://localhost/my_site/user</strong></p>\
 This will be added in behat.local.yml (this file will be in the build you download in next step). \
-<pre class="language-markup">base_url: "http://localhost/my_site"</pre>');      
+<pre class="language-markup">base_url: "http://localhost/my_site"</pre>\
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');      
         break;
       case 7:
         showMessage('\
         <p>Here we can open a saved project to workspace by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">folder_open</i></button> button,\
          delete a saved project by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">delete</i></button> button and\
-          download features from a saved project by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">file_download</i></button> button.</p>');      
+          download features from a saved project by clicking <button class="mdl-button mdl-js-button mdl-button--icon"><i class="material-icons">file_download</i></button> button.</p>\
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');      
         break;
       case 8:
         showMessage('\
@@ -128,10 +147,19 @@ This will be added in behat.local.yml (this file will be in the build you downlo
           we can save to an existing project.</p> \
           <p>We can load saved project to workspace from the open project from the left side menu <i class="fa fa-folder-open" aria-hidden="true"></i></p> \
           <p>Note: we also have an auto save feature which will preserve current workspace data in session.</p>\
-          ');      
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');      
         break;
       case 9:
-        showMessage('<p>From here we can add common test cases in Drupal. Select features you want to add to your project and click the add button</p>');      
+        showMessage('<p>From here we can add common test cases in Drupal. Select features you want to add to your project and click the add button</p>\
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');      
         break;
       default:
     }    
@@ -304,7 +332,9 @@ This will be added in behat.local.yml (this file will be in the build you downlo
           width: '500'
         },
         onLeave: function() {
-          $("#download_build").trigger('click');
+          if($.pagewalkthrough.cur_step == "next") {
+            $("#download_build").trigger('click');
+          }
           return true;
         }
       },

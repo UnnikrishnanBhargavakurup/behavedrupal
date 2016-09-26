@@ -206,6 +206,7 @@
       if (!onEnter(e)) {
           methods.next();
       }
+      $.pagewalkthrough.cur_step = "next";
       showStep('next');
     },
 
@@ -218,6 +219,7 @@
       if (!onEnter(e)) {
         methods.prev();
       }
+      $.pagewalkthrough.cur_step = "previous";
       showStep('prev');
     },
 
