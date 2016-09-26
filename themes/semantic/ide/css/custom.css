@@ -864,6 +864,7 @@ body #jpWalkthrough #jpwTooltip #tooltipInner p {
   display: none;
   position: absolute;
   color: red;
+  z-index: 10000;
 }
 
 .scenario-list {
