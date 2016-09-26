@@ -31,14 +31,18 @@
     switch(index) {
       case 1:
         showMessage('<p>This is the workspace we are going to use most of our time in this application, \
-          here we add <strong>Features</strong>, <strong>Scenarios</strong> and <strong>Actions</strong> for behavior testing.</p>\
-          <p>First thing you might be doing here is adding features of your application here, \
+          here we add <strong>Features</strong>, <strong>Scenarios</strong> and <strong>Actions</strong>.</p>\
+          <p>First thing we might be doing here is adding features of our application here, \
           for that we need to click the Add Feature button from the left pane.</p>\
             <p>After adding a feature we need to define scenarios in that feature; scenario is a flow in an application \
           like <strong>Login</strong> or <strong>Logout</strong> we add scenario by clicking \
           Add Scenario button in top right side of the workspace.</p>\
           <p>After adding a scenario we need to define actions for that scenario; action is step we do in a scenario \
-          like pressing a button or filling up a form.</p>');      
+          like pressing a button or filling up a form.</p>\
+          <p>After adding <strong>Features</strong>, <strong>Scenarios</strong> and <strong>Actions</strong>\
+           we need to download the build and install it in our local development environment,\
+          on running the command to execute the test it will automatically pull the changes from workspace and \
+          run it through behat.</p>');      
         break;
       case 2:
         showMessage('\
@@ -298,6 +302,10 @@ This will be added in behat.local.yml (this file will be in the build you downlo
           type: 'tooltip',
           position: 'bottom',
           width: '500'
+        },
+        onLeave: function() {
+          $("#download_build").trigger('click');
+          return true;
         }
       },
       {
@@ -306,7 +314,22 @@ This will be added in behat.local.yml (this file will be in the build you downlo
             $(".dialog-run")[0].show();
             $("#base_path").val('http://drupal.org');
           }
-          $("#download_build").trigger('click');
+          return true;
+        },
+        wrapper: 'pre.language-markup:eq(0)',
+        popup: {
+          content: '#walkthrough-18',
+          type: 'tooltip',
+          position: 'top',
+          width: '500'
+        }
+      },
+      {
+        onEnter: function() {
+          if(!$(".dialog-run")[0].open) {
+            $(".dialog-run")[0].show();
+            $("#base_path").val('http://drupal.org');
+          }
           return true;
         },
         wrapper: 'pre.language-markup:eq(1)',
