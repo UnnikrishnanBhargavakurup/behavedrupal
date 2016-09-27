@@ -1,12 +1,14 @@
 <?php
 
 use Drupal\image\Entity\ImageStyle;
+
 /**
  * Implements hook_preprocess_HOOK() for HTML document templates.
  */
 function semantic_preprocess_html(&$variables) {
   $uid = \Drupal::currentUser()->id();
   if($uid != 0) {
+
     $uid = \Drupal::currentUser()->id();
     $query = \Drupal::entityQuery('node');
     $query->condition('type', 'projects');
@@ -23,6 +25,7 @@ function semantic_preprocess_html(&$variables) {
       );
     }
     $variables['saved_data'] = $result;
+
     $user = user_load($uid);
     if (!isset($user->get('user_picture')->entity)) {
       $variables['user_picture'] = "/sites/default/files/public/styles/thumbnail/public/avatar_kit/robohash/1.jpg";
@@ -32,6 +35,7 @@ function semantic_preprocess_html(&$variables) {
       $variables['user_picture'] = ImageStyle::load('thumbnail')->buildUrl($user->get('user_picture')->entity->uri->value);
       //$variables['user_picture'] = $user->get('user_picture')->entity->url();
     }
+
     $variables['user_name'] = substr($user->getUsername(), 0, strpos($user->getUsername(), '@'));
     $variables['member_since'] = $user->getCreatedTime();
   }
@@ -40,5 +44,27 @@ function semantic_preprocess_html(&$variables) {
     $variables['user_picture'] = '';
     $variables['member_since'] = '';
   }
+  // get project templates
+  $cache = \Drupal::cache()->get('feature_templates');
+  $templates = isset($cache->data) ? $cache->data : NULL; 
+  // if we have it in cache we don't need to lod it again.
+  if(!$templates) {
+    $query = \Drupal::entityQuery('node');
+    $query->condition('type', 'templates');
+    $query->sort('created', 'DESC');
+    $nids = $query->execute();
+    $nodes = entity_load_multiple('node', $nids);
+    $templates = array();
+    foreach ($nodes as $node) {
+      $templates[] = array(
+        "id" => $node->id(), 
+        "name" => $node->get('title')->value, 
+        "description" => $node->get('field_description')->value
+      );
+    }
+    $expire = time() + 18000;
+    \Drupal::cache()->set('feature_templates', $templates, $expire); 
+  }
+  $variables['feature_templates'] = $templates;
 }
 
