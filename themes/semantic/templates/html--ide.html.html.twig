@@ -532,11 +532,11 @@
                     <li class="mdl-list__item mdl-list__item--three-line">
                       <span class="mdl-list__item-primary-content">
                         <span>{{data.name}}</span>
-                        <span class="mdl-list__item-text-body">{{data.description}}</span>
+                        <span class="mdl-list__item-text-body">{{data.description | raw}}</span>
                       </span>
                       <span class="mdl-list__item-secondary-content">
                         <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="{{data.id}}">
-                          <input type="checkbox" id="{{data.id}}" class="mdl-switch__input">
+                          <input type="checkbox" id="{{data.id}}" value="{{data.id}}" class="mdl-switch__input template_id">
                           <span class="mdl-switch__label"></span>
                         </label>
                       </span>

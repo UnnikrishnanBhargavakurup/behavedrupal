@@ -19,7 +19,7 @@ use Drupal\behaviour_builder\BehaveCommon;
  * Provides a resource to get view modes by entity and bundle.
  *
  * @RestResource(
- *   id = "behaviour_get",
+ *   id = "behaviour_get_template",
  *   label = @Translation("Behaviour builder get templates"),
  *   uri_paths = {
  *     "canonical" = "/behave/get-template/{id}"
@@ -108,7 +108,7 @@ class BehaviourGetTemplates extends ResourceBase {
       $nids = $query->execute();
       if(!empty($nids)) {
         $node = entity_load('node', array_values($nids)[0]);
-        return new ResourceResponse(array("data" => $node->get('body')->value));
+        return new ResourceResponse(array("data" => $node->get('field_data')->value));
       }
       return new ResourceResponse(array("data" => ""));
     }
