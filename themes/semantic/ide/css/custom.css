@@ -784,6 +784,13 @@ dialog {
   background-color: rgba(0, 0, 0, 0.5);
 }
 
+.mdl-tooltip.is-active {
+  animation: none;
+  transform: scale(1);
+  opacity: 1;
+  visibility: visible;
+}
+
 .boxed-group {
   width: 90%;
   max-width: 680px;
