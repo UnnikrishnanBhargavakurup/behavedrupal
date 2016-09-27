@@ -171,8 +171,13 @@
             $("#user_name").html(data.name + "<span>&nbsp;</span>");
             $("#login").hide();
             $(".usr-profile").show();
+            if(data.saved_data.length > 0) {
+              for (var i = 0; i <  data.saved_data.length; i++) {
+                updateProjectData(data.saved_data[i]);
+              }
+            }
             window.behave.isLoggedin = 1;
-              //success code
+            //success code
             dialog_login.close();
           }
         });
@@ -214,11 +219,25 @@
     }
     //https://codepen.io/sevilayha/pen/IdGKH
   });
-  
+
   /**
    * show all auth related error.
    */ 
   function showAuthError(error) {
+    if(typeof error === 'object' && error.hasOwnProperty('name')) {
+      if(error.name.indexOf("Unrecognized username") === 0) {
+        $(".dialog_auth .auth_error").html("Unrecognized username or password.");
+      }
+      if(error.name.indexOf("is not recognized as a username") > 0) {
+        $(".dialog_auth .auth_error").html("User does not exist");
+      }
+      if(error.name.indexOf("more than 5 failed login attempts") > 0) {
+        $(".dialog_auth .auth_error").html("So many faild login attempt for this account.");
+      }
+      $(".profile_details .mdl-spinner").removeClass('is-active');
+      return;
+    }
+
     if(error.length == 2 && error[0] == 'name') {
       $(".dialog_auth .error-msg").html("Email already taken plrease use a different email.");
     }
@@ -233,12 +252,6 @@
     }
     if(error.indexOf("captcha") === 0) {
       $(".dialog_auth .auth_error").html("Wrong captcha.");
-    }
-    if(error.indexOf("Unrecognized username") === 0) {
-      $(".dialog_auth .auth_error").html("Unrecognized username or password.");
-    }
-    if(error.indexOf("is not recognized as a username") > 0) {
-      $(".dialog_auth .auth_error").html("User does not exist");
     }
     $(".profile_details .mdl-spinner").removeClass('is-active');
   }
@@ -349,30 +362,36 @@
           $(".save-dialog .mdl-spinner").removeClass('is-active');
         },
         success : function(data) {
-          var created = new Date(data.created * 1000);
-          $(".dialog-open tbody").prepend('<tr>\
-                      <td class="project-title">'+ data.title +'</td>\
-                      <td>'+ created.getDate() + '/' + (created.getMonth() + 1) + '/' + created.getFullYear() +'</td>\
-                      <td data-id="'+ data.pid +'">\
-                        <button class="mdl-button mdl-js-button mdl-button--icon delete_project">\
-                          <i class="material-icons">delete</i>\
-                        </button>\
-                        <button class="mdl-button mdl-js-button mdl-button--icon download_project">\
-                          <i class="material-icons">file_download</i>\
-                        </button>\
-                        <button class="mdl-button mdl-js-button mdl-button--icon open_project">\
-                          <i class="material-icons">folder_open</i>\
-                        </button>\
-                      </td>\
-                    </tr>');
-          // adding to save as dilaogs.
-          $("#saved_projects > option:first-child").after("<option value="+ data.pid +">"+ data.title +"</option>");
-            //success code
+          updateProjectData(data);
           dialog_save.close();
           $(".save-dialog .mdl-spinner").removeClass('is-active');
         }
       });
     }
+  };
+  
+  /**
+   * update data in open and save dialogboxes.
+   */
+  function updateProjectData(data) {
+    var created = new Date(data.created * 1000);
+    $(".dialog-open tbody").prepend('<tr>\
+                <td class="project-title">'+ data.title +'</td>\
+                <td>'+ created.getDate() + '/' + (created.getMonth() + 1) + '/' + created.getFullYear() +'</td>\
+                <td data-id="'+ data.pid +'">\
+                  <button class="mdl-button mdl-js-button mdl-button--icon delete_project">\
+                    <i class="material-icons">delete</i>\
+                  </button>\
+                  <button class="mdl-button mdl-js-button mdl-button--icon download_project">\
+                    <i class="material-icons">file_download</i>\
+                  </button>\
+                  <button class="mdl-button mdl-js-button mdl-button--icon open_project">\
+                    <i class="material-icons">folder_open</i>\
+                  </button>\
+                </td>\
+              </tr>');
+    // adding to save as dilaogs.
+    $("#saved_projects > option:first-child").after("<option value="+ data.pid +">"+ data.title +"</option>");
   };
 
   var dialog_profile = document.querySelector('.dialog-profile');
@@ -520,10 +539,51 @@
       },
       success : function(response) {
         // set deta in workspace from autosave data.
-        set_data(JSON.parse(response.data));
+        clean();
+        set_data(JSON.parse(response.data), "");
       }
     });
   });
+
+  // open a feture template to workspace.
+  $(".dialog-templates").on("click", ".template_id", function(e) {
+    e.stopPropagation();
+    var tid = $(this).val();
+    if($(this).prop("checked")) {
+      $.ajax({
+        url : "/behave/get-template/"+ tid +"/?_format=json",
+        method : "GET",
+        beforeSend: function (request) {
+          request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+          request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
+        },
+        dataType: "json",
+        error: function(response) {
+          dialog_templates.close();
+        },
+        success : function(response) {
+          // set deta in workspace from autosave data.
+          set_data(JSON.parse(response.data), "f_templet_" + tid);
+        }
+      });
+    }
+    else {
+      // remove the templates added 
+      $(".f_templet_" + tid).each(function() {
+        $(this).find(".feature-close").trigger('click');
+      });
+    }
+    return true;
+  });
+
+  /**
+   * Add a commn drupal feature
+   * @param feature
+   *  feature to be added to the workspace.
+   */
+  function addCommonFeature(feature) {
+
+  };
 
   var dialog_templates = document.querySelector('.dialog-templates');
   var showDialogButton_templates = document.querySelector('#templates');
@@ -666,6 +726,8 @@
   function logout() {
     $(".usr-profile").hide();
     $("#login").show();
+    $("#saved_projects option").not(':first').remove();
+    $(".dialog-open table tbody tr").remove();
     $(".profile_details .mdl-spinner").removeClass('is-active');   
     window.behave.isLoggedin = 0;
   };
@@ -1020,14 +1082,20 @@
 
   /**
    * Add a new feature here.
+   * @param feature_name
+   *  name of the feature 
+   * @param description
+   *  a short description about the feature max three lines
+   * @param _classes
+   *  extra classes that needs to be added to the UI.
    */
-  function addFeature(feature_name, description) {
+  function addFeature(feature_name, description, _classes) {
     // we don't want duplicate features in a project 
     if(feature_list.hasOwnProperty(feature_name)) {
       return;
     }   
     $("ul.collection li").removeClass('active');
-    var feature_ui = '<li id="feature-'+ feature_cnt +'" class="collection-item avatar email-unread feature-item active" data-id="'+ feature_cnt +'">\
+    var feature_ui = '<li id="feature-'+ feature_cnt +'" class="collection-item avatar email-unread feature-item '+ _classes +' active" data-id="'+ feature_cnt +'">\
                         <i class="fa fa-cogs icon_1"></i>\
                         <div class="avatar_left">\
                           <span class="email-title feature-n">'+ feature_name +'</span>\
@@ -1271,17 +1339,12 @@
   /**
    * Load data to IDE.
    */
-  function set_data(_features) {
-    if(_features == null) {
-      return;
-    }
-    //clean everything before adding from saved data.
-    clean();
+  function set_data(_features, _classes) {
 
     for(var i = 0; i < _features.length; i++) {
 
       // add feature to workspace.
-      addFeature(_features[i].name, _features[i].description);
+      addFeature(_features[i].name, _features[i].description, _classes);
 
       for (var j = 0; j < _features[i].scenarios.length; j++) {
 
@@ -1425,8 +1488,13 @@
         "get" : true
       }),
       success : function(data) {
-        set_data(data);
-        project_data = data;
+        if(data == null || data.length == 0) {
+          return;
+        }
+       //clean everything before adding from saved data.
+       clean();
+       set_data(data, "");
+       project_data = data;
       }
     });    
   };
