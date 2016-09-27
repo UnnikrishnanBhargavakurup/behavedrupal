@@ -104,7 +104,7 @@ class BehaviourLogin extends ResourceBase {
         // Check that the form returns an error when expected, and vice versa.
         $errors = $form_state->getErrors();
         if(empty($errors)) {
-          $user = user_load(\Drupal::currentUser()->id());
+          $user = user_load($this->currentUser->id());
           // Check whether a session has been started.
           // Migrate the current session from anonymous to authenticated (or vice-versa).
           $picture = isset($user->get('user_picture')->entity) ? $user->get('user_picture')->entity->url() : "/sites/default/files/public/styles/thumbnail/public/avatar_kit/robohash/1.jpg";
@@ -127,18 +127,24 @@ class BehaviourLogin extends ResourceBase {
     }
   }
 
+  /**
+   * Get all the saved project information for this user.
+   * @return array
+   *   return an array of project informations.
+   */
   private function get_data() {
     $uid = \Drupal::currentUser()->id();
     $query = \Drupal::entityQuery('node');
     $query->condition('type', 'projects');
-    $query->condition('uid', $uid);
+    $query->condition('uid', $this->currentUser->id());
+    $query->sort('created', 'DESC');
     $nids = $query->execute();
     $nodes = entity_load_multiple('node', $nids);
     $results = array();
     foreach ($nodes as $node) {
       $results[] = array(
-        "id" => $node->id(), 
-        "name" => $node->get('title')->value, 
+        "pid" => $node->id(), 
+        "title" => $node->get('title')->value, 
         "created" => $node->get('created')->value
       );
     }
