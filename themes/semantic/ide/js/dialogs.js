@@ -858,6 +858,7 @@
   });
   
   /** 
+   * Close dilaogboxes when we click on body.
    * some times that table cell blur is not working.
    * TODO: need to find exact issue.
    */
@@ -869,11 +870,31 @@
     $(".scenario-list .cell-ctl").blur();
     // if there is an open dilaog we need to close it.
     if($("dialog:visible").length == 1 && $(event.target).closest('dialog > div').length == 0) {
-      if(!$(event.target).hasClass('down_link') && !$.pagewalkthrough('isActive')) {
+      // if we are in help or feedback form we dont need to close this dilaogbox.
+      if(!$(event.target).hasClass('down_link') && !$.pagewalkthrough('isActive') && $("#feedback-canvas").length == 0) {
         $("dialog:visible")[0].close();
       }
     }
     $('.cancel-edt-featre').trigger('click');
+  });
+
+  /**
+   * We will compain this with above function.
+   */
+  $(document).keyup(function(e) {
+    if (e.keyCode == 27) { // escape key maps to keycode `27`
+     // hide all the message boxes.
+      if($(".messages:visible").length > 0) {
+        $(".messages").hide();
+      }
+      $(".scenario-list .cell-ctl").blur();
+      // if there is an open dilaog we need to close it.
+      if($("dialog:visible").length == 1) {
+        // if we are in help or feedback form we dont need to close this dilaogbox.
+        $("dialog:visible")[0].close();
+      }
+      $('.cancel-edt-featre').trigger('click');
+    }
   });
   
   /**
