@@ -591,6 +591,7 @@ dialog .mdl-layout__content {
 
 .dialog-templates .dialog-scrollbar {
   height: 336px;
+  padding-top: 0;
 }
 
 .dialog-run {
