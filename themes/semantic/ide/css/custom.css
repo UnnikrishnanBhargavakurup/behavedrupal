@@ -436,8 +436,10 @@ dialog .help-txt  {
 .save-dialog  .mdl-layout__content {
   width: 100%;
 }
+
 dialog.mdl-dialog {
   padding: 0 !important;
+  position: fixed;
 }
 
 dialog .mdl-textfield__label:after, 
