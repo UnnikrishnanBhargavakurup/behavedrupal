@@ -528,49 +528,20 @@
             <form action="#">
               <div class="scrollbar scrollbar-templates dialog-scrollbar">
                 <ul class="mdl-list">
-                  <li class="mdl-list__item mdl-list__item--three-line">
-                    <span class="mdl-list__item-primary-content">
-                      <span>Authentication</span>
-                      <span class="mdl-list__item-text-body">
-                        In order to maintain an account as a site visitor I need to log in and out of the site.
+                  {% for data in feature_templates %}
+                    <li class="mdl-list__item mdl-list__item--three-line">
+                      <span class="mdl-list__item-primary-content">
+                        <span>{{data.name}}</span>
+                        <span class="mdl-list__item-text-body">{{data.description}}</span>
                       </span>
-                    </span>
-                    <span class="mdl-list__item-secondary-content">
-                      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-1">
-                        <input type="checkbox" id="switch-1" class="mdl-switch__input">
-                        <span class="mdl-switch__label"></span>
-                      </label>
-                    </span>
-                  </li>
-                  <li class="mdl-list__item mdl-list__item--three-line">
-                    <span class="mdl-list__item-primary-content">
-                      <span>Create Article</span>
-                      <span class="mdl-list__item-text-body">
-                        As an authenticated user I shoud be able to create articles in the site.
+                      <span class="mdl-list__item-secondary-content">
+                        <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="{{data.id}}">
+                          <input type="checkbox" id="{{data.id}}" class="mdl-switch__input">
+                          <span class="mdl-switch__label"></span>
+                        </label>
                       </span>
-                    </span>
-                    <span class="mdl-list__item-secondary-content">
-                      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-2">
-                        <input type="checkbox" id="switch-2" class="mdl-switch__input">
-                        <span class="mdl-switch__label"></span>
-                      </label>
-                    </span>
-                  </li>
-                  <li class="mdl-list__item mdl-list__item--three-line">
-                    <span class="mdl-list__item-primary-content">
-                      <span>Bryan Cranston</span>
-                      <span class="mdl-list__item-text-body">
-                        Bryan Cranston played the role of Walter in Breaking Bad. He is also known
-                        for playing Hal in Malcom in the Middle.
-                      </span>
-                    </span>
-                    <span class="mdl-list__item-secondary-content">
-                      <label class="mdl-switch mdl-js-switch mdl-js-ripple-effect" for="switch-3">
-                        <input type="checkbox" id="switch-3" class="mdl-switch__input">
-                        <span class="mdl-switch__label"></span>
-                      </label>
-                    </span>
-                  </li>
+                    </li>
+                  {% endfor %}
                 </ul>
               </div>
               <div>
