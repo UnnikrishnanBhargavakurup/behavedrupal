@@ -1239,9 +1239,14 @@
                        <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
                          <i class="material-icons">close</i>\
                        </button>\
-                       <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
+                       <button id="actio-edit'+ action_cnt +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
                          <i class="material-icons">mode_edit</i>\
-                       </button>';
+                       </button>\
+                       <button id="actio-copy'+ action_cnt +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-copy action-btn">\
+                         <i class="material-icons">content_copy</i>\
+                       </button>\
+                       <div class="mdl-tooltip" for="actio-copy'+ action_cnt +'"><span>Duplicate</span></div>\
+                       <div class="mdl-tooltip" for="actio-edit'+ action_cnt +'"><span>Edit</span></div>';
     /**
      * a word that endwith : 
      * and not followed by anything that is not a space or end of string
@@ -1385,9 +1390,14 @@
                        <button data-target="#action-'+ action_cnt +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
                          <i class="material-icons">close</i>\
                        </button>\
-                       <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
+                       <button id="actio-edit'+ action_cnt +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
                          <i class="material-icons">mode_edit</i>\
-                       </button>';
+                       </button>\
+                       <button id="actio-copy'+ action_cnt +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-copy action-btn">\
+                         <i class="material-icons">content_copy</i>\
+                       </button>\
+                       <div class="mdl-tooltip" for="actio-copy'+ action_cnt +'"><span>Duplicate</span></div>\
+                       <div class="mdl-tooltip" for="actio-edit'+ action_cnt +'"><span>Edit</span></div>';
           /**
            * a word that endwith : 
            * and not followed by anything that is not a space or end of string
@@ -1421,6 +1431,7 @@
         $("#scenario-"+ (scenario_cnt - 1) +" .action-list").append(action_ui);
       }
     }
+    componentHandler.upgradeDom();
     // select the fist feature from the list as default.
     $('.feature-list li:first-child').trigger('click');
   };
@@ -1626,6 +1637,18 @@
     var action_index = $(this).parent().attr('id');
     $(this).closest('.panel-body').find('.action_txt').val(action_txt);
     $(this).closest('.panel-body').find(':submit').data('edit-index', action_index);
+  });
+
+  /**
+   * edit an action text.
+   */
+  $(".scenario-list").on("click", ".list-group-item .btn-copy", function(e) {
+    e.preventDefault();
+    //e.stopPropagation(); 
+    var action_txt = $(this).siblings('span').text();
+    //TODO: need to find a better solution for this.
+    active_scenario = active_scenario || $(this).closest('.itm-scenario');
+    addAction(action_txt);
   });
 
   /**
