@@ -1647,7 +1647,7 @@
     //e.stopPropagation(); 
     var action_txt = $(this).siblings('span').text();
     //TODO: need to find a better solution for this.
-    active_scenario = active_scenario || $(this).closest('.itm-scenario');
+    active_scenario = $(this).closest('.itm-scenario');
     addAction(action_txt);
   });
 
