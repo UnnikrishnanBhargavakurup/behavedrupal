@@ -59,7 +59,7 @@ function semantic_preprocess_html(&$variables) {
       $templates[] = array(
         "id" => $node->id(), 
         "name" => $node->get('title')->value, 
-        "description" => $node->get('field_description')->value
+        "description" => $node->get('body')->value
       );
     }
     $expire = time() + 18000;
