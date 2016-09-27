@@ -152,7 +152,7 @@ class BehaviourAutoSave extends ResourceBase {
    */
   public function get() {
     if(isset($_SESSION['behave_drupal']['auto_save'])) {
-      \Drupal::logger('behave_drupal')->notice("getting > ". print_r($_SESSION['behave_drupal']['auto_save'], TRUE));
+      //\Drupal::logger('behave_drupal')->notice("getting > ". print_r($_SESSION['behave_drupal']['auto_save'], TRUE));
       return new ResourceResponse($_SESSION['behave_drupal']['auto_save']);
     }
     else {
