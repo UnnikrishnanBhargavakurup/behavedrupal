@@ -161,6 +161,15 @@ This will be added in behat.local.yml (this file will be in the build you downlo
           <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
         </div>');      
         break;
+      case 10:
+        showMessage('<p>Action shoud always start with <strong>Given</strong> / <strong>When</strong> / <strong>Then</strong> / \
+        <strong>And</strong> / <strong>Or</strong> / <strong>But</strong></p>\
+        <div class="clearfix"> </div>\
+        <div class="clearfix"> </div>\
+        <div style="display:block;overflow:hidden;">\
+          <button style="float:right;" type="button" class="mdl-button mdl-js-button message-close mdl-button--primary">Ok</button>\
+        </div>');      
+        break;
       default:
     }    
   });

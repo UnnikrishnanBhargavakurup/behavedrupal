@@ -1023,7 +1023,9 @@
   function hide_help() {
     active_scenario.find('input:text').removeClass('invalid');
     active_scenario.find('.error-msg span').text("");
-    active_scenario.find('.error-msg').animate({opacity: 0, height : 0}, 50);
+    active_scenario.find('.error-msg').animate({opacity: 0, height : 0}, 50, function() {
+      active_scenario.find('.error-msg .help-txt').data("index", 3);
+    });
   }
 
   var tbl_cnt = 0;
