@@ -281,43 +281,66 @@ function attach_autocomplete(selector) {
       // we use this in behaviour_builder.js for accessing table data if any.
       that.data('data-index', $(this).data('data-index'));     
     });
-  }(jQuery));   
-};
 
-/**
- * Here we match with json data.
- */
-function source(term, suggest) {
-  //TODO: need to find a better alternative for this.
-  term = term.toLowerCase();
-  var choices = action_data;
-  var suggestions = [];
-  for (i = 0; i < choices.length; i++) {
-    var text = choices[i].t;
-    var action = text.toLowerCase();
-    // if the action start with 
-    if (action.indexOf(term) == 0 ) {
-      suggestions.push({
-        "text" : text, 
-        "index" : i // used for adding table for data.
-      });
-    }
-    else {
-      // remove the first word from text.
+  }(jQuery)); 
+
+  /**
+   * Here we match with json data.
+   */
+  function source(term, suggest) {
+    //TODO: need to find a better alternative for this.
+    term = term.toLowerCase();
+    var choices = action_data;
+    var suggestions = [];
+    for (i = 0; i < choices.length; i++) {
+      var text = choices[i].t;
+      var action = text.toLowerCase();
+      // remove the first word from text this is for raw text.
       text = text.substr(text.indexOf(" ") + 1);
+      // this is for processed text ie lowercase.
       var first_word = term.substr(0, term.indexOf(" "));
       // need to add but here.
-      if(first_word == 'and' || first_word == 'or') {
+      if(
+          first_word == 'and' || 
+          first_word == 'or' || 
+          first_word == 'but' || 
+          first_word == 'when'||
+          first_word == 'then'||
+          first_word == 'given'
+        ) 
+      {
+
+        // removed first word from search message
         term_stripped = term.substr(term.indexOf(" ") + 1);
+        // remove first word from action.
         action = action.substr(action.indexOf(" ") + 1);
-        if (action.indexOf(term_stripped) == 0 || term_stripped == "") {
+
+        if (term_stripped == "" || action.indexOf(term_stripped) >= 0) {
           suggestions.push({
-            "text" : first_word == 'and' ? 'And ' + text : 'Or ' + text, 
+            "text" : first_word.charAt(0).toUpperCase() + first_word.slice(1) + " " + text, 
             "index" : i // used for adding table for data.
           });          
         }
       }
       else {
+        if(term == 't' || term == 'th' || term == 'the' || term == 'then') {
+            suggestions.push({
+              "text" : "Then " + text, 
+              "index" : i // used for adding table for data.
+            });  
+        }
+        if(term == 'g' || term == 'gi' || term == 'giv' || term == 'give' || term == 'given') {
+            suggestions.push({
+              "text" : "Given " + text, 
+              "index" : i // used for adding table for data.
+            });  
+        }
+        if(term == 'w' || term == 'wh' || term == 'when') {
+            suggestions.push({
+              "text" : "When " + text, 
+              "index" : i // used for adding table for data.
+            });  
+        }
         if(term == 'a' || term == 'an' || term == 'and') {
             suggestions.push({
               "text" : "And " + text, 
@@ -336,10 +359,17 @@ function source(term, suggest) {
               "index" : i // used for adding table for data.
             }); 
         }
+        if(first_word != "") {
+          $('.scenario-help').hide();
+          selector.siblings('.error-msg').find('span').html("Action should start with Given / When / Then / And / Or / But");
+          selector.siblings('.error-msg').find('.help-txt').data("index", 10);
+          selector.siblings('.error-msg').animate({opacity: 1, height : '20px'}, 50);
+          break;
+        }
       }
     }
-  }
-  suggest(suggestions);
+    suggest(suggestions);
+  };
 };
 
 /**
