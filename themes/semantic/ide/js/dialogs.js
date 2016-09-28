@@ -1235,6 +1235,10 @@
    *  action that needs to be added.
    */
   function addAction(action_txt) {
+    //TODO: We need to check whether it is starting with Given, When, Then, And, Or
+    if(action_txt == "") {
+      return;
+    }
     var action_ui = '<li id="action-'+ action_cnt +'" class="list-group-item">\
                        <i class="fa fa-bolt text-warning" aria-hidden="true"></i>\
                        <span class="action_itm">'+ action_txt +'</span>\
