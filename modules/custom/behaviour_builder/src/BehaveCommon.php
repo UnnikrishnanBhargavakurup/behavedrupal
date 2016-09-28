@@ -99,7 +99,9 @@ class BehaveCommon {
           if(
               strrpos(strtolower($action->action), "drush") !== false ||
               strrpos(strtolower($action->action), "logged in") !== false ||
-              strrpos(strtolower($action->action), "term") !== false 
+              strrpos(strtolower($action->action), "term") !== false ||
+              strrpos(strtolower($action->action), "cron") !== false || 
+              strrpos(strtolower($action->action), "role") !== false
             ) 
           {
             array_push($tags, "@api");
