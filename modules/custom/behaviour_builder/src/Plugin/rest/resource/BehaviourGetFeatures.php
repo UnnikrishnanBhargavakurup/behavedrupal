@@ -105,11 +105,15 @@ class BehaviourGetFeatures extends ResourceBase {
      * so we cannot get id from session.
      */
     $session = filter_var($id, FILTER_SANITIZE_STRING);
+    // This is going to access from commandline so we can't get a user authenticated user here. 
+    $or = db_or();
+    $or->condition('b.updated', time() - (60 * 60 * 24 * 10), '>');
+    $or->condition('b.uid', 0, '>');
     $saved_data = $this->connection
       ->select('behave_builds', 'b')
       ->fields('b', array('data', 'build_no'))
       ->condition('b.session', $session)
-      ->condition('b.created', time() - (60 * 60 * 24 * 10), '>')
+      ->condition($or)
       ->execute()->fetch(\PDO::FETCH_OBJ);
 
     if(isset($saved_data) && !empty($saved_data)) {
