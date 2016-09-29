@@ -1353,7 +1353,7 @@
   };
 
   /**
-   * get data for actions.
+   * get data from actions.
    */
   function getTableData(tables) {
     var data = [];
