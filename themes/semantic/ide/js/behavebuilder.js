@@ -96,7 +96,7 @@ var Base = function (name) {
    * check if node unique.
    */
   this.chekUnique = function(name) {
-    for (var childIndex in this.children) {
+    for(var childIndex in this.children) {
       if(name == this.children[childIndex].name) {
         return false;
       }  
@@ -141,9 +141,9 @@ var Scenario = function(name) {
 
 Scenario.prototype = new Base();
 
-var Action = function(name) {
+var Action = function(name, data) {
   this.name = name;
-  this.data = [];
+  this.data = data;
 };
 
 Action.prototype = new Base();
@@ -166,9 +166,9 @@ Action.prototype.addData = function(data) {
   if(data_patterns)  {
     //action_ui += '<div class="action-data"></div>';
     action_ui += '<div class="action-data">';
-    for (var i = 0; i < data_patterns.length; i++) {
-      if(this.data.length > 0){
-        action_ui += this.addTable(data_patterns[i], [], this.data[i]);
+    for(var i = 0; i < data_patterns.length; i++) {
+      if(this.data.length > 0) {
+        action_ui += this.addTable(data_patterns[i], this.data[i]);
       }
       else {
         action_ui += this.addTable(data_patterns[i], []);
@@ -258,6 +258,8 @@ Scenario.prototype.updateUI = function() {
     </div>\
   </div>';
   $(".scenario-list").append(scenario_ui);
+  attach_autocomplete($('#f'+ this.parent.index +'-s'+ this.index +" input:text"));
+  $('.feature-help').hide();
   // if we are not loading from saved items
   if(!Wordspace.loading) {
     var offset = $('#f'+ this.parent.index +'-s'+ this.index).offset();
@@ -268,6 +270,13 @@ Scenario.prototype.updateUI = function() {
       scrollLeft: offset.left
     });
   }
+  //componentHandler.upgradeDom(); - for updating the meterial js.
+  //var el = $('.action-list:last-child')[0];
+  //var sortable = Sortable.create(el);
+  $(".action-list:last-child").sortable({
+    "connectWith": '.action-list',
+    "appendTo": '.action-list',
+  });
 };
 
 Action.prototype.updateUI = function() {
@@ -300,7 +309,7 @@ Action.prototype.updateUI = function() {
  * @param table
  *   array of tables.
  */
-Action.prototype.getData = function (tables) {
+Action.getData = function (tables) {
   var data = [];
   for(var i = 0; i < tables.length; i++) {
     var _data =  $(tables[i]).find('tbody tr:not(:last-child)').get().map(function(row) {
@@ -347,9 +356,9 @@ Action.prototype.addTable = function(label, rows) {
       <tbody>';
 
       if(rows.length > 0) {
-        for (var i = 0; i < rows.length; i++) {
+        for(var i = 0; i < rows.length; i++) {
           tbl += '<tr>';
-          for (var j = 0; j < rows[i].length; j++) {
+          for(var j = 0; j < rows[i].length; j++) {
             tbl += '<td class="cell-dta">'+ rows[i][j] +'</td>';
           }
           tbl += '</tr>';
@@ -422,12 +431,12 @@ Wordspace.setData = function(features, _classes) {
     var fetaure = new Feature(features[i].name, features[i].description);
     Wordspace.addUniqueChild(fetaure); 
     // add feature to workspace.
-    for (var j = 0; j < features[i].scenarios.length; j++) {
+    for(var j = 0; j < features[i].scenarios.length; j++) {
       // add the scenario to the feature.
       var scenario = new Scenario(features[i].scenarios[j].name);
       fetaure.addUniqueChild(scenario);
       // add all the actions
-      for (var k = 0; k < features[i].scenarios[j].actions.length; k++) {
+      for(var k = 0; k < features[i].scenarios[j].actions.length; k++) {
         var action_txt = features[i].scenarios[j].actions[k].action;
         var action_data = features[i].scenarios[j].actions[k].data;
         var action = new Action(action_txt, action_data);
@@ -447,14 +456,14 @@ Wordspace.setData = function(features, _classes) {
  */
 Wordspace.getData = function() {
   var data = [];
-  for (var feature_no in this.children) {
+  for(var feature_no in this.children) {
     if (this.children.hasOwnProperty(feature_no)) {
       var feature = {
         "name" : this.children[feature_no].name,
         "description" : this.children[feature_no].description,
         "scenarios" : []
       };
-      for (var scenario_no in this.children[feature_no].children) {
+      for(var scenario_no in this.children[feature_no].children) {
         if (this.children[feature_no].children.hasOwnProperty(scenario_no)) {
           var actions = [];
           $("#f" + this.children[feature_no].index + "-s" + this.children[feature_no].children[scenario_no].index +" li").each(function() {

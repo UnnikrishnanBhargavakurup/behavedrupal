@@ -125,7 +125,7 @@
     var action_index = $(this).data('index');
     var vars = JSON.parse(unescape($(this).data('vars')));
     var tbl = '';
-    for (var i = 0; i < vars.length; i++) {
+    for(var i = 0; i < vars.length; i++) {
       tbl += Action.addTable(vars[i]);
     };
     Wordspace.getActiveScenario().find('action-' + action_index).append(tbl);
@@ -261,7 +261,7 @@
     var table = $(this).closest("table");
     var colspan = table.find('tbody tr:first td').length;
     table.find('tbody tr:last-child').before('<tr></tr>');
-    for(i = 0; i < colspan; i++) {
+    for(var i = 0; i < colspan; i++) {
       table.find('tbody tr:nth-last-child(2)').append('<td class="cell-dta">click here</td>');
     }   
   });
@@ -272,7 +272,7 @@
   function show_help(help_patterns) {
     Wordspace.getActiveScenario().find('input:text').addClass('invalid');
     /*
-    for (var i = 0; i < help_patterns.length; i++) {
+    for(var i = 0; i < help_patterns.length; i++) {
       var key = help_patterns[i].trim();
       if(key in help_data) {
         Wordspace.getActiveScenario().find('.error-msg span').text(help_data[key]);
@@ -581,7 +581,7 @@
     var old_name = $(this).data('name');
 
     if(old_name != featureName) {
-      for(featureIndex in Wordspace.children) {
+      for(var featureIndex in Wordspace.children) {
         if(Wordspace.children[featureIndex].name == featureName) {
           $(this).closest('.feature-item').find('.error').show();
           return;
@@ -626,7 +626,7 @@
     var old_value = $(this).data('old');
 
     if(old_value != scenario_name) {
-      for(scenarioIndex in Wordspace.getActiveChild().children) {
+      for(var scenarioIndex in Wordspace.getActiveChild().children) {
         if(Wordspace.getActiveChild().children[scenarioIndex].name == scenario_name) {
           return true;
         }
