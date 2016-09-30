@@ -175,7 +175,7 @@
             $("#login").hide();
             $(".usr-profile").show();
             if(data.saved_data.length > 0) {
-              for (var i = 0; i <  data.saved_data.length; i++) {
+              for(var i = 0; i <  data.saved_data.length; i++) {
                 updateProjectData(data.saved_data[i]);
               }
             }
