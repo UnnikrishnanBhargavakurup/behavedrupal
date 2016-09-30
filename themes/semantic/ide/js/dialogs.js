@@ -22,7 +22,7 @@
       </div>');
       return;
     }
-    $(".feature-name").text(Wordspace.activeChild.name);
+    $(".feature-name").text(Wordspace.getActiveChild().name);
     dialog_scenario.show();
   });
 
@@ -38,7 +38,7 @@
     var scenario_name = $("#scenario-name").val().trim();
     if(scenario_name != "") {
       var scenario = new Scenario(scenario_name);
-      Wordspace.activeChild.addUniqueChild(scenario);
+      Wordspace.getActiveChild().addUniqueChild(scenario);
       $("#scenario-name").val('');
     }
     dialog_scenario.close();
@@ -68,8 +68,8 @@
     var feature_name = $("#feature-name").val().trim();
     var feature_description = $("#feature-description").val().trim();
     if(feature_name != "") {
-      var fetaure = new Feature(feature_name, feature_description);
-      Wordspace.addUniqueChild(fetaure);
+        var fetaure = new Feature(feature_name, feature_description);
+        Wordspace.addUniqueChild(fetaure);
       $("#feature-name").val('');
       $("#feature-description").val('');
     }

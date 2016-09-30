@@ -31,7 +31,7 @@ var Base = function (name) {
   this.name = name;
   // children
   this.children = {};
-  //active child
+  //active child index
   this.activeChild = null;
   // index of this object in array; set by parent of this.
   this.index = 0;
@@ -48,7 +48,7 @@ var Base = function (name) {
       node.index = this.childIndex;
       node.parent = this;
       this.children[this.childIndex] = node;
-      this.activeChild = node;
+      this.activeChild = this.childIndex;
       this.childIndex++;
       node.updateUI();
     }
@@ -59,9 +59,9 @@ var Base = function (name) {
    */
   this.addChild = function(node) {
     this.children[this.childIndex] = node;
-    node.index = this.index;
+    node.index = this.childIndex;
     node.parent = this;
-    this.activeChild = node;
+    this.activeChild = this.childIndex;
     this.childIndex++;
     node.updateUI();
   }
@@ -82,22 +82,22 @@ var Base = function (name) {
    * set active child node.
    */
   this.setActiveChild = function(id) {
-    this.activeChild =  this.children[id];
+    this.activeChild =  id;
   }
 
   /**
    * get active child node.
    */
   this.getActiveChild = function() {
-    return this.activeChild;
+    return this.children[this.activeChild];
   }  
 
   /**
    * check if node unique.
    */
   this.chekUnique = function(name) {
-    for (var i = 0; i < this.children.length; i++) {
-      if(name == this.children[i].name) {
+    for (var childIndex in this.children) {
+      if(name == this.children[childIndex].name) {
         return false;
       }  
     }
@@ -115,12 +115,28 @@ Base.prototype.updateUI = function() {
 var Feature = function(name, description) {
   this.name = name;
   this.description = description;
+  this.children = {};
+  //active child index
+  this.activeChild = null;
+  // index of this object in array; set by parent of this.
+  this.index = 0;
+  // child index
+  this.childIndex = 0;
+  this.parent = null;
 };
 
 Feature.prototype = new Base();
 
 var Scenario = function(name) {
   this.name = name;
+  this.children = {};
+  //active child index
+  this.activeChild = null;
+  // index of this object in array; set by parent of this.
+  this.index = 0;
+  // child index
+  this.childIndex = 0;
+  this.parent = null;
 };
 
 Scenario.prototype = new Base();
@@ -197,7 +213,8 @@ Feature.prototype.updateUI = function() {
     </div>\
     <div class="clearfix"></div>\
   </li>';
-  //$(".itm-scenario").removeClass('active');
+  // hide all the scenarios 
+  $(".itm-scenario").removeClass('active');
   $(feature_ui).insertBefore('.feature-list li:last-child');
 };
 
@@ -207,7 +224,7 @@ Scenario.prototype.updateUI = function() {
     <div class="panel panel-default">\
       <div class="panel-heading">\
         <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;<span class="s_name">'+ this.name +'</span>\
-        <button data-target="#f'+ this.parent.index +'-s'+ this.index +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close scenario_close">\
+        <button data-index="'+ this.index +'" data-target="#f'+ this.parent.index +'-s'+ this.index +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close scenario_close">\
           <i class="material-icons">close</i>\
         </button>\
         <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit">\
@@ -467,6 +484,6 @@ Wordspace.clean = function() {
 }
 
 Wordspace.getActiveScenario = function() {
-  return $("#f" + this.activeChild.index + "-s" + this.activeChild.activeChild.index);
+  return $("#f" + this.activeChild + "-s" + this.getActiveChild().activeChild);
 };
 
