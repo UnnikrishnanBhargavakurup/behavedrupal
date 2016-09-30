@@ -21,6 +21,8 @@
  *   getData()        - Get data for an action    
  */
 
+"use strict";
+
 /**
  * Base functionality for all other objects.
  */
@@ -31,8 +33,10 @@ var Base = function (name) {
   this.children = {};
   //active child
   this.activeChild = null;
-  // child index
+  // index of this object in array; set by parent of this.
   this.index = 0;
+  // child index
+  this.childIndex = 0;
 
   this.parent = null;
 
@@ -41,11 +45,11 @@ var Base = function (name) {
    */
   this.addUniqueChild = function(node) {
     if(this.chekUnique(node.name)) {
-      node.index = this.index;
+      node.index = this.childIndex;
       node.parent = this;
-      this.children[this.index] = node;
+      this.children[this.childIndex] = node;
       this.activeChild = node;
-      this.index++;
+      this.childIndex++;
       node.updateUI();
     }
   }
@@ -54,9 +58,11 @@ var Base = function (name) {
    * add a child node.
    */
   this.addChild = function(node) {
-    this.children[this.index] = node;
+    this.children[this.childIndex] = node;
+    node.index = this.index;
+    node.parent = this;
     this.activeChild = node;
-    this.index++;
+    this.childIndex++;
     node.updateUI();
   }
 
@@ -67,6 +73,11 @@ var Base = function (name) {
     delete this.children[id];
   }
 
+  this.removeAll = function() {
+    delete this.children;
+    this.children = {};
+    this.activeChild = null;
+  }
   /**
    * set active child node.
    */
@@ -116,7 +127,6 @@ Scenario.prototype = new Base();
 
 var Action = function(name) {
   this.name = name;
-  this.tableCount = 0;
   this.data = [];
 };
 
@@ -125,7 +135,7 @@ Action.prototype = new Base();
 /**
  * If we have any data patterns we need to show it below an action
  */
-Action.addData = function(data) {
+Action.prototype.addData = function(data) {
   var action_ui = "";
   /**
    * a word that endwith : 
@@ -187,17 +197,17 @@ Feature.prototype.updateUI = function() {
     </div>\
     <div class="clearfix"></div>\
   </li>';
-  $(".itm-scenario").removeClass('active');
+  //$(".itm-scenario").removeClass('active');
   $(feature_ui).insertBefore('.feature-list li:last-child');
 };
 
 Scenario.prototype.updateUI = function() {
   var scenario_ui = '\
-  <div id="scenario-'+ this.index +'" class="Compose-Message itm-scenario feature-'+ this.parent.index +' active">\
+  <div id="f'+ this.parent.index +'-s'+ this.index +'" class="Compose-Message itm-scenario feature-'+ this.parent.index +' active" data-index="'+ this.index +'"> \
     <div class="panel panel-default">\
       <div class="panel-heading">\
         <i class="fa fa-cog" aria-hidden="true"></i>&nbsp;<span class="s_name">'+ this.name +'</span>\
-        <button data-fid="'+ this.parent.index +'" data-target="#scenario-'+ this.index +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close scenario_close">\
+        <button data-target="#f'+ this.parent.index +'-s'+ this.index +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-close scenario_close">\
           <i class="material-icons">close</i>\
         </button>\
         <button class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit">\
@@ -232,8 +242,8 @@ Scenario.prototype.updateUI = function() {
   </div>';
   $(".scenario-list").append(scenario_ui);
   // if we are not loading from saved items
-  if(!Workarea.loading) {
-    var offset = $('#scenario-'+ this.index).offset();
+  if(!Wordspace.loading) {
+    var offset = $('#f'+ this.parent.index +'-s'+ this.index).offset();
     offset.left -= 120;
     offset.top -= 120;
     $('html, body').animate({
@@ -245,25 +255,25 @@ Scenario.prototype.updateUI = function() {
 
 Action.prototype.updateUI = function() {
   var action_ui = '\
-  <li id="action-'+ this.index +'" class="list-group-item">\
+  <li id="f'+ this.parent.parent.index +'-s'+ this.parent.index +'-a'+ this.index +'" class="list-group-item action-'+ this.index +'">\
     <i class="fa fa-bolt text-warning" aria-hidden="true"></i>\
     <span class="action_itm">'+ this.name +'</span>\
-    <button data-target="#action-'+ this.index +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
+    <button data-target="#f'+ this.parent.parent.index +'-s'+ this.parent.index +'-a'+ this.index +'" data-dismiss="alert" class="mdl-button mdl-js-button mdl-button--icon pull-right action-btn">\
       <i class="material-icons">close</i>\
     </button>\
-    <button id="actio-edit'+ this.index +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
+    <button id="actio-edit-f'+ this.parent.parent.index +'-s'+ this.parent.index +'-a'+ this.index +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-edit action-btn">\
       <i class="material-icons">mode_edit</i>\
     </button>\
-    <button id="actio-copy'+ this.index +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-copy action-btn">\
+    <button id="actio-copy-f'+ this.parent.parent.index +'-s'+ this.parent.index +'-a'+ this.index +'" class="mdl-button mdl-js-button mdl-button--icon pull-right btn-copy action-btn">\
       <i class="material-icons">content_copy</i>\
     </button>\
-    <div class="mdl-tooltip" for="actio-copy'+ this.index +'"><span>Duplicate</span></div>\
-    <div class="mdl-tooltip" for="actio-edit'+ this.index +'"><span>Edit</span></div>';
+    <div class="mdl-tooltip" for="actio-copy-f'+ this.parent.parent.index +'-s'+ this.parent.index +'-a'+ this.index +'"><span>Duplicate</span></div>\
+    <div class="mdl-tooltip" for="actio-edit-f'+ this.parent.parent.index +'-s'+ this.parent.index +'-a'+ this.index +'"><span>Edit</span></div>';
   // add data if pattern exist
   action_ui += this.addData();  
-  action_ui += '</li>';  
+  action_ui += '</li>';
   // find the scenario belogs to this action and inster action to it.
-  $("scenario-" + this.parent.index).find('.action-list').append(action_ui);     
+  $('#f'+ this.parent.parent.index +'-s'+ this.parent.index).find('.action-list').append(action_ui);     
   componentHandler.upgradeDom();
 };
 
@@ -273,7 +283,7 @@ Action.prototype.updateUI = function() {
  * @param table
  *   array of tables.
  */
-Action.getData = function (tables) {
+Action.prototype.getData = function (tables) {
   var data = [];
   for(var i = 0; i < tables.length; i++) {
     var _data =  $(tables[i]).find('tbody tr:not(:last-child)').get().map(function(row) {
@@ -296,23 +306,24 @@ Action.getData = function (tables) {
  * @return string
  *  HTML table representation of data.
  */
-Action.addTable = function(label, rows) {
+var tableCount = 0;
+Action.prototype.addTable = function(label, rows) {
     var tbl = '\
-    <table id="data-table-'+ this.tableCount +'" class="mdl-data-table mdl-js-data-table action-data-table">\
+    <table id="data-table-'+ tableCount +'" class="mdl-data-table mdl-js-data-table action-data-table">\
       <thead>\
         <tr>\
           <th colspan="2">\
             <div class="tbl-title">\
               <span>'+ label.slice(0, -1) +'</span>\
             </div>\
-            <button id="delete-col-'+ this.tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-col">\
+            <button id="delete-col-'+ tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-col">\
               <i class="material-icons">chevron_left</i>\
             </button>\
-            <button id="add-col-'+ this.tableCount +'" class="mdl-button mdl-js-button mdl-button--icon add-col">\
+            <button id="add-col-'+ tableCount +'" class="mdl-button mdl-js-button mdl-button--icon add-col">\
               <i class="material-icons">chevron_right</i>\
             </button>\
-            <div class="mdl-tooltip" for="delete-col-'+ this.tableCount +'"><span>Delete column</span></div>\
-            <div class="mdl-tooltip" for="add-col-'+ this.tableCount +'"><span>Add column</span></div>\
+            <div class="mdl-tooltip" for="delete-col-'+ tableCount +'"><span>Delete column</span></div>\
+            <div class="mdl-tooltip" for="add-col-'+ tableCount +'"><span>Add column</span></div>\
           </th>\
         </tr>\
       </thead>\
@@ -341,24 +352,24 @@ Action.addTable = function(label, rows) {
 
     tbl += '<tr>\
           <td colspan="2">\
-            <button id="delete-row-'+ this.tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-row">\
+            <button id="delete-row-'+ tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-row">\
               <i class="material-icons">expand_less</i>\
             </button>\
-            <button id="add-row-'+ this.tableCount +'" class="mdl-button mdl-js-button mdl-button--icon add-row">\
+            <button id="add-row-'+ tableCount +'" class="mdl-button mdl-js-button mdl-button--icon add-row">\
               <i class="material-icons">expand_more</i>\
             </button>\
-            <div class="mdl-tooltip" for="delete-row-'+ this.tableCount +'"><span>Delete row</span></div>\
-            <div class="mdl-tooltip" for="add-row-'+ this.tableCount +'"><span>Add row </span></div>\
-            <button id="delete-tbl-'+ this.tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-tbl">\
+            <div class="mdl-tooltip" for="delete-row-'+ tableCount +'"><span>Delete row</span></div>\
+            <div class="mdl-tooltip" for="add-row-'+ tableCount +'"><span>Add row </span></div>\
+            <button id="delete-tbl-'+ tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-tbl">\
               <i class="material-icons">delete</i>\
             </button>\
-            <div class="mdl-tooltip" for="delete-tbl-'+ this.tableCount +'"><span>Delete table</span></div>\
+            <div class="mdl-tooltip" for="delete-tbl-'+ tableCount +'"><span>Delete table</span></div>\
             <a class="table-help help-txt help-link" data-index="5" href="#">Help?</a>\
           </td>\
         </tr>\
       </tbody>\
     </table>';
-    this.tableCount++;
+    tableCount++;
     return tbl;
     //$('#action-' + this.index +' .action-data').append(tbl);
     //componentHandler.upgradeDom();
@@ -367,6 +378,7 @@ Action.addTable = function(label, rows) {
 var Wordspace = new Base("ide");
 // if data is loading to workspace or not
 Wordspace.loading = false;
+
 /**
  * show a message to user.
  */
@@ -374,6 +386,15 @@ Wordspace.showMessage = function(message) {
   $("#message_window .msg_body").html(message);
   $("#message_window").show();
 }; 
+
+(function($) {
+  $(".messages").draggable({ handle:'H4'});
+  $(".messages").on('click', '.message-close', function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+    $(".messages").hide();
+  });
+})(jQuery);
 
 /**
  * Add data from backend to workspace
@@ -388,6 +409,7 @@ Wordspace.setData = function(features, _classes) {
       // add the scenario to the feature.
       var scenario = new Scenario(features[i].scenarios[j].name);
       fetaure.addUniqueChild(scenario);
+      // add all the actions
       for (var k = 0; k < features[i].scenarios[j].actions.length; k++) {
         var action_txt = features[i].scenarios[j].actions[k].action;
         var action_data = features[i].scenarios[j].actions[k].data;
@@ -418,7 +440,7 @@ Wordspace.getData = function() {
       for (var scenario_no in this.children[feature_no].children) {
         if (this.children[feature_no].children.hasOwnProperty(scenario_no)) {
           var actions = [];
-          $("#scenario-" + this.children[feature_no].children[scenario_no].index +" li").each(function() {
+          $("#f" + this.children[feature_no].index + "-s" + this.children[feature_no].children[scenario_no].index +" li").each(function() {
             var action_txt = $(this).find("span.action_itm").html();
             var data = [];
             // need to get all data here
@@ -427,12 +449,24 @@ Wordspace.getData = function() {
             }
             actions.push({"action" : action_txt, "data" : data});
           });
-          feature.scenarios.push({"name" : scenario_name, "actions" : _actions});
+          feature.scenarios.push({"name" : this.children[feature_no].children[scenario_no].name, "actions" : actions});
         }
       } 
       data.push(feature);
     }
   }
   return data;
+};
+
+Wordspace.clean = function() {
+  this.removeAll();
+  (function($) {
+    $(".itm-scenario").remove();
+    $(".feature-item").remove();
+  })(jQuery);
+}
+
+Wordspace.getActiveScenario = function() {
+  return $("#f" + this.activeChild.index + "-s" + this.activeChild.activeChild.index);
 };
 
