@@ -128,7 +128,7 @@
     for(var i = 0; i < vars.length; i++) {
       tbl += Action.addTable(vars[i]);
     };
-    Wordspace.getActiveScenario().find('action-' + action_index).append(tbl);
+    Wordspace.getActiveScenario().find('.action-' + action_index).append(tbl);
     componentHandler.upgradeDom();
     $(this).parent().hide();
   });
@@ -205,6 +205,19 @@
     $(this).parent().text(data_now);
   });
   
+  /**
+   * For tab navigation in data cells of an action.
+   */
+  $(".scenario-list").on("keydown", '.cell-ctl', function(e) {
+    if (e.keyCode == 9) { 
+      e.preventDefault();
+      e.stopPropagation();
+      var curr = $("td.cell-dta").index($(this).parent());
+      $(this).blur();
+      $("td.cell-dta").eq(curr + 1).trigger('click');
+    }
+  });
+
   /**
    * deleting a column from current table.
    */
@@ -346,33 +359,33 @@
   /**
    * Open login dilaogbox.
    */
-  $("#messages").on("click", ".open_login", function(e) {
+  $(".messages").on("click", ".open_login", function(e) {
     e.stopPropagation();
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
-    $("#messages").hide();
+    $(".messages").hide();
     dialog_login.show();
   });
   
   /**
    * Open register dilaogbox.
    */
-  $("#messages").on("click", ".open_register", function(e) {
+  $(".messages").on("click", ".open_register", function(e) {
     e.stopPropagation();
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_reg').removeClass('dialog_login dialog_password_reset');
-    $("#messages").hide();
+    $(".messages").hide();
     dialog_login.show();
   });
 
   /**
    * Need at least one feature for adding scenatios.
    */
-  $("#messages").on("click", "#add_feature", function(e) {
+  $(".messages").on("click", "#add_feature", function(e) {
     e.preventDefault();
     e.stopPropagation();
-    $("#messages").hide();
-    dialog_feature.show();
+    Feature.add();
+    $(".messages").hide();
   });
 
 
@@ -458,7 +471,7 @@
   $("#clear_all").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
-    clean();
+    Wordspace.clean();
     project_data = [];
     if(window.behave.csrf_token == "") {
       get_token(autosave_update);

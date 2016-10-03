@@ -970,3 +970,7 @@ body #jpWalkthrough #jpwTooltip #tooltipInner p {
 .msg-title .btn-close {
   margin-top: 5px;
 }
+
+td.cell-dta{
+  width: 50%;
+}
