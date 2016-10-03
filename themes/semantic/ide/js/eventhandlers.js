@@ -117,16 +117,24 @@
 
   /**
    * add action data table
-   * TODO: need to fix
    */
   $(".scenario-list").on('click', '.add-data', function(e) {
     e.preventDefault();
     e.stopPropagation();
     var action_index = $(this).data('index');
-    var vars = JSON.parse(unescape($(this).data('vars')));
+    var data_patterns = JSON.parse(unescape($(this).data('vars')));
     var tbl = '';
-    for(var i = 0; i < vars.length; i++) {
-      tbl += Action.addTable(vars[i]);
+    // getting active action from current feature > scenario 
+    var action = Wordspace.getActiveChild().getActiveChild().getChild(action_index);
+    for(var i = 0; i < data_patterns.length; i++) {
+      // if we have data
+      if(action.data.length > 0) {
+        tbl += action.addTable(data_patterns[i], action.data[i]);
+      }
+      else {
+        // just add the palceholder here
+        tbl += action.addTable(data_patterns[i], []);
+      }
     };
     Wordspace.getActiveScenario().find('.action-' + action_index).append(tbl);
     componentHandler.upgradeDom();

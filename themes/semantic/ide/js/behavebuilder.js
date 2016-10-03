@@ -88,6 +88,13 @@ var Base = function (name) {
   }
 
   /**
+   * get a child node.
+   */
+  this.getChild = function(id) {
+    return this.children[id];
+  } 
+
+  /**
    * get active child node.
    */
   this.getActiveChild = function() {
@@ -115,12 +122,8 @@ Base.prototype.updateUI = function() {
 };
 
 /**
- * This is a abstract function for showing a dilaogbox for adding child components..
+ * Base class for all the fatures.
  */
-Base.prototype.add = function() {
-  console.log("UI not implemented");
-};
-
 var Feature = function(name, description) {
   this.name = name;
   this.description = description;
@@ -136,6 +139,9 @@ var Feature = function(name, description) {
 
 Feature.prototype = new Base();
 
+/**
+ * Base class for all the scenarios in a feature.
+ */
 var Scenario = function(name) {
   this.name = name;
   this.children = {};
@@ -150,9 +156,12 @@ var Scenario = function(name) {
 
 Scenario.prototype = new Base();
 
+/**
+ * Base class for all the actions in a scenario.
+ */
 var Action = function(name, data) {
   this.name = name;
-  this.data = data || [];
+  this.data = data || []; 
 };
 
 Action.prototype = new Base();
