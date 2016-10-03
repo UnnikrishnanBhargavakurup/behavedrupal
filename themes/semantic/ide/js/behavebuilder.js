@@ -6,10 +6,12 @@
  *   addUniqueChild() - add a unique child.
  * 
  * Workarea : object
- *   loading          - flag if data is getting loaded to workspace.
- *   getData()        - get all data from workarea
- *   setData()        - set data to workarea
- *   showMessage()    - Show a message to use
+ *   loading             - flag if data is getting loaded to workspace.
+ *   getData()           - get data from workarea
+ *   setData()           - set data to workarea
+ *   showMessage()       - Show a message to use
+ *   clean()             - Clean everuthing in workarea.
+ *   getActiveScenario() - Active focused scenario.
  *
  * Feature : object
  *   description      - description about this feature
@@ -106,9 +108,16 @@ var Base = function (name) {
 };
 
 /**
- * This is a abstract class for child to add UI elements to workarea.
+ * This is a abstract function for child to add UI elements to workarea.
  */
 Base.prototype.updateUI = function() {
+  console.log("UI not implemented");
+};
+
+/**
+ * This is a abstract function for showing a dilaogbox for adding child components..
+ */
+Base.prototype.add = function() {
   console.log("UI not implemented");
 };
 
@@ -143,7 +152,7 @@ Scenario.prototype = new Base();
 
 var Action = function(name, data) {
   this.name = name;
-  this.data = data;
+  this.data = data || [];
 };
 
 Action.prototype = new Base();
