@@ -378,11 +378,40 @@ Action.getData = function (tables) {
  */
 var tableCount = 0;
 Action.prototype.addTable = function(label, rows) {
+    // default colspan 2
+    var colspan = 2;
+    var row_data = "";
+    /**
+     * get row data here if exist.
+     * else add dummy rows.
+     */
+    if(rows.length > 0) {
+      colspan = rows[0].length;
+      for(var i = 0; i < rows.length; i++) {
+        row_data += '<tr>';
+        for(var j = 0; j < rows[i].length; j++) {
+          row_data += '<td class="cell-dta">'+ rows[i][j] +'</td>';
+        }
+        row_data += '</tr>';
+      }
+    }
+    else {
+      row_data +='\
+      <tr>\
+        <td class="cell-dta">click here</td>\
+        <td class="cell-dta">click here</td>\
+      </tr>\
+      <tr>\
+        <td class="cell-dta">click here</td>\
+        <td class="cell-dta">click here</td>\
+      </tr>';
+    }
+
     var tbl = '\
     <table id="data-table-'+ tableCount +'" class="mdl-data-table mdl-js-data-table action-data-table">\
       <thead>\
         <tr>\
-          <th colspan="2">\
+          <th colspan="'+ colspan +'">\
             <div class="tbl-title">\
               <span>'+ label.slice(0, -1) +'</span>\
             </div>\
@@ -398,30 +427,9 @@ Action.prototype.addTable = function(label, rows) {
         </tr>\
       </thead>\
       <tbody>';
-
-      if(rows.length > 0) {
-        for(var i = 0; i < rows.length; i++) {
-          tbl += '<tr>';
-          for(var j = 0; j < rows[i].length; j++) {
-            tbl += '<td class="cell-dta">'+ rows[i][j] +'</td>';
-          }
-          tbl += '</tr>';
-        }
-      }
-      else {
-        tbl +='\
-        <tr>\
-          <td class="cell-dta">click here</td>\
-          <td class="cell-dta">click here</td>\
-        </tr>\
-        <tr>\
-          <td class="cell-dta">click here</td>\
-          <td class="cell-dta">click here</td>\
-        </tr>';
-      }
-
+    tbl += row_data; // add row data here
     tbl += '<tr>\
-          <td colspan="2">\
+          <td colspan="'+ colspan +'">\
             <button id="delete-row-'+ tableCount +'" class="mdl-button mdl-js-button mdl-button--icon delete-row">\
               <i class="material-icons">expand_less</i>\
             </button>\
