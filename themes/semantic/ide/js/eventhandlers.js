@@ -580,7 +580,7 @@
   });
   
   /**
-   * cancel feature edit.
+   * Cancel feature edit.
    */
   $(".feature-list").on("click", ".cancel-edt-featre", function(e) {
     e.preventDefault();
@@ -592,7 +592,7 @@
   });
 
   /**
-   * save feature edit.
+   * Save feature edit.
    */
   $(".feature-list").on("click", ".save-edt-featre", function(e) {
     e.preventDefault();
@@ -600,13 +600,15 @@
     $('.feature-item .error').hide();
     var featureName = $(this).closest('.feature-item').find('.feature-n-ctl').val().trim();
     var old_name = $(this).data('name');
-
+    
+    /**
+     * If there already exist a feature with same name.
+     */
     if(old_name != featureName) {
-      for(var featureIndex in Wordspace.children) {
-        if(Wordspace.children[featureIndex].name == featureName) {
-          $(this).closest('.feature-item').find('.error').show();
-          return;
-        }
+      if(Wordspace.findByName(featureName)) {
+        // show the error message and exit.
+        $(this).closest('.feature-item').find('.error').show();
+        return;
       }
     }
 
@@ -619,7 +621,7 @@
   });
   
   /**
-   * remove the error message om keydown.
+   * Remove the error message on keydown.
    */
   $(".feature-list").on("keydown", '.feature-n-ctl', function(e) {
     e.stopPropagation();
@@ -645,19 +647,20 @@
     e.stopPropagation();
     var scenario_name = $(this).val().trim();
     var old_value = $(this).data('old');
-
+    /** 
+     * if we have a different value for scenario we need to check 
+     * whether there exist a scenario with same name. 
+     * If yes show an error message.
+     */
     if(old_value != scenario_name) {
-      for(var scenarioIndex in Wordspace.getActiveChild().children) {
-        if(Wordspace.getActiveChild().children[scenarioIndex].name == scenario_name) {
-          return true;
-        }
+      if(Wordspace.getActiveChild().findByName(scenario_name)) {
+        return;
       }
-      return;
-    }
-    else if(old_value != scenario_name) {
-      Wordspace.getActiveChild().children[scenario_name] = Object.assign(Wordspace.getActiveChild().children[old_value]);
-      delete Wordspace.getActiveChild().children[old_value];
-      $(this).parent().text(scenario_name);
+      else {
+        var old_scenario = Wordspace.getActiveChild().findByName(old_value);
+        old_scenario.name = scenario_name;
+        $(this).parent().text(scenario_name); 
+      }
     }
     else {
       $(this).parent().text(scenario_name);

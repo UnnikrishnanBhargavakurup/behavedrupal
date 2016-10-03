@@ -54,6 +54,10 @@ var Base = function (name) {
       this.childIndex++;
       node.updateUI();
     }
+    else {
+      // show an error message 
+      node.showDuplicateError(node.name);
+    }
   }
 
   /**
@@ -111,7 +115,29 @@ var Base = function (name) {
       }  
     }
     return true;
-  }  
+  }
+
+  /**
+   * Find a node by name
+   */
+  this.findByName = function(name) {
+    for(var childIndex in this.children) {
+      if(this.children[childIndex].name == name) {
+        return this.children[childIndex];
+      }
+    }
+    return null;
+  }; 
+
+  /**
+   * If already a node exist with the same name.
+   */
+  this.showDuplicateError = function() {
+    if (window.console) {
+      console.log("Duplicate name");
+    }
+  };
+
 };
 
 /**
