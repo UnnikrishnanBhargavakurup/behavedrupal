@@ -53,7 +53,7 @@
   showDialogButton_feature.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    dialog_feature.show();
+    Feature.add();
   });
 
   dialog_feature.querySelector('.close').addEventListener('click', function(e) {
@@ -76,6 +76,12 @@
     dialog_feature.close();
   });
 
+  /**
+   * Show the add feature dialog from here.
+   */
+  Feature.add = function() {
+    dialog_feature.show();
+  }
 
   var dialog_login = document.querySelector('.dialog_login');
   var showDialogButton_login = document.querySelector('#login');
