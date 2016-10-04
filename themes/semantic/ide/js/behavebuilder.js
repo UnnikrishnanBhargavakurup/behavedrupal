@@ -2,8 +2,10 @@
  * Following are classes for workarea related functionalities.
  *
  * Base : object base object for all other object.
- *   name             - name of the object
- *   addUniqueChild() - add a unique child.
+ *   name             -  name of the object
+ *   addUniqueChild() -  add a unique child.
+ *   getChild()       -  get child with given id
+ *   findByName()     -  Find a child having name
  * 
  * Workarea : object
  *   loading             - flag if data is getting loaded to workspace.
@@ -12,6 +14,7 @@
  *   showMessage()       - Show a message to use
  *   clean()             - Clean everuthing in workarea.
  *   getActiveScenario() - Active focused scenario.
+ *   login()             - Open the login dialogbox.
  *
  * Feature : object
  *   description      - description about this feature
@@ -150,7 +153,7 @@ Base.prototype.updateUI = function() {
 /**
  * Base class for all the fatures.
  */
-var Feature = function(name, description) {
+var Feature = function(name, description, classes) {
   this.name = name;
   this.description = description;
   this.children = {};
@@ -161,6 +164,8 @@ var Feature = function(name, description) {
   // child index
   this.childIndex = 0;
   this.parent = null;
+  // aditional classess need to be added in the UI.
+  this.classes = classes || "";
 };
 
 Feature.prototype = new Base();
@@ -239,9 +244,8 @@ Action.prototype.addData = function(data) {
 
 Feature.prototype.updateUI = function() {
   $("ul.collection li").removeClass('active');
-  var _classes = "";
   var feature_ui = '\
-  <li id="feature-'+ this.index +'" class="collection-item avatar email-unread feature-item '+ _classes +' active" data-id="'+ this.index +'">\
+  <li id="feature-'+ this.index +'" class="collection-item avatar email-unread feature-item '+ this.classes +' active" data-id="'+ this.index +'">\
     <i class="fa fa-cogs icon_1"></i>\
     <div class="avatar_left">\
       <span class="email-title feature-n">'+ this.name +'</span>\
@@ -477,10 +481,10 @@ Wordspace.showMessage = function(message) {
 /**
  * Add data from backend to workspace
  */
-Wordspace.setData = function(features, _classes) {
+Wordspace.setData = function(features, classes) {
   this.loading = true;
   for(var i = 0; i < features.length; i++) {
-    var fetaure = new Feature(features[i].name, features[i].description);
+    var fetaure = new Feature(features[i].name, features[i].description, classes);
     Wordspace.addUniqueChild(fetaure); 
     // add feature to workspace.
     for(var j = 0; j < features[i].scenarios.length; j++) {

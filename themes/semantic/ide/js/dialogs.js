@@ -2,6 +2,7 @@
 
 (function($) {
   var dialog_scenario = document.querySelector('.dialog_add-scenario');
+
   var showDialogButton = document.querySelector('.add-scenario');
 
   if (!dialog_scenario.showModal) {
@@ -84,6 +85,7 @@
   }
 
   var dialog_login = document.querySelector('.dialog_login');
+
   var showDialogButton_login = document.querySelector('#login');
   if (!dialog_login.showModal) {
     dialogPolyfill.registerDialog(dialog_login);
@@ -100,6 +102,13 @@
     e.stopPropagation();
     dialog_login.close();
   });
+
+  /**
+   * Show the add feature dialog from here.
+   */
+  Wordspace.login = function() {
+    dialog_login.show();
+  }
 
   /**
    * Login the user 
@@ -572,7 +581,7 @@
         },
         success : function(response) {
           // set deta in workspace from autosave data.
-          set_data(JSON.parse(response.data), "f_templet_" + tid);
+          Wordspace.setData(JSON.parse(response.data), "f_templet_" + tid);
         }
       });
     }

@@ -365,25 +365,25 @@
   });
    
   /**
-   * Open login dilaogbox.
+   * Open login dialogbox.
    */
   $(".messages").on("click", ".open_login", function(e) {
     e.stopPropagation();
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
     $(".messages").hide();
-    dialog_login.show();
+    Wordspace.login();
   });
   
   /**
-   * Open register dilaogbox.
+   * Open register dialogbox.
    */
   $(".messages").on("click", ".open_register", function(e) {
     e.stopPropagation();
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_reg').removeClass('dialog_login dialog_password_reset');
     $(".messages").hide();
-    dialog_login.show();
+    Wordspace.login();
   });
 
   /**
