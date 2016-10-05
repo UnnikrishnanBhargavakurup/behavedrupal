@@ -13,7 +13,7 @@
     e.preventDefault();
     e.stopPropagation();
     if($(".feature-item").length == 0) {
-      Wordspace.showMessage('\
+      Workspace.showMessage('\
       <span>Please add a feature before adding scenarios</span>\
       <div class="clearfix"> </div>\
       <div class="clearfix"> </div>\
@@ -23,7 +23,7 @@
       </div>');
       return;
     }
-    $(".feature-name").text(Wordspace.getActiveChild().name);
+    $(".feature-name").text(Workspace.getActiveChild().name);
     dialog_scenario.show();
   });
 
@@ -39,7 +39,7 @@
     var scenario_name = $("#scenario-name").val().trim();
     if(scenario_name != "") {
       var scenario = new Scenario(scenario_name);
-      Wordspace.getActiveChild().addUniqueChild(scenario);
+      Workspace.getActiveChild().addUniqueChild(scenario);
       $("#scenario-name").val('');
     }
     dialog_scenario.close();
@@ -70,7 +70,7 @@
     var feature_description = $("#feature-description").val().trim();
     if(feature_name != "") {
         var fetaure = new Feature(feature_name, feature_description);
-        Wordspace.addUniqueChild(fetaure);
+        Workspace.addUniqueChild(fetaure);
       $("#feature-name").val('');
       $("#feature-description").val('');
     }
@@ -106,7 +106,7 @@
   /**
    * Show the add feature dialog from here.
    */
-  Wordspace.login = function() {
+  Workspace.login = function() {
     dialog_login.show();
   }
 
@@ -137,7 +137,7 @@
             "confirm_pass" : confirm_password
           }),
           error: function(data) {
-            window.behave.isLoggedin = 0;
+            Workspace.isLoggedin = 0;
           },
           success : function(data) {
             if(data.hasOwnProperty('error')) {
@@ -149,7 +149,7 @@
             $("#login").hide();
             $(".usr-profile").show();
               //success code
-            window.behave.isLoggedin = 1;
+            Workspace.isLoggedin = 1;
             dialog_login.close();
           }
         });
@@ -176,7 +176,7 @@
           data : JSON.stringify({"name" : user_name, "pass" : user_pass}),
           error: function(data) {
             $(".profile_details .mdl-spinner").removeClass('is-active');
-            window.behave.isLoggedin = 0;
+            Workspace.isLoggedin = 0;
           },
           success : function(data) {
             if(data.hasOwnProperty('error')) {
@@ -194,7 +194,7 @@
                 updateProjectData(data.saved_data[i]);
               }
             }
-            window.behave.isLoggedin = 1;
+            Workspace.isLoggedin = 1;
             //success code
             dialog_login.close();
           }
@@ -286,7 +286,7 @@
     e.stopPropagation();
     $(".profile_details .mdl-spinner").addClass('is-active');
     $.get( "/user/logout", function(data) {
-      logout();
+      Workspace.logout();
     });
   });
 
@@ -320,11 +320,11 @@
   showDialogButton_save.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if(window.behave.isLoggedin) {
+    if(Workspace.isLoggedin) {
       dialog_save.show();
     }
     else {
-      Wordspace.showMessage('\
+      Workspace.showMessage('\
       <span>Please <a href="#" class="open_login">login</a> / <a href="#" class="open_register">register</a> for saving a project.</span>\
       <div class="clearfix"> </div>\
       <div style="float:right;">\
@@ -355,7 +355,7 @@
    */
   function save_projects() {
     var project_name = $("#save_project").val().trim();
-    var project_data = Wordspace.getData();
+    var project_data = Workspace.getData();
     var id = "";
     if(project_name == "") {
       id = $("#saved_projects").val();
@@ -408,7 +408,7 @@
                   </button>\
                 </td>\
               </tr>');
-    // adding to save as dilaogs.
+    // adding to save as dialogs.
     $("#saved_projects > option:first-child").after("<option value="+ data.pid +">"+ data.title +"</option>");
   };
 
@@ -460,7 +460,7 @@
       success : function(data) {
           //success code
         dialog_profile.close();
-        logout();
+        Workspace.logout();
       }
     });
   }
@@ -509,11 +509,11 @@
   showDialogButton_open.addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if(window.behave.isLoggedin) {
+    if(Workspace.isLoggedin) {
       dialog_open.show();
     }
     else {
-      Wordspace.showMessage('\
+      Workspace.showMessage('\
       <span>Please <a href="#" class="open_login">login</a> for opening your saved projects</span>\
       <div class="clearfix"> </div>\
       <div style="float:right;">\
@@ -557,8 +557,8 @@
       },
       success : function(response) {
         // set deta in workspace from autosave data.
-        Wordspace.clean();
-        Wordspace.setData(JSON.parse(response.data));
+        Workspace.clean();
+        Workspace.setData(JSON.parse(response.data));
       }
     });
   });
@@ -581,7 +581,7 @@
         },
         success : function(response) {
           // set deta in workspace from autosave data.
-          Wordspace.setData(JSON.parse(response.data), "f_templet_" + tid);
+          Workspace.setData(JSON.parse(response.data), "f_templet_" + tid);
         }
       });
     }
@@ -640,11 +640,11 @@
           <a style="margin-top: 9px;display: inline-block;" class="help-txt help-link" data-index="1" href="#">Help?</a>\
           <button style="float:right;" id="add_feature" type="button" class="mdl-button mdl-js-button mdl-button--primary">Ok</button>\
         </div>';
-        Wordspace.showMessage(message_txt);
+        Workspace.showMessage(message_txt);
         return;
       }
       if($(".itm-scenario").length == 0) {
-        Wordspace.showMessage('\
+        Workspace.showMessage('\
         <span>Please add scenarios and actions for the test.</span>\
         <div class="clearfix"> </div>\
         <div style="display:block;overflow:hidden;">\
@@ -653,7 +653,7 @@
         </div>');  
       }
       else {
-        Wordspace.showMessage('\
+        Workspace.showMessage('\
         <span>Please add at least one action before running the test.</span>\
         <div class="clearfix"> </div>\
         <div style="display:block;overflow:hidden;">\
@@ -696,16 +696,16 @@
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
   });
   
-  // make the dilaog draggabale
-  $("dialog").draggable({ handle:'.mdl-card__title'});
+  // make the dialog draggabale
+  $("dialog").draggable({handle:'.mdl-card__title', zIndex: 10000});
 
   /** 
-   * Close dilaogboxes when we click on body.
+   * Close dialogboxes when we click on body.
    */
   $(document).click(function(event) {
-    // if there is an open dilaog we need to close it.
+    // if there is an open dialog we need to close it.
     if($("dialog:visible").length == 1 && $(event.target).closest('dialog > div').length == 0) {
-      // if we are in help or feedback form we dont need to close this dilaogbox.
+      // if we are in help or feedback form we dont need to close this dialogbox.
       if(!$(event.target).hasClass('down_link') && !$.pagewalkthrough('isActive') && $("#feedback-canvas").length == 0) {
         $("dialog:visible")[0].close();
       }
@@ -717,9 +717,9 @@
    */
   $(document).keyup(function(e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
-      // if there is an open dilaog we need to close it.
+      // if there is an open dialog we need to close it.
       if($("dialog:visible").length == 1) {
-        // if we are in help or feedback form we dont need to close this dilaogbox.
+        // if we are in help or feedback form we dont need to close this dialogbox.
         $("dialog:visible")[0].close();
       }
     }

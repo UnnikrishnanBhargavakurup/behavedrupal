@@ -30,25 +30,13 @@
     // Read in the image file as a data URL.
     reader.readAsDataURL($("#uploaded_file")[0].files[0]);    
   });
-
-  /**
-   * Remove profile informations.
-   */
-  function logout() {
-    $(".usr-profile").hide();
-    $("#login").show();
-    $("#saved_projects option").not(':first').remove();
-    $(".dialog-open table tbody tr").remove();
-    $(".profile_details .mdl-spinner").removeClass('is-active');   
-    window.behave.isLoggedin = 0;
-  };
     
   // This is for tracking active scenario
   $(".scenario-list").on("focusin", ".itm-scenario input:text", function(e) {
     e.stopPropagation();
     var index = $(this).closest('.itm-scenario').data('index');
     // feature >> scenario 
-    Wordspace.getActiveChild().setActiveChild(index);
+    Workspace.getActiveChild().setActiveChild(index);
     hide_help();
     showActiveHelpLink();
   });
@@ -59,8 +47,8 @@
     // some thimes it is showing error.
     var index = $(this).closest('.itm-scenario').data('index');
     // feature >> scenario 
-    Wordspace.getActiveChild().setActiveChild(index);
-    var action_txt = Wordspace.getActiveScenario().find('input:text').val();
+    Workspace.getActiveChild().setActiveChild(index);
+    var action_txt = Workspace.getActiveScenario().find('input:text').val();
     var help_patterns = action_txt.toLowerCase().match(/(^|\s):(\w+)/g);
     if(help_patterns) {
       show_help(help_patterns);
@@ -74,13 +62,13 @@
       }
       else {
         var action = new Action(action_txt);
-        Wordspace.getActiveChild().getActiveChild().addChild(action);
+        Workspace.getActiveChild().getActiveChild().addChild(action);
       }
-      Wordspace.getActiveScenario().find('input:text').val('');
+      Workspace.getActiveScenario().find('input:text').val('');
     }
     /*
     addAction(action_txt);
-    Wordspace.getActiveScenario().find('input:text').val('');
+    Workspace.getActiveScenario().find('input:text').val('');
     */
   });
   
@@ -93,7 +81,7 @@
     var f_id = $(this).data('target');
     // remove all the scenario associated with this feature
     $('.feature-' + f_id).remove();
-    Wordspace.removeChild(f_id);
+    Workspace.removeChild(f_id);
     // remove the feature.
     $('#feature-' + f_id).remove();
     //prev.trigger('click');
@@ -111,7 +99,7 @@
     if($(".itm-scenario:visible").length == 1) {
       $('.feature-help').show();
     }
-    Wordspace.getActiveChild().removeChild(sIndex);
+    Workspace.getActiveChild().removeChild(sIndex);
     $(s_id).remove();
   });
 
@@ -125,7 +113,7 @@
     var data_patterns = JSON.parse(unescape($(this).data('vars')));
     var tbl = '';
     // getting active action from current feature > scenario 
-    var action = Wordspace.getActiveChild().getActiveChild().getChild(action_index);
+    var action = Workspace.getActiveChild().getActiveChild().getChild(action_index);
     for(var i = 0; i < data_patterns.length; i++) {
       // if we have data
       if(action.data.length > 0) {
@@ -136,7 +124,7 @@
         tbl += action.addTable(data_patterns[i], []);
       }
     };
-    Wordspace.getActiveScenario().find('.action-' + action_index).append(tbl);
+    Workspace.getActiveScenario().find('.action-' + action_index).append(tbl);
     componentHandler.upgradeDom();
     $(this).parent().hide();
   });
@@ -291,15 +279,15 @@
    * Show help message
    */
   function show_help(help_patterns) {
-    Wordspace.getActiveScenario().find('input:text').addClass('invalid');
+    Workspace.getActiveScenario().find('input:text').addClass('invalid');
     /*
     for(var i = 0; i < help_patterns.length; i++) {
       var key = help_patterns[i].trim();
       if(key in help_data) {
-        Wordspace.getActiveScenario().find('.error-msg span').text(help_data[key]);
+        Workspace.getActiveScenario().find('.error-msg span').text(help_data[key]);
       }
       else {
-        Wordspace.getActiveScenario().find('.error-msg span').html("Please provide a value for " + key + " placeholder.");
+        Workspace.getActiveScenario().find('.error-msg span').html("Please provide a value for " + key + " placeholder.");
       }
       break;
     };
@@ -311,10 +299,10 @@
     else {
       msg = "Please provide a value for <b>" + help_patterns[0] + "</b> placeholder. Should be enclosed in quotes";
     }
-    Wordspace.getActiveScenario().find('.error-msg span').html(msg);
+    Workspace.getActiveScenario().find('.error-msg span').html(msg);
     $('.scenario-help').hide();
-    Wordspace.getActiveScenario().find('.error-msg').animate({opacity: 1, height : '20px'}, 50);
-    Wordspace.getActiveScenario().find('input:text').blur();
+    Workspace.getActiveScenario().find('.error-msg').animate({opacity: 1, height : '20px'}, 50);
+    Workspace.getActiveScenario().find('input:text').blur();
   }
 
   /**
@@ -322,8 +310,8 @@
    */
   function showActiveHelpLink() {
     $('.scenario-help').hide();
-    if(Wordspace.getActiveScenario()) {
-      Wordspace.getActiveScenario().find('.scenario-help').show();
+    if(Workspace.getActiveScenario()) {
+      Workspace.getActiveScenario().find('.scenario-help').show();
     }
   };
 
@@ -331,10 +319,10 @@
    * Hide help message.
    */
   function hide_help() {
-    Wordspace.getActiveScenario().find('input:text').removeClass('invalid');
-    Wordspace.getActiveScenario().find('.error-msg span').text("");
-    Wordspace.getActiveScenario().find('.error-msg').animate({opacity: 0, height : 0}, 50, function() {
-      Wordspace.getActiveScenario().find('.error-msg .help-txt').data("index", 3);
+    Workspace.getActiveScenario().find('input:text').removeClass('invalid');
+    Workspace.getActiveScenario().find('.error-msg span').text("");
+    Workspace.getActiveScenario().find('.error-msg').animate({opacity: 0, height : 0}, 50, function() {
+      Workspace.getActiveScenario().find('.error-msg .help-txt').data("index", 3);
     });
   }
  
@@ -348,7 +336,7 @@
     $(this).addClass('active');
     var activeFeatureIndex = $(this).data('id') || 0;
     // set active feature in workarea 
-    Wordspace.setActiveChild(activeFeatureIndex);
+    Workspace.setActiveChild(activeFeatureIndex);
     $(".itm-scenario").removeClass('active');
 
     if($(".scenario-list .feature-" + activeFeatureIndex).length > 0) {
@@ -372,7 +360,7 @@
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
     $(".messages").hide();
-    Wordspace.login();
+    Workspace.login();
   });
   
   /**
@@ -383,7 +371,7 @@
     e.preventDefault();
     $(".dialog_auth").addClass('dialog_reg').removeClass('dialog_login dialog_password_reset');
     $(".messages").hide();
-    Wordspace.login();
+    Workspace.login();
   });
 
   /**
@@ -427,8 +415,8 @@
           return;
         }
        //clean everything before adding from saved data.
-       Wordspace.clean();
-       Wordspace.setData(data);
+       Workspace.clean();
+       Workspace.setData(data);
        project_data = data;
       }
     });    
@@ -439,7 +427,7 @@
 
   // for autosaving workspace data.
   var autosave = function() {
-    var _project_data = Wordspace.getData();
+    var _project_data = Workspace.getData();
     // only if we have some chages
     if(JSON.stringify(project_data) == JSON.stringify(_project_data)) {
       return;
@@ -479,7 +467,7 @@
   $("#clear_all").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
-    Wordspace.clean();
+    Workspace.clean();
     project_data = [];
     if(window.behave.csrf_token == "") {
       get_token(autosave_update);
@@ -559,7 +547,7 @@
     //e.stopPropagation(); 
     var action_txt = $(this).siblings('span').text();
     var action = new Action(action_txt);
-    Wordspace.getActiveChild().getActiveChild().addChild(action);    
+    Workspace.getActiveChild().getActiveChild().addChild(action);    
   });
 
   /**
@@ -614,7 +602,7 @@
      * If there already exist a feature with same name.
      */
     if(old_name != featureName) {
-      if(Wordspace.findByName(featureName)) {
+      if(Workspace.findByName(featureName)) {
         // show the error message and exit.
         $(this).closest('.feature-item').find('.error').show();
         return;
@@ -624,8 +612,8 @@
     var description = $(this).closest('.feature-item').find('.feature-dis-ctl').val().trim();
     $(this).closest('.feature-item').find('.feature-n').text(featureName);
     $(this).closest('.feature-item').find('.feature-dis').text(description); 
-    Wordspace.getActiveChild().name = featureName;
-    Wordspace.getActiveChild().description = description;
+    Workspace.getActiveChild().name = featureName;
+    Workspace.getActiveChild().description = description;
     $('.feature-item .btn-edit').show();
   });
   
@@ -662,11 +650,11 @@
      * If yes show an error message.
      */
     if(old_value != scenario_name) {
-      if(Wordspace.getActiveChild().findByName(scenario_name)) {
+      if(Workspace.getActiveChild().findByName(scenario_name)) {
         return;
       }
       else {
-        var old_scenario = Wordspace.getActiveChild().findByName(old_value);
+        var old_scenario = Workspace.getActiveChild().findByName(old_value);
         old_scenario.name = scenario_name;
         $(this).parent().text(scenario_name); 
       }

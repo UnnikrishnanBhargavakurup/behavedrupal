@@ -309,7 +309,7 @@ Scenario.prototype.updateUI = function() {
   attach_autocomplete($('#f'+ this.parent.index +'-s'+ this.index +" input:text"));
   $('.feature-help').hide();
   // if we are not loading from saved items
-  if(!Wordspace.loading) {
+  if(!Workspace.loading) {
     var offset = $('#f'+ this.parent.index +'-s'+ this.index).offset();
     offset.left -= 120;
     offset.top -= 120;
@@ -457,14 +457,15 @@ Action.prototype.addTable = function(label, rows) {
     //componentHandler.upgradeDom();
 }
 
-var Wordspace = new Base("ide");
+var Workspace = new Base("ide");
 // if data is loading to workspace or not
-Wordspace.loading = false;
+Workspace.loading = false;
+Workspace.isLoggedin = window.behave.isLoggedin;
 
 /**
  * show a message to user.
  */
-Wordspace.showMessage = function(message) {
+Workspace.showMessage = function(message) {
   $("#message_window .msg_body").html(message);
   $("#message_window").show();
 }; 
@@ -481,11 +482,11 @@ Wordspace.showMessage = function(message) {
 /**
  * Add data from backend to workspace
  */
-Wordspace.setData = function(features, classes) {
+Workspace.setData = function(features, classes) {
   this.loading = true;
   for(var i = 0; i < features.length; i++) {
     var fetaure = new Feature(features[i].name, features[i].description, classes);
-    Wordspace.addUniqueChild(fetaure); 
+    Workspace.addUniqueChild(fetaure); 
     // add feature to workspace.
     for(var j = 0; j < features[i].scenarios.length; j++) {
       // add the scenario to the feature.
@@ -508,9 +509,21 @@ Wordspace.setData = function(features, classes) {
 };
 
 /**
+ * Logout the user from workspace.
+ */
+Workspace.logout = function() {
+  $(".usr-profile").hide();
+  $("#login").show();
+  $("#saved_projects option").not(':first').remove();
+  $(".dialog-open table tbody tr").remove();
+  $(".profile_details .mdl-spinner").removeClass('is-active');   
+  Workspace.isLoggedin = 0;
+}
+
+/**
  * get data from workspace.
  */
-Wordspace.getData = function() {
+Workspace.getData = function() {
   var data = [];
   for(var feature_no in this.children) {
     if (this.children.hasOwnProperty(feature_no)) {
@@ -540,7 +553,7 @@ Wordspace.getData = function() {
   return data;
 };
 
-Wordspace.clean = function() {
+Workspace.clean = function() {
   this.removeAll();
   (function($) {
     $(".itm-scenario").remove();
@@ -548,7 +561,7 @@ Wordspace.clean = function() {
   })(jQuery);
 }
 
-Wordspace.getActiveScenario = function() {
+Workspace.getActiveScenario = function() {
   return $("#f" + this.activeChild + "-s" + this.getActiveChild().activeChild);
 };
 
