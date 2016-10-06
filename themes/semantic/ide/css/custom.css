@@ -449,6 +449,16 @@ dialog .mdl-selectfield__label:after{
   bottom: 16px;
 }
 
+dialog .mdl-selectfield {
+  width: 100% !important;
+}
+
+select:-moz-focusring {
+  color: transparent;
+  text-shadow: 0 0 0 rgba(0, 0, 0, 0.87);
+  font-style: normal;
+}
+
 .user-name p {
   font-size: 14px;
   line-height: 2em;
@@ -562,9 +572,10 @@ dialog .mdl-selectfield__label:after{
   float: left;
 }
 
-.dialog-open {
+body .dialog-open {
   width: 660px;
   height: 428px;
+  left:30%;
 }
 
 .dialog-open table {
@@ -588,9 +599,10 @@ dialog .mdl-layout__content {
   width: 100%;
 }
 
-.dialog-templates {
+body dialog.dialog-templates {
   width: 800px;
   height: 499px;
+  left: 30%
 }
 
 .dialog-templates .dialog-scrollbar {
@@ -598,15 +610,20 @@ dialog .mdl-layout__content {
   padding-top: 0;
 }
 
-.dialog-run {
+body .dialog-run {
   width: 650px;
   height: 754px;
-  top: 5%;
+  top: 1%;
+  left: 30%
 }
 
 .dialog-run .scrollbar {
   height: 609px;
   padding: 0;
+}
+
+.scrollbar {
+  outline: medium none;
 }
 
 .dialog-run  pre {
