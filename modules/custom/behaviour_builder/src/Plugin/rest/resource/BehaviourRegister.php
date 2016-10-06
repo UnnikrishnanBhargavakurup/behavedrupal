@@ -131,20 +131,28 @@ class BehaviourRegister extends ResourceBase {
 
         $language = \Drupal::languageManager()->getCurrentLanguage()->getId();
         $user = entity_create('user', [
-          'name' => $data['mail'],
+          'name' => $data['email'],
           'pass' => $data['pass'],
-          'mail' => $data['mail'],
-          'init' => $data['mail'],
+          'mail' => $data['email'],
+          'init' => $data['email'],
           'status' => 1,
           'langcode' => $language
         ]);
         $errors = $user->validate();
         if($errors->count() == 0) {
           $user->save();
-          return new ResourceResponse(array());
+          return new ResourceResponse(array(
+            "pic" => "/sites/default/files/public/styles/thumbnail/public/avatar_kit/robohash/1.jpg",
+            "name" => substr($user->getUsername(), 0, strpos($user->getUsername(), '@')),
+          ));
         }
         else {
-          return new ResourceResponse(array("error" => $errors->getFieldNames()));
+          $error_messages = array();
+          foreach ($errors->getByFields($errors->getFieldNames()) as $violation) {
+            list($field_name) = explode('.', $violation->getPropertyPath(), 2);
+            $error_messages[$field_name] = $violation->getMessage();
+          }
+          return new ResourceResponse(array("error" => $error_messages));
         }
       /*}
       else {
