@@ -89,19 +89,18 @@ class BehaviourGetTemplates extends ResourceBase {
   }
 
   /**
-   * Responds to POST requests.
+   * Responds to GET requests.
    *
-   * Returns a list of bundles for specified entity.
+   * Returns data for the template.
    *
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
   public function get($id) {
     /**
-     * We need node id for this project, 
-     * also only authenticated user can open an saved projet in workspace.
+     * We need node id for this project 
      */
-    if(isset($id) && is_numeric($id) && $this->currentUser->id() > 0) {
+    if(isset($id) && is_numeric($id)) {
       $query = $this->entity_query->get('node');
       $query->condition('type', 'templates');
       $query->condition('nid', $id);
