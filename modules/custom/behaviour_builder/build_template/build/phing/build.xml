@@ -23,7 +23,7 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
 
     <taskdef name="backgroundexec" classname="phingcludes.BackgroundExecTask"/>
 
-    <taskdef name="spinner" classname="phingcludes.SpinnerTask"/>
+    <taskdef name="downloadfeatures" classname="phingcludes.DownloadFeaturesTask"/>
 
     <taskdef name="filereplace" classname="phingcludes.FileReplaceTask"/>
 
@@ -69,7 +69,10 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
               value="${behat_root}/junit" />
 
     <!-- Targets       -->
-
+    <target name="test_phing" description="Test phing">
+      <downloadfeatures url="${behave_server}/behave/features/${session_id}?_format=json" 
+            dir="${behat_root}/feature.zip"/>
+    </target>
     <target name="build"
             description="Run all the behaviour test features defined."
             depends="test:behat">
@@ -105,6 +108,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <!-- Scan PHP version -->
       <php level="debug" expression="version_compare(PHP_VERSION, '5.3') >= 0" returnProperty="phpversioncheck" />
 
+      <php level="debug" expression="function_exists('curl_version')" returnProperty="curlcheck" />
+
       <if>
         <equals arg1="${javaVersionCheck}" arg2="true" />
         <then>
@@ -132,6 +137,17 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
         <else>
           <property name="canInstall" value="false" />
           <warn level="error" message="[ ] PHP version ${php.version} should be at least 5.3" />
+        </else>
+      </if>
+
+      <if>
+        <equals arg1="${curlcheck}" arg2="true" />
+        <then>
+          <echo>[x] PHP curl checking</echo>
+        </then>
+        <else>
+          <property name="canInstall" value="false" />
+          <warn level="error" message="[ ] PHP curl should be installed" />
         </else>
       </if>
 
@@ -419,10 +435,15 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
               <delete dir="${features}" includeemptydirs="true" verbose="false" failonerror="true" />
             </then>
           </if>
+          <!--
           <httpget filename="features.zip" 
             url="${behave_server}/behave/features/${session_id}?_format=json" 
             dir="${behat_root}" 
           />
+          -->
+          <downloadfeatures url="${behave_server}/behave/features/${session_id}?_format=json" 
+            dir="${behat_root}/features.zip"/>
+            
           <if>
             <available file='${behat_root}/features.zip' type='file' />
             <then>
@@ -432,7 +453,7 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
             <else>
               <fail 
                 message="Unable to download features, your session might have expired \
-                please downlaod the build and run the command."
+                please downlaod the build and run the command again."
               />
             </else>
           </if>
