@@ -226,6 +226,7 @@
               showAuthError(data.error);
               return;
             }
+            $(".profile_details .mdl-spinner").removeClass('is-active');
             dialog_login.close();
           }
         });
@@ -246,19 +247,22 @@
       if(error.name.indexOf("Unrecognized username") === 0) {
         $(".dialog_auth .auth_error").html("Unrecognized username or password.");
       }
+      if(error.name.indexOf("is already taken") > 0) {
+        $(".dialog_auth .auth_error").html("This email already taken did you <a href='#' class='forgot-password-link'>forgot your password?</a>");
+      }
       if(error.name.indexOf("is not recognized as a username") > 0) {
         $(".dialog_auth .auth_error").html("User does not exist");
       }
       if(error.name.indexOf("more than 5 failed login attempts") > 0) {
         $(".dialog_auth .auth_error").html("So many faild login attempt for this account.");
       }
+      if(error.name.indexOf("is not recognized as a username or an email") > 0) {
+        $(".dialog_auth .auth_error").html("Account dosen't exist.");
+      }
       $(".profile_details .mdl-spinner").removeClass('is-active');
       return;
     }
 
-    if(error.length == 2 && error[0] == 'name') {
-      $(".dialog_auth .error-msg").html("Email already taken plrease use a different email.");
-    }
     if(error.indexOf("invalid email") === 0) {
       $(".dialog_auth .error-msg").html("Invalid email address.");
     }
@@ -677,37 +681,40 @@
   });
 
   /* For auth related actions.*/
-  $(".forgot-password-link").click(function(e) {
+  $(".dialog_auth").on('click', ".forgot-password-link", function(e) {
     e.preventDefault();
     e.stopPropagation();
     $(".dialog_auth").addClass('dialog_password_reset').removeClass('dialog_login dialog_reg');
-
+    $(".dialog_auth .auth_error").html("");
   });
 
   $(".reg-link").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
     $(".dialog_auth").addClass('dialog_reg').removeClass('dialog_login dialog_password_reset');
+    $(".dialog_auth .auth_error").html("");
   });
 
   $(".login-link").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
     $(".dialog_auth").addClass('dialog_login').removeClass('dialog_reg dialog_password_reset');
+    $(".dialog_auth .auth_error").html("");
   });
   
   // make the dialog draggabale
-  $("dialog").draggable({handle:'.mdl-card__title', zIndex: 10000});
+  $("dialog").draggable({handle:'.mdl-card__title'});
 
   /** 
    * Close dialogboxes when we click on body.
    */
   $(document).click(function(event) {
     // if there is an open dialog we need to close it.
-    if($("dialog:visible").length == 1 && $(event.target).closest('dialog > div').length == 0) {
+    if($("dialog:visible").length > 0 && $(event.target).closest('dialog > div').length == 0) {
       // if we are in help or feedback form we dont need to close this dialogbox.
       if(!$(event.target).hasClass('down_link') && !$.pagewalkthrough('isActive') && $("#feedback-canvas").length == 0) {
-        $("dialog:visible")[0].close();
+        var length = $("dialog:visible").length;
+        $("dialog:visible")[length - 1].close();
       }
     }
   });
@@ -718,9 +725,10 @@
   $(document).keyup(function(e) {
     if (e.keyCode == 27) { // escape key maps to keycode `27`
       // if there is an open dialog we need to close it.
-      if($("dialog:visible").length == 1) {
+      if($("dialog:visible").length > 0) {
         // if we are in help or feedback form we dont need to close this dialogbox.
-        $("dialog:visible")[0].close();
+        var length = $("dialog:visible").length;
+        $("dialog:visible")[length - 1].close();
       }
     }
   });
