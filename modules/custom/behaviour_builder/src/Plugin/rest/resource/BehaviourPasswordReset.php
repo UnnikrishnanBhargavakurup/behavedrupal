@@ -107,7 +107,7 @@ class BehaviourPasswordReset extends ResourceBase {
           return new ResourceResponse(array());
         }
         else {
-          return new ResourceResponse(array("error" => $errors['name']));
+          return new ResourceResponse(array("error" => $errors));
         }
       /*}
       else {
