@@ -313,8 +313,8 @@
               <div class="auth_error"></div>
               <div class="login-section">
                 <div class="mdl-textfield mdl-js-textfield">
-                  <input class="mdl-textfield__input" type="text" id="username" autocomplete="off" />
-                  <label class="mdl-textfield__label" for="username">Username</label>
+                  <input class="mdl-textfield__input" type="email" id="username" autocomplete="off" />
+                  <label class="mdl-textfield__label" for="username">Email</label>
                 </div>
                 <div class="mdl-textfield mdl-js-textfield">
                   <input class="mdl-textfield__input" type="password" id="userpass" autocomplete="off"/>
@@ -620,8 +620,7 @@
                          <p>Unzip the build to your drupal root directory & run the following commands</p>
 <pre class="language-markup">
   cd &lt;drupal root&gt;
-  composer install --prefer-dist --working-dir=build
-</pre>
+  composer install --prefer-dist --working-dir=build</pre>
                         </div>
                     </div>
                 </div>
@@ -635,8 +634,7 @@
                         <div class="body">
                          <p>To run the test use the following command, whenever you change anything in workspace run the following command to see that change in action.</p>
 <pre class="language-markup">
-  build/bin/phing -f build/phing/build.xml                            
-</pre>
+  build/bin/phing -f build/phing/build.xml</pre>
                         </div>
                     </div>
                 </div>
@@ -650,8 +648,7 @@
                         <div class="body">
 <p>1) If you want to specify a browser for running the test use -Dbrowser commanline option.</p>
 <pre class="language-markup">
-  build/bin/phing -f build/phing/build.xml -Dbrowser=firefox                            
-</pre>
+  build/bin/phing -f build/phing/build.xml -Dbrowser=firefox</pre>
 <p>
   <small>
     <b>For -Dbrowser option you can use firefox, chrome, opera or <a target="_balnk" href="http://phantomjs.org/">phantomjs</a></b>
@@ -659,13 +656,11 @@
 </p>
 <p>2) If you don't want to update the features from workspace you can use -DskipDownload option.<p>
 <pre class="language-markup">
-  build/bin/phing -f build/phing/build.xml -DskipDownload                            
-</pre>
+  build/bin/phing -f build/phing/build.xml -DskipDownload</pre>
 <p>(example:  if you directly edit the features in your file system.)</p>
 <p>3) You can use these options together also</p>
 <pre class="language-markup">
-  build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=firefox                          
-</pre>
+  build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=firefox</pre>
 
                         </div>
                     </div>
