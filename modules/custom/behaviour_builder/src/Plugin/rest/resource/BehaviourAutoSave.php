@@ -135,7 +135,8 @@ class BehaviourAutoSave extends ResourceBase {
       return new ResourceResponse(array());
     }
     else if (is_array($data) && isset($data['get'])) {
-      return new ResourceResponse($_SESSION['behave_drupal']['auto_save']);
+      $response = isset($_SESSION['behave_drupal']['auto_save']) ? $_SESSION['behave_drupal']['auto_save'] : array();
+      return new ResourceResponse($response);
     }
     else {
       return new ResourceResponse(array("error" => "Missing data"));
