@@ -440,6 +440,8 @@ dialog .help-txt  {
 dialog.mdl-dialog {
   padding: 0 !important;
   position: fixed;
+  margin: 0;
+  left: 40%;
 }
 
 dialog .mdl-textfield__label:after, 
@@ -762,6 +764,7 @@ footer  p {
   position: absolute;
   color: #F44336;
   overflow: hidden;
+  z-index: 1000;
 }
 
 dialog {
