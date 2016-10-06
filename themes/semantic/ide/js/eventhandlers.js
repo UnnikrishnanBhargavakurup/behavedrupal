@@ -693,5 +693,7 @@
 
   // auto save on every minute.
   window.setInterval(autosave, 2 * 1000);
+  $(".scrollbar").niceScroll({styler:"fb",cursorcolor:"#27cce4", cursorwidth: '5', cursorborderradius: '10px', background: '#424f63', spacebarenabled:false, cursorborder: '0',  zindex: '1000'});
+
 
 })(jQuery);
