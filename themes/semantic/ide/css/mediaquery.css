@@ -105,6 +105,13 @@
     height: 690px;
     top: 5%;
   }
+  dialog.mdl-dialog {
+    left: 5%;
+  }
+  body dialog.dialog-templates {
+    left: 3%;
+    width: 97%;
+  }
 }
 @media (max-width:1283px) {
  ul.collection li {

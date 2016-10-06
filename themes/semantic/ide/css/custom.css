@@ -622,6 +622,10 @@ body .dialog-run {
   padding: 0;
 }
 
+.dialog-run pre {
+  cursor:text;
+}
+
 .scrollbar {
   outline: medium none;
 }
