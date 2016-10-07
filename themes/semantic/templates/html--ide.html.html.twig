@@ -60,7 +60,7 @@
     -->
     <script type="text/javascript">
       window.behave = {};
-      window.behave.csrf_token = "";
+      window.behave.csrf_token = "{{csr_token}}";
       window.behave.theme_path = "{{base_path ~ directory}}";
       {% if logged_in is empty %}
         window.behave.isLoggedin = false;
