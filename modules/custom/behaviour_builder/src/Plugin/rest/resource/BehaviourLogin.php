@@ -12,6 +12,8 @@ use Drupal\rest\Plugin\rest\resource;
 use Drupal\Core\Url;
 use Drupal\Core\Form\FormState;
 use Symfony\Component\HttpFoundation\Response;
+use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Access\CsrfRequestHeaderAccessCheck;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -112,6 +114,7 @@ class BehaviourLogin extends ResourceBase {
             "pic" => $picture,
             "name" => substr($user->getUsername(), 0, strpos($user->getUsername(), '@')),
             "saved_data" => $this->get_data(),
+            "csr_token" => \Drupal::csrfToken()->get(CsrfRequestHeaderAccessCheck::TOKEN_KEY),
           ));
         }
         else {
@@ -145,7 +148,7 @@ class BehaviourLogin extends ResourceBase {
       $results[] = array(
         "pid" => $node->id(), 
         "title" => $node->get('title')->value, 
-        "created" => $node->get('created')->value
+        "created" => $node->get('created')->value,
       );
     }
     return $results;    

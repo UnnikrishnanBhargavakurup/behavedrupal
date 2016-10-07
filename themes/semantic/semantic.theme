@@ -1,6 +1,7 @@
 <?php
 
 use Drupal\image\Entity\ImageStyle;
+use Drupal\Core\Access\CsrfRequestHeaderAccessCheck;
 
 /**
  * Implements hook_preprocess_HOOK() for HTML document templates.
@@ -65,6 +66,7 @@ function semantic_preprocess_html(&$variables) {
     $expire = time() + 18000;
     \Drupal::cache()->set('feature_templates', $templates, $expire); 
   }
+  $variables['csr_token'] = \Drupal::csrfToken()->get(CsrfRequestHeaderAccessCheck::TOKEN_KEY);
   $variables['feature_templates'] = $templates;
 }
 
