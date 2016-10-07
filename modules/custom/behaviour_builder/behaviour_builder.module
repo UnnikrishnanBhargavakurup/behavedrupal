@@ -33,3 +33,33 @@ function behaviour_builder_theme($existing, $type, $theme, $path) {
     ),
   );
 }
+
+/**
+ * Implements hook_user_login().
+ */
+function behaviour_builder_user_login($account) {
+  if($account->id() > 0) {
+    $saved_data = db_select('behave_builds', 'b')
+    ->fields('b', array('data', 'build_no'))
+    ->condition('b.uid', $account->id())
+    ->execute()->fetch(\PDO::FETCH_OBJ);
+    if(isset($saved_data) && !empty($saved_data)) { 
+      $_SESSION['behave_drupal']['auto_save'] = json_decode($saved_data->data, TRUE);
+    }       
+  }  
+}
+
+/**
+ * Implements hook_user_logout().
+ */
+function behaviour_builder_user_logout($account) {
+  /*
+  \Drupal::service('user.data')->set('contact', $account->id(), 'enabled');
+  db_insert('logouts')
+    ->fields(array(
+      'uid' => $account->id(),
+      'time' => time(),
+    ))
+    ->execute();
+  */
+}

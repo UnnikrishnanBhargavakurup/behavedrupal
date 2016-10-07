@@ -157,6 +157,18 @@ class BehaviourAutoSave extends ResourceBase {
       return new ResourceResponse($_SESSION['behave_drupal']['auto_save']);
     }
     else {
+      /*
+      if($this->currentUser->id() > 0) {
+        $saved_data = $this->connection
+          ->select('behave_builds', 'b')
+          ->fields('b', array('data', 'build_no'))
+          ->condition('b.uid', $this->currentUser->id())
+          ->execute()->fetch(\PDO::FETCH_OBJ);
+        if(isset($saved_data) && !empty($saved_data)) { 
+          return new ResourceResponse($saved_data->data);
+        }       
+      }
+      */
       return new ResourceResponse(array());
     }
   }
