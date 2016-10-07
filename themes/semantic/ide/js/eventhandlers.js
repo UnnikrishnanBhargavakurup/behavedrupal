@@ -384,97 +384,26 @@
     $(".messages").hide();
   });
 
-
-  function get_token(_function) {
-    $.ajax({
-      method : "GET",
-      url: '/rest/session/token',
-      success: function (csrf_token) {
-        window.behave.csrf_token = csrf_token;
-        _function();
-      }
-    });
-  }
-
-  var project_data = [];
-  // get autosaved items.
-  function get_autosave() {
-    $.ajax({
-      url : "/behave/autosave?_format=json",
-      method : "POST",
-      beforeSend: function (request) {
-        request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-        request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
-      },
-      dataType: "json",
-      data : JSON.stringify({
-        "get" : true
-      }),
-      success : function(data) {
-        if(data == null || data.length == 0) {
-          return;
-        }
-       //clean everything before adding from saved data.
-       Workspace.clean();
-       Workspace.setData(data);
-       project_data = data;
-      }
-    });    
-  };
-
-  // get token and update workspace.
-  get_token(get_autosave);
+  Workspace.getAutoSave();
 
   // for autosaving workspace data.
   var autosave = function() {
     var _project_data = Workspace.getData();
     // only if we have some chages
-    if(JSON.stringify(project_data) == JSON.stringify(_project_data)) {
+    if(JSON.stringify(Workspace.autoSaveData) == JSON.stringify(_project_data)) {
       return;
     }
-    project_data = _project_data;
-    if(window.behave.csrf_token == "") {
-      get_token(autosave_update);
-    }
-    else {
-      autosave_update();
-    }
+    Workspace.autoSaveData = _project_data;
+    Workspace.setAutoSave();
   };
-  
-  function autosave_update() {
-    $.ajax({
-      url : "/behave/autosave?_format=json",
-      method : "POST",
-      beforeSend: function (request) {
-        request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
-        request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
-        $(".auto_save").show();
-      },
-      dataType: "json",
-      data : JSON.stringify({
-        "data" : project_data
-      }),
-      error: function(data) {
-        $(".auto_save").hide();
-      },
-      success : function(data) {
-        $(".auto_save").hide();
-      }
-    });    
-  }
 
   //clean all data from workspace.
   $("#clear_all").click(function(e) {
     e.preventDefault();
     e.stopPropagation();
     Workspace.clean();
-    project_data = [];
-    if(window.behave.csrf_token == "") {
-      get_token(autosave_update);
-    }
-    else {
-      autosave_update();
-    }
+    Workspace.autoSaveData = [];
+    Workspace.setAutoSave();
   });
   
   /**
@@ -528,7 +457,7 @@
   });
 
   /**
-   * edit an action text.
+   * Edit an action text.
    */
   $(".scenario-list").on("click", ".list-group-item .btn-edit", function(e) {
     e.preventDefault();
@@ -547,6 +476,7 @@
     //e.stopPropagation(); 
     var action_txt = $(this).siblings('span').text();
     var action = new Action(action_txt);
+    // add to workspace.
     Workspace.getActiveChild().getActiveChild().addChild(action);    
   });
 

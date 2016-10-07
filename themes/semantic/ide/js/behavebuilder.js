@@ -517,6 +517,7 @@ Workspace.logout = function() {
   $("#saved_projects option").not(':first').remove();
   $(".dialog-open table tbody tr").remove();
   $(".profile_details .mdl-spinner").removeClass('is-active');   
+  this.clean();
   Workspace.isLoggedin = 0;
 }
 
@@ -561,6 +562,64 @@ Workspace.clean = function() {
   })(jQuery);
 }
 
+// for cheking if workspace data is dearty
+Workspace.autoSaveData = [];
+
+/**
+ * Get autosaved data for updating the workspace. 
+ */ 
+Workspace.getAutoSave = function() {
+  $.ajax({
+    url : "/behave/autosave?_format=json",
+    method : "POST",
+    beforeSend: function (request) {
+      request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+      request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
+    },
+    dataType: "json",
+    data : JSON.stringify({
+      "get" : true
+    }),
+    success : function(data) {
+      if(data == null || data.length == 0) {
+        return;
+      }
+     //clean everything before adding from saved data.
+     Workspace.clean();
+     Workspace.setData(data);
+     Workspace.autoSaveData = data;
+    }
+  });    
+}
+
+/**
+ * Save workspace data as autosave. 
+ */ 
+Workspace.setAutoSave = function() {
+  $.ajax({
+    url : "/behave/autosave?_format=json",
+    method : "POST",
+    beforeSend: function (request) {
+      request.setRequestHeader("Content-Type", "application/json; charset=utf-8");
+      request.setRequestHeader("X-CSRF-Token", window.behave.csrf_token);
+      $(".auto_save").show();
+    },
+    dataType: "json",
+    data : JSON.stringify({
+      "data" : this.autoSaveData
+    }),
+    error: function(data) {
+      $(".auto_save").hide();
+    },
+    success : function(data) {
+      $(".auto_save").hide();
+    }
+  });  
+}
+
+/**
+ * Get active scenario user is working on.
+ */
 Workspace.getActiveScenario = function() {
   return $("#f" + this.activeChild + "-s" + this.getActiveChild().activeChild);
 };

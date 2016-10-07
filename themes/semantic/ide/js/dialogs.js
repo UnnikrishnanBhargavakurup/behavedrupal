@@ -189,11 +189,13 @@
             $("#user_name").html(data.name + "<span>&nbsp;</span>");
             $("#login").hide();
             $(".usr-profile").show();
+            window.behave.csrf_token = data.csr_token;
             if(data.saved_data.length > 0) {
               for(var i = 0; i <  data.saved_data.length; i++) {
                 updateProjectData(data.saved_data[i]);
               }
             }
+            Workspace.getAutoSave();
             Workspace.isLoggedin = 1;
             //success code
             dialog_login.close();
