@@ -24,7 +24,8 @@ use Drupal\behaviour_builder\BehaveCommon;
  *   id = "behaviour_get_features",
  *   label = @Translation("Behaviour builder get features"),
  *   uri_paths = {
- *     "canonical" = "/behave/features/{id}"
+ *     "canonical" = "/behave/features",
+ *     "https://www.drupal.org/link-relations/create" = "/behave/features"
  *   },
  *   serialization_class = "Drupal\behaviour_builder\normalizer\JsonDenormalizer",
  * )
@@ -98,12 +99,13 @@ class BehaviourGetFeatures extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function post($id) {
+  public function post($data) {
     /**
-     * id should get from the url because this is going to be accessed from
+     * Here we need to get sid from POST data also this is accessing from
      * command line not from web so it might have a different session.
-     * so we cannot get id from session.
+     * so we cannot save sid in session.
      */
+    $id = isset($data['sid']) ? $data['sid'] : '';
     $session = filter_var($id, FILTER_SANITIZE_STRING);
     // This is going to access from commandline so we can't get a user authenticated user here. 
     $or = db_or();
