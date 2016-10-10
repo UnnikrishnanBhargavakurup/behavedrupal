@@ -45,6 +45,13 @@ class BehaviourGetFeatures extends ResourceBase {
    * @var \Drupal\Core\Database\Connection
    */
   protected $connection; 
+
+  /**
+   * For logging download accesses.
+   *
+   * @var \Drupal\Core\Logger
+   */
+  protected $logger; 
   
   /**
    * Constructs a Drupal\rest\Plugin\ResourceBase object.
@@ -74,6 +81,7 @@ class BehaviourGetFeatures extends ResourceBase {
 
     $this->currentUser = $current_user;
     $this->connection = $connection;
+    $this->logger = $logger;
   }
 
   /**
@@ -106,6 +114,7 @@ class BehaviourGetFeatures extends ResourceBase {
      * so we cannot save sid in session.
      */
     $id = isset($data['sid']) ? $data['sid'] : '';
+    $this->logger->notice("Downloading features for session > ". $id);
     $session = filter_var($id, FILTER_SANITIZE_STRING);
     // This is going to access from commandline so we can't get a user authenticated user here. 
     $or = db_or();
