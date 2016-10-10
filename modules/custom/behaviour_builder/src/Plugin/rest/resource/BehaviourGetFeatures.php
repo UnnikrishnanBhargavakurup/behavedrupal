@@ -98,7 +98,7 @@ class BehaviourGetFeatures extends ResourceBase {
    * @throws \Symfony\Component\HttpKernel\Exception\HttpException
    *   Throws exception expected.
    */
-  public function get($id) {
+  public function post($id) {
     /**
      * id should get from the url because this is going to be accessed from
      * command line not from web so it might have a different session.
@@ -107,6 +107,7 @@ class BehaviourGetFeatures extends ResourceBase {
     $session = filter_var($id, FILTER_SANITIZE_STRING);
     // This is going to access from commandline so we can't get a user authenticated user here. 
     $or = db_or();
+    // build should be updated within 10 days. 
     $or->condition('b.updated', time() - (60 * 60 * 24 * 10), '>');
     $or->condition('b.uid', 0, '>');
     $saved_data = $this->connection
