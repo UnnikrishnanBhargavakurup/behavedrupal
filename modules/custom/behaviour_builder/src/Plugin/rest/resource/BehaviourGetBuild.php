@@ -115,14 +115,16 @@ class BehaviourGetBuild extends ResourceBase {
           copy($item, $dest . DIRECTORY_SEPARATOR . $iterator->getSubPathName());
         }
       }
+      // This is a requred parameter.
+      $base_url = $data['base_url'] == "" ? "http://localhost" : $data['base_url'];
+      // removing the trailing backslash if exist in the url.
+      $base_url = preg_replace('{/$}', '', $base_url);
       // add base_url in local behat config
-      if($base_url != 'http://localhost/') {
-        BehaveCommon::replaceInFile(
-          'LOCALHOST', 
-          $data['base_url'],
-          drupal_realpath('public://downloads/'. $session .'/build/build/tests/behat/behat.local.yml')
-        );
-      }
+      BehaveCommon::replaceInFile(
+        'LOCALHOST', 
+        $base_url,
+        drupal_realpath('public://downloads/'. $session .'/build/build/tests/behat/behat.local.yml')
+      );
       // add session for building the project form comandline
       BehaveCommon::replaceInFile(
         'SESSIONID', 
