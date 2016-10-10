@@ -20,6 +20,13 @@ class DownloadFeaturesTask extends Task {
   protected static $url;
 
   /**
+   * session id from which we need to download the features.
+   *
+   * @var string
+   */
+  protected static $sid;
+
+  /**
    * Destination to save the features.
    *
    * @var string
@@ -31,8 +38,15 @@ class DownloadFeaturesTask extends Task {
     echo "\nDownloading features ...";
     ob_flush();
     flush();
+    $session_data = json_encode(array('sid' => $this->sid));
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $this->url);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
+    curl_setopt($ch, CURLOPT_POST, TRUE);
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
+    curl_setopt($ch, CURLOPT_USERPWD, "admin:#user@123");
+    curl_setopt($ch, CURLOPT_POSTFIELDS, $session_data);
     curl_setopt($ch, CURLOPT_BUFFERSIZE, 128);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function ($resource, $download_size, $downloaded, $upload_size, $uploaded) {
@@ -51,6 +65,7 @@ class DownloadFeaturesTask extends Task {
     curl_close($ch);
     ob_flush();
     flush();
+    print_r($data);
     $file = fopen($this->destination, "w+");
     fputs($file, $data);
     fclose($file);
@@ -76,5 +91,16 @@ class DownloadFeaturesTask extends Task {
    */
   public function setUrl($url) {
     $this->url = "" . $url;
+  }
+
+  /**
+   * Set the url form which we downlaod the feature.
+   *
+   * @param string $suite The suite to use.
+   *
+   * @return void
+   */
+  public function setSID($sid) {
+    $this->sid = "" . $sid;
   }
 }

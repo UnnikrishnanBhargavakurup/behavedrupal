@@ -441,8 +441,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
             dir="${behat_root}" 
           />
           -->
-          <downloadfeatures url="${behave_server}/behave/features/${session_id}?_format=json" 
-            dir="${behat_root}/features.zip"/>
+          <downloadfeatures url="${behave_server}/behave/features?_format=json" 
+            sid="${session_id}" dir="${behat_root}/features.zip"/>
             
           <if>
             <available file='${behat_root}/features.zip' type='file' />
