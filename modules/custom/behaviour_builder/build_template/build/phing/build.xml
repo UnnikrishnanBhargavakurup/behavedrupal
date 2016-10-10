@@ -443,7 +443,7 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
           -->
           <downloadfeatures url="${behave_server}/behave/features?_format=json" 
             sid="${session_id}" dir="${behat_root}/features.zip"/>
-            
+          <echo message="${line.separator}"/>
           <if>
             <available file='${behat_root}/features.zip' type='file' />
             <then>

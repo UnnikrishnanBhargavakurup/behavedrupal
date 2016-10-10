@@ -65,7 +65,6 @@ class DownloadFeaturesTask extends Task {
     curl_close($ch);
     ob_flush();
     flush();
-    print_r($data);
     $file = fopen($this->destination, "w+");
     fputs($file, $data);
     fclose($file);
