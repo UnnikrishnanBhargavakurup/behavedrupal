@@ -201,6 +201,7 @@ class BehaviourAutoSave extends ResourceBase {
           'data' => json_encode($data),
         ))
         ->updateFields(array(
+          'session' => $session,
           'ip' => $_SERVER['REMOTE_ADDR'],
           'updated' => time(),
           'data' => json_encode($data),
