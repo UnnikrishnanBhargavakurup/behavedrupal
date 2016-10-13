@@ -45,3 +45,5 @@ core/phpunit.xml
 .DS_Store
 
 build
+
+logs
