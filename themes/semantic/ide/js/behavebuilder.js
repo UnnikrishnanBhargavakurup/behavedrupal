@@ -62,6 +62,7 @@ var Base = function (name) {
       node.showDuplicateError(node.name);
       return false;
     }
+    return true;
   }
 
   /**
@@ -494,7 +495,7 @@ Workspace.setData = function(features, classes) {
     var fetaure = new Feature(features[i].name, features[i].description, classes);
     var status = Workspace.addUniqueChild(fetaure); 
     // if we can't add this Feature we can move to next one.
-    if(!status) {
+    if(status === false) {
       continue;
     }
     // add feature to workspace.
