@@ -89,3 +89,76 @@ actions table {
 .bdd_scenario {
   display: none;
 }
+
+#example.index .introduction {
+  padding-top: 6em;
+}
+
+body p, .ui.header {
+ font-family: medium-content-serif-font, Georgia, Cambria, "Times New Roman", Times, serif;
+}
+
+#example.index .ui.header {
+  font-weight: bold;
+}
+
+#example .stripe .column > p {
+  font-size: 24px;
+}
+
+#example .stripe h2 {
+  font-size: 30px;
+}
+
+#example .stripe h1 {
+  font-size: 48px;
+}
+
+#example .segment pre {
+  font-size: 16px;
+}
+
+@media (max-width:480px) {
+  #example .stripe .column > p {
+    font-size: 19px;
+  }
+
+  #example .stripe h2 {
+    font-size: 26px;
+  }
+
+  #example .stripe h1 {
+    font-size: 42px;
+  }
+}
+@media (max-width:1283px) {
+
+}
+@media (max-width:1243px) {
+
+}
+@media (max-width:1205px){
+
+}
+@media (max-width:1169px){
+
+}
+@media (max-width: 1136px){
+
+
+}
+@media (max-width: 1104px){
+
+
+}
+@media (max-width: 1075px){
+
+}
+@media (max-width: 1046px){
+
+}
+
+/* For add scenario button to align*/
+@media (max-width : 991px) {
+
+}
