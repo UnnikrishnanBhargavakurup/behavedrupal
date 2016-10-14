@@ -1,8 +1,10 @@
-"use strict";
 
 /**
- * all the event handlers for UI elements.
- */ 
+ * all the event handlers for UI elements in workarea.
+ */
+
+"use strict";
+
 (function($) {
   /**
    * Upload a foto for user picture.

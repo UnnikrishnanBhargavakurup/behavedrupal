@@ -1,3 +1,8 @@
+
+/**
+ * Dialogs used in the workarea and functionalities associated ot it.
+ */
+
 "use strict";
 
 (function($) {
@@ -741,6 +746,8 @@
  * Force browser to download the build.
  * @param path
  *  path to the archive file to download.
+ * @param file
+ *  file name fr adding in anchor tag.
  */
 function downloadFile(path, file) {
   if(path == "") {
