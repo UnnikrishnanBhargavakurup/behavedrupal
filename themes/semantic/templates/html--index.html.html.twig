@@ -17,6 +17,7 @@
 <meta name="keywords" content="behat, BDD, drupal, behaviour testing, behaviour testing in drupal" />
 <link rel="stylesheet" type="text/css" class="ui" href="{{ base_path ~ directory }}/libs/semantic/dist/semantic.min.css">
 <link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/docs.css">
+<link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/fonts-base.css">
 <link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/rtl.css">
 <link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/home.css">
 <link rel="stylesheet" type="text/css" href="{{ base_path ~ directory }}/css/bdd_builder.css">
@@ -28,7 +29,7 @@
 
     <div class="full height">
 
-      <div class="following bar">
+      <div class="following bar light fixed">
         <div class="ui container">
           <div class="ui large inverted secondary network menu">
 
@@ -68,22 +69,20 @@
           <!-- body -->
             <div class="ui stackable very relaxed left aligned grid container">
               <div class="row">
-                <div class="twelve wide column">
+                <div class="wide column">
                 <div>{{ page.highlighted }}</div>
-                {% if logged_in %}
-                <img src="{{user_picture}}"/>
-                {{ 'Welcome, @username'|t({ '@username': user.name }) }}
-                <h1>hello there</h1>
-                {% endif %}
-                
                   <h2 class="ui header">1. What is behavior testing?</h2>
-                  <p>Behavior testing is testing your applications behavior(feature) from a user point of view.</p>
-                  <p>In behavior testing we use client conversations as instructions to test the application. We rephrase client conversations to features, scenarios and actions.</p>
-                  <p>Feature: A specific feature in an application (example: user authentication)</p>
-                  <p>Scenario: A flow in that feature (example: login or logout)</p>
-                  <p>Action: A step in that flow (example: clicking on the login button)</p>
+<p>Behavior driven development(BDD) or Behavior testing is a software development process in which we develop and test an application from an end user perspective. For this we use client conversations as instructions for both development and testing. We rephrase the conversation as features, scenarios and actions.</p>
+
+<p>Feature: A specific feature in an application (example: user authentication)</p>
+
+<p>Scenario: A flow in that feature (example: login or logout)</p>
+
+<p>Action: A step in that flow (example: clicking on the login button)</p>
+
+<p>After we convert the conversations to instructions we run it thought a testing software which will verify whether the feature is working as expected or not.</p>
                   <h2 class="ui header">2. Tell me an example</h2>
-                  <p>Following is an example of testing user authentication feature using behavior testing.</p>
+                  <p>Following is an example for instructions to test user authentication feature using behavior testing.</p>
                     <pre>
 Feature: User authentication, log in and out of the site.
    In order to maintain an account
@@ -120,95 +119,14 @@ Feature: User authentication, log in and out of the site.
                       </pre>
                   <h2 class="ui header">3. How we do this behavior testing in Drupal?</h2>
 
-                  <p>We use open source tool behat for behaviorist testing in Drupal.</p>
-
-                  <p>Here we go though a simple step by step process to generate all the behavior testing needs for your Drupal project. We will auto generate all the code for you.</p>
-                  <h2 class="ui header">4. Sit back and add your Drupal site features here!</h2>
-                  <!-- Add pre existing features -->
-                  <div class="pre-existing">
-                  <div class="ui styled accordion">
-                    <div class="title">
-                      <i class="dropdown icon"></i>
-                      Too lazy to add a feature click here to add some pre existing features.
-                    </div>
-                    <div class="content">
-                      <div class="ui segments">
-                        <div class="ui segment">
-                          <p>
-                            <div class="ui toggle checkbox">
-                              <input type="checkbox" name="public">
-                              <label>Authentication</label>
-                            </div>
-                          </p>
-                        </div>
-                        <div class="ui segment">
-                          <p>
-                          <div class="ui toggle checkbox">
-                            <input type="checkbox" name="public">
-                            <label>Contact us</label>
-                          </div>
-                          </p>
-                        </div>
-                        <div class="ui segment">
-                          <p>
-                            <div class="ui toggle checkbox">
-                              <input type="checkbox" name="public">
-                              <label>Authentication</label>
-                            </div>
-                          </p>
-                        </div>
-                        <div class="ui segment">
-                          <p>
-                            <div class="ui toggle checkbox">
-                              <input type="checkbox" name="public">
-                              <label>Authentication</label>
-                            </div>
-                          </p>
-                        </div>
-                        <div class="ui segment">
-                          <p>
-                            <div class="ui toggle checkbox">
-                              <input type="checkbox" name="public">
-                              <label>Authentication</label>
-                            </div>
-                          </p>
-                        </div>
-                        <div class="ui clearing segment">
-                          <div class="ui right floated button">Add</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  </div>
-                  <!-- end of pre existing features -->
-                  <div class="bdd_builder">
-                    <div id="bdd_features" class="ui styled fluid accordion">
-                    </div>
-                  </div>
-                  <div class="ui huge fluid action input">
-                    <input id="feture_name" type="text" placeholder="Type in a feature...">
-                    <div id="add_feature" class="ui button">Add</div>
-                  </div>
-                  <small>example: authentication/contact us/add content etc </small>
-                  <div class="ui basic segment code-generate">
-                     <button class="positive ui button disabled download-code">Generate code now</button>
-                  </div>
-                  <h2 class="ui header">5. How I can run this code?</h2>
-                  <p>Unzip the code to your Drupal root directory and run the following command in terminal.</p>
-<!-- Command to execute behat -->                  
-<pre>
-cd &lt;drupal root&gt;
-composer install --prefer-dist --working-dir=build
-build/bin/phing -f build/phing/build.xml
-</pre>
-                  <h2 class="ui header">6. Disclaimer</h2>
-                  <p>We have covered only generic testing needs for you here. If you need something that not exist here please contact us we will add it or customize this tool for your requirements.</p>
+                  <p>We use the open source tool <a href="http://behat.org/en/latest/" target="_blank">behat</a> for behavior testing in Drupal. You can do this manually by following the instructions <a href="https://behat-drupal-extension.readthedocs.io/en/master/localinstall.html" target="_blank">here</a>. Or you can use out online IDE for testing Drupal application from the following button</p>
+                  <div style="text-align: center;"><a class="ui green huge button" href="/ide.html">Launch  IDE</a></div>
                 </div>
               </div>
             </div>
 
       </div>
-
+     <!--
       <div class="ui email alternate stripe vertical segment">
         <div class="ui center aligned grid container">
           <div class="column">
@@ -230,7 +148,7 @@ build/bin/phing -f build/phing/build.xml
           </div>
         </div>
       </div> 
-
+      -->
     </div>
     <!-- Footer start here -->
     <div class="ui black inverted vertical footer segment">
@@ -306,7 +224,6 @@ build/bin/phing -f build/phing/build.xml
   <script src="{{ base_path ~ directory }}/js/docs.js"></script>
   <script src="{{ base_path ~ directory }}/js/home.js"></script>
   <!--//TODO: need to move to modules -->
-  <script src="{{ base_path ~ directory }}/js/actions.js"></script>
   <script src="{{ base_path ~ directory }}/js/jquery.auto-complete-custom.js"></script>
   <script>
   window.less = {
@@ -318,6 +235,5 @@ build/bin/phing -f build/phing/build.xml
   };
   </script>
   <script src="{{ base_path ~ directory }}/libs/js/less.min.js"></script>
-  <div class="autocomplete-suggestions"></div>
 </body>
 </html>
