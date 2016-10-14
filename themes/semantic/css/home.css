@@ -358,7 +358,7 @@
 ---------------*/
 
 #example.index .following.bar {
-  position: fixed;
+  /*position: fixed;*/
   top: 0px;
   z-index: 900;
   left: 0%;

@@ -206,7 +206,7 @@ semantic.home.ready = function() {
   handler.introduction();
 
   if($(window).width() > 600) {
-    $('body')
+   /* $('body')
       .visibility({
         offset         : -10,
         observeChanges : false,
@@ -236,7 +236,7 @@ semantic.home.ready = function() {
           });
         }
       })
-    ;
+    ;*/
   }
   $('.additional.item')
     .popup({
