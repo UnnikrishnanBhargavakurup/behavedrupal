@@ -1,5 +1,5 @@
 /**
- * Following are classes for workarea related functionalities.
+ * Following are classes we used for workarea related functionalities.
  *
  * Base : object base object for all other object.
  *   name             -  name of the object
@@ -60,6 +60,7 @@ var Base = function (name) {
     else {
       // show an error message 
       node.showDuplicateError(node.name);
+      return false;
     }
   }
 
@@ -481,12 +482,21 @@ Workspace.showMessage = function(message) {
 
 /**
  * Add data from backend to workspace
+ *
+ * @param features
+ *    Array of features that needs to add
+ * @param classes
+ *   Aditionla classes needs to be added.
  */
 Workspace.setData = function(features, classes) {
   this.loading = true;
   for(var i = 0; i < features.length; i++) {
     var fetaure = new Feature(features[i].name, features[i].description, classes);
-    Workspace.addUniqueChild(fetaure); 
+    var status = Workspace.addUniqueChild(fetaure); 
+    // if we can't add this Feature we can move to next one.
+    if(!status) {
+      continue;
+    }
     // add feature to workspace.
     for(var j = 0; j < features[i].scenarios.length; j++) {
       // add the scenario to the feature.
@@ -503,8 +513,9 @@ Workspace.setData = function(features, classes) {
     }
   }
   componentHandler.upgradeDom();
-  // select the fist feature from the list as default.
-  $('.feature-list li:first-child').trigger('click');
+  // select the second last feature from the list as default.
+  // last one is for add feature button.
+  $('.feature-list li:nth-last-child(2)').trigger('click');
   this.loading = false;
 };
 
