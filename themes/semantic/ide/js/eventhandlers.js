@@ -50,7 +50,11 @@
     var index = $(this).closest('.itm-scenario').data('index');
     // feature >> scenario 
     Workspace.getActiveChild().setActiveChild(index);
-    var action_txt = Workspace.getActiveScenario().find('input:text').val();
+    var action_txt = Workspace.getActiveScenario().find('input:text').val().trim();
+    // we don't need empty string as action.
+    if(action_txt == "") {
+      return;
+    }
     var help_patterns = action_txt.toLowerCase().match(/(^|\s):(\w+)/g);
     if(help_patterns) {
       show_help(help_patterns);
