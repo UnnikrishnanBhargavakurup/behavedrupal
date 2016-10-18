@@ -16,7 +16,7 @@ To develop on or patch against behavedrupal, the source files should be download
 behavedrupal source may be downloaded using git
 
 ```
-git clone git@github.com:behavedrupal/behavedrupal.git
+git clone git@github.com:UnnikrishnanBhargavakurup/behavedrupal.git
 ```
 ## Contributing to behavedrupal
 
