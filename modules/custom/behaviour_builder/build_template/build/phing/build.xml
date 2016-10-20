@@ -440,7 +440,6 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
             sid="${session_id}" dir="${behat_root}/features.zip"/>
 
           <echo message="${line.separator}"/>
-          <fail message="Required OS:  does not match with:"/>
           <if>
             <available file='${behat_root}/features.zip' type='file' />
             <then>
