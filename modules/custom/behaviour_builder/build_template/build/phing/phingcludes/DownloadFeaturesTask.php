@@ -43,12 +43,12 @@ class DownloadFeaturesTask extends Task {
     curl_setopt($ch, CURLOPT_URL, $this->url);
     curl_setopt($ch, CURLOPT_FOLLOWLOCATION, TRUE);
     curl_setopt($ch, CURLOPT_POST, TRUE);
-    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-    curl_setopt($ch, CURLOPT_USERPWD, "admin:#user@123");
     curl_setopt($ch, CURLOPT_POSTFIELDS, $session_data);
     curl_setopt($ch, CURLOPT_BUFFERSIZE, 128);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_BINARYTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_ENCODING, 'zip');
     curl_setopt($ch, CURLOPT_PROGRESSFUNCTION, function ($resource, $download_size, $downloaded, $upload_size, $uploaded) {
       if($download_size > 0) {
         $perc = floor(($downloaded / $download_size) * 100);
@@ -58,10 +58,14 @@ class DownloadFeaturesTask extends Task {
       ob_flush();
       flush();
     });
-    curl_setopt($ch, CURLOPT_NOPROGRESS, false); // needed to make progress function work
-    curl_setopt($ch, CURLOPT_HEADER, 0);
+    curl_setopt($ch, CURLOPT_NOPROGRESS, FALSE); // needed to make progress function work
     curl_setopt($ch, CURLOPT_USERAGENT, 'Mozilla/5.0 (Windows NT 5.1; rv:31.0) Gecko/20100101 Firefox/31.0');
+    $info = curl_getinfo($ch);
     $data = curl_exec($ch);
+    if (curl_errno($ch) !== 0) {
+      $info = curl_getinfo($ch);
+      print_r($info);
+    }
     curl_close($ch);
     ob_flush();
     flush();

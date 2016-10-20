@@ -25,6 +25,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
 
     <taskdef name="downloadfeatures" classname="phingcludes.DownloadFeaturesTask"/>
 
+    <taskdef name="behavedownload" classname="phingcludes.BehaveDownloadTask"/>
+
     <taskdef name="filereplace" classname="phingcludes.FileReplaceTask"/>
 
     <!-- end of tasks -->
@@ -230,9 +232,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
 
     <!-- set up selenium server for the fist time -->
     <target name="setup-selenium-server" depends="init" unless="project.setup_selenium">
-
-      <httpget url="${selenium_server.url}"
-             dir="${composer.bin}"
+      <behavedownload url="${selenium_server.url}"
+             dir="${composer.bin}/selenium-server-standalone-3.0.0-beta3.jar"
              />
     </target>
 
@@ -264,8 +265,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <if>
         <os family="mac" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${firefox.mac_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${firefox.mac_url}"
+             dir="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" />
@@ -274,8 +275,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <elseif>
         <os family="unix" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${firefox.unix_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${firefox.unix_url}"
+             dir="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-linux64.tar.gz" />
@@ -285,8 +286,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <elseif>
         <os family="windows" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${firefox.win_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${firefox.win_url}"
+             dir="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz"
              />
           <untar file="${composer.bin}/webdriver/geckodriver-v0.10.0-macos.tar.gz" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.tar.gz" />
@@ -305,8 +306,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <if>
         <os family="mac" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${chrome.mac_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${chrome.mac_url}"
+             dir="${composer.bin}/webdriver/chromedriver_mac64.zip"
              />
           <unzip file="${composer.bin}/webdriver/chromedriver_mac64.zip" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/chromedriver_mac64.zip" />
@@ -315,8 +316,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <elseif>
         <os family="unix" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${chrome.unix_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${chrome.unix_url}"
+             dir="${composer.bin}/webdriver/chromedriver_linux64.zip"
              />
           <unzip file="${composer.bin}/webdriver/chromedriver_linux64.zip" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/chromedriver_linux64.zip" />
@@ -326,8 +327,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <elseif>
         <os family="windows" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${chrome.win_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${chrome.win_url}"
+             dir="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.zip"
              />
           <unzip file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.zip" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/geckodriver-v0.10.0-win64.zip" />
@@ -346,8 +347,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <if>
         <os family="mac" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.mac_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${opera.mac_url}"
+             dir="${composer.bin}/webdriver/operadriver_mac64.zip"
              />
           <untar file="${composer.bin}/webdriver/operadriver_mac64.zip" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/operadriver_mac64.zip" />
@@ -356,8 +357,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <elseif>
         <os family="unix" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.unix_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${opera.unix_url}"
+             dir="${composer.bin}/webdriver/operadriver_linux64.zip"
              />
           <untar file="${composer.bin}/webdriver/operadriver_linux64.zip" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/operadriver_linux64.zip" />
@@ -367,8 +368,8 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
       <elseif>
         <os family="windows" />
         <then>
-          <httpget followRedirects="true" sslVerifyPeer="false" url="${opera.win_url}"
-             dir="${composer.bin}/webdriver"
+          <behavedownload url="${opera.win_url}"
+             dir="${composer.bin}/webdriver/operadriver_win32.zip"
              />
           <untar file="${composer.bin}/webdriver/operadriver_win32.zip" todir="${composer.bin}/webdriver" />
           <delete file="${composer.bin}/webdriver/operadriver_win32.zip" />
@@ -435,15 +436,11 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
               <delete dir="${features}" includeemptydirs="true" verbose="false" failonerror="true" />
             </then>
           </if>
-          <!--
-          <httpget filename="features.zip" 
-            url="${behave_server}/behave/features/${session_id}?_format=json" 
-            dir="${behat_root}" 
-          />
-          -->
           <downloadfeatures url="${behave_server}/behave/features?_format=json" 
             sid="${session_id}" dir="${behat_root}/features.zip"/>
+
           <echo message="${line.separator}"/>
+          <fail message="Required OS:  does not match with:"/>
           <if>
             <available file='${behat_root}/features.zip' type='file' />
             <then>
