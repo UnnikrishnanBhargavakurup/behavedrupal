@@ -47,3 +47,5 @@ core/phpunit.xml
 build
 
 logs
+
+.htpasswd
