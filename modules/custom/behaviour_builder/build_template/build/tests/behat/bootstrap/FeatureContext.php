@@ -9,6 +9,8 @@ use Drupal\DrupalExtension\Context\RawDrupalContext;
 use Behat\Mink\Driver\Selenium2Driver;
 use Behat\Behat\Hook\Scope\AfterStepScope;
 
+use Behat\Behat\Definition\Call;
+
 use Behat\Behat\Hook\Scope\BeforeFeatureScope;
 use Behat\Behat\Hook\Scope\AfterFeatureScope;
 
@@ -238,44 +240,6 @@ JS;
   }
 
   /**
-   * Click on the element with the provided xpath query
-   *
-   * @When /^I click on the element with xpath "([^"]*)"$/
-   */
-  public function iClickOnTheElementWithXPath($xpath) {
-      $session = $this->getSession(); // get the mink session
-      $element = $session->getPage()->find(
-        'xpath',
-         $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
-      ); // runs the actual query and returns the element
-
-      // errors must not pass silently
-      if (null === $element) {
-        throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
-      }
-
-      // ok, let's click on it
-      $element->click();
-  }
-
-  /**
-   * Click on the element with the provided CSS Selector
-   *
-   * @When /^I click on the element with css selector "([^"]*)"$/
-   */
-  public function iClickOnTheElementWithCSSSelector($cssSelector) {
-    $session = $this->getSession();
-    $element = $session->getPage()->find(
-      'xpath',
-      $session->getSelectorsHandler()->selectorToXpath('css', $cssSelector) // just changed xpath to css
-    );
-    if (null === $element) {
-      throw new \InvalidArgumentException(sprintf('Could not evaluate CSS Selector: "%s"', $cssSelector));
-    }
-    $element->click();
-  }
-
-  /**
    * @When I execute js script :script 
    */
   public function iExecuteJSScript($script) {
@@ -300,6 +264,61 @@ JS;
       }
       return false;
     });
+  }
+
+  /**
+   * Click on the element with the provided xpath query
+   *
+   * @When I click on the element with xpath :xpath
+   */
+  public function iClickOnTheElementWithXPath($xpath)
+  {
+    $session = $this->getSession(); // get the mink session
+    $element = $session->getPage()->find(
+      'xpath',
+      $session->getSelectorsHandler()->selectorToXpath('xpath', $xpath)
+    ); // runs the actual query and returns the element
+
+    // errors must not pass silently
+    if (null === $element) {
+      throw new \InvalidArgumentException(sprintf('Could not evaluate XPath: "%s"', $xpath));
+    }
+    // ok, let's click on it
+    $element->click();
+  }
+
+  /**
+   * I select the option from selectbox
+   *
+   * @Then I select the :option in the :name selectbox
+   */
+  public function iSelectTheInTheSelectbox($option, $name)
+  {
+    $page = $this->getSession()->getPage();
+    $selectElement = $page->find('xpath', '//select[@name = "' . $name . '"]');
+    $selectElement->selectOption($option);
+  }
+
+  /**
+   * I click the button and confirm 
+   * Needs to be in single command to avoid "unexpected alert open" errors in Selenium.
+   *
+   * @Then I press the :arg1 button and confirming the dialog
+   */
+  public function iPressTheButtonAndConfirmingTheDialog($button)
+  {
+    $page = $this->getSession()->getPage();
+    $buttonElement = $page->find('xpath', ".//button[@value='". $button ."']");
+    $buttonElement->click();
+    $this->confirmPopup();
+  }
+
+  /**
+   * @when /^(?:|I )confirm the popup$/
+   */
+  public function confirmPopup()
+  {
+    $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
   }
 
   /**
@@ -357,7 +376,7 @@ JS;
    */
   public function beforeStep() 
   {
-   $this->getSession()->getDriver()->maximizeWindow();
+    $this->getSession()->getDriver()->maximizeWindow();
   }
 
   /**
@@ -380,6 +399,3 @@ JS;
     }
   }
 }
-
-//https://thinkshout.com/blog/2014/10/getting-started-with-behat/
-//http://kevinquillen.com/bdd/2014/06/08/your-first-behat-test
