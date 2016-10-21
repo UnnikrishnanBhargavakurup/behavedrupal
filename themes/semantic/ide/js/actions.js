@@ -500,7 +500,7 @@ var action_data = [
 		"tag" : ""
 	},
 	{
-		"t" : "Then the (?i)url(?-i) should match :pattern",
+		"t" : "Then the :url should match :pattern",
 		"d" : [],
 		"tag" : ""
 	},
@@ -728,6 +728,21 @@ var action_data = [
 		"t" : "Then I should see :text disappear",
 		"d" : [],
 		"tag" : ""
+	},
+	{
+		"t" : "When I click on the element with xpath :xpath",
+		"d" : [],
+		"tag" : ""
+	},
+	{
+		"t" : "Then I select the :option in the :name selectbox",
+		"d" : [],
+		"tag" : ""
+	},
+	{
+		"t" : "Then I press the :arg1 button and confirming the dialog",
+		"d" : [],
+		"tag" : ""
 	}
 ];
 
@@ -772,4 +787,5 @@ var help_data = {
 	":height" : "Please specify a height for :height palce holder", 
 	":cssselector" : "Please specify a cssselector for :cssselector palce holder", 
 	":script" : "Please specify a script for :script palce holder", 
+	":xpath" : "Please specify a xpath for :xpath palce holder", 
 };
