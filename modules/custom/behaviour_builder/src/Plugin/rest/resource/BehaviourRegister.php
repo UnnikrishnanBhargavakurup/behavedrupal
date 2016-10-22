@@ -141,6 +141,8 @@ class BehaviourRegister extends ResourceBase {
         $errors = $user->validate();
         if($errors->count() == 0) {
           $user->save();
+          // we need to finilize login send cookie to browser.
+          user_login_finalize($user);
           return new ResourceResponse(array(
             "pic" => "/sites/default/files/public/styles/thumbnail/public/avatar_kit/robohash/1.jpg",
             "name" => substr($user->getUsername(), 0, strpos($user->getUsername(), '@')),
