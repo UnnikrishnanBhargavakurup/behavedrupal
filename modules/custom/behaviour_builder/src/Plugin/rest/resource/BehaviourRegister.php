@@ -14,6 +14,8 @@ use Drupal\Core\Form\FormState;
 use Symfony\Component\HttpFoundation\Response;
 use Drupal\Core\Entity\EntityFormBuilderInterface;
 use Drupal\Core\Entity\EntityTypeManagerInterface;
+use Drupal\Core\Access\CsrfTokenGenerator;
+use Drupal\Core\Access\CsrfRequestHeaderAccessCheck;
 
 /**
  * Provides a resource to get view modes by entity and bundle.
@@ -146,6 +148,7 @@ class BehaviourRegister extends ResourceBase {
           return new ResourceResponse(array(
             "pic" => "/sites/default/files/public/styles/thumbnail/public/avatar_kit/robohash/1.jpg",
             "name" => substr($user->getUsername(), 0, strpos($user->getUsername(), '@')),
+            "csr_token" => \Drupal::csrfToken()->get(CsrfRequestHeaderAccessCheck::TOKEN_KEY),
           ));
         }
         else {
