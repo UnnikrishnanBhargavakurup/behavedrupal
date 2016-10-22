@@ -24,10 +24,10 @@
     var reader = new FileReader();
     // Closure to capture the file information.
     reader.onload = (function(theFile) {
-        return function(e) {
-            // Render thumbnail.
-          $("#profile_pic").attr('src', e.target.result);                         
-        };
+      return function(e) {
+        // Render thumbnail.
+        $("#profile_pic").attr('src', e.target.result);                         
+      };
     })($("#uploaded_file")[0].files[0]);
     // Read in the image file as a data URL.
     reader.readAsDataURL($("#uploaded_file")[0].files[0]);    

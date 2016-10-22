@@ -1728,9 +1728,10 @@ ul.dropdown-menu.drp-mnu li a i {
 	 height:35px;
 	 width:45%;
 }
-.profile_details ul li{
+
+.profile_details ul li {
 	list-style-type:none;
-	width:87%;
+	/*width:87%;*/
 }
 .user-name p{
 	font-size:14px;

@@ -998,3 +998,7 @@ body #jpWalkthrough #jpwTooltip #tooltipInner p {
 td.cell-dta{
   width: 50%;
 }
+
+.profile_details ul li {
+  min-width: 90%;
+}

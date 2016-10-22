@@ -74,8 +74,8 @@
     var feature_name = $("#feature-name").val().trim();
     var feature_description = $("#feature-description").val().trim();
     if(feature_name != "") {
-        var fetaure = new Feature(feature_name, feature_description);
-        Workspace.addUniqueChild(fetaure);
+      var fetaure = new Feature(feature_name, feature_description);
+      Workspace.addUniqueChild(fetaure);
       $("#feature-name").val('');
       $("#feature-description").val('');
     }
@@ -143,26 +143,30 @@
           }),
           error: function(data) {
             Workspace.isLoggedin = 0;
+            $(".profile_details .mdl-spinner").removeClass('is-active');
           },
           success : function(data) {
             if(data.hasOwnProperty('error')) {
               showAuthError(data.error);
               return;
             }
+            window.behave.csrf_token = data.csr_token;
             $("#user_pic").css("background-image", "url("+ data.pic +")");
             $("#user_name").html(data.name + "<span>&nbsp;</span>");
+            $("#profile_pic").attr("src", data.pic);
             $("#login").hide();
             $(".usr-profile").show();
               //success code
             Workspace.isLoggedin = 1;
             dialog_login.close();
+            $(".profile_details .mdl-spinner").removeClass('is-active');
           }
         });
       }
       else {
+        $(".profile_details .mdl-spinner").removeClass('is-active');
         if(email == "" || password == "") {
           $(".dialog_auth .auth_error").html("Please enter all the fields.");
-          $(".profile_details .mdl-spinner").removeClass('is-active');
         }
       }
     }
@@ -243,7 +247,6 @@
         $(".profile_details .mdl-spinner").removeClass('is-active');
       }
     }
-    //https://codepen.io/sevilayha/pen/IdGKH
   });
 
   /**
@@ -353,12 +356,7 @@
   dialog_save.querySelector('.btn-save').addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if(window.behave.csrf_token == "") {
-      get_token(save_projects);
-    }
-    else {
-      save_projects();
-    }
+    save_projects();
   });
 
   /**
@@ -447,12 +445,7 @@
   dialog_profile.querySelector('#cancel_account').addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if(window.behave.csrf_token == "") {
-      get_token(cancel_account);
-    }
-    else {
-      cancel_account();
-    }
+    cancel_account();
   });
 
   function cancel_account() {
@@ -481,12 +474,7 @@
   dialog_profile.querySelector('.btn-save').addEventListener('click', function(e) {
     e.preventDefault();
     e.stopPropagation();
-    if(window.behave.csrf_token == "") {
-      get_token(update_profile);
-    }
-    else {
-      update_profile();
-    }   
+    update_profile();
   });
   
   function update_profile() {
