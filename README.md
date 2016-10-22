@@ -22,4 +22,4 @@ git clone git@github.com:UnnikrishnanBhargavakurup/behavedrupal.git
 
 All contributions to behavedrupal are welcome. Issues and pull requests may be submitted against the behavedrupal project on github where they will be addressed by the behavedrupal team. 
 
-Send your feedbacks and comments at unnikrishnanadoor[at]gmail.com
+Send your feedbacks and comments at unnikrishnanadoor@gmail.com
