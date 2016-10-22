@@ -86,7 +86,9 @@ class BehaviourCancel extends ResourceBase {
    *   Throws exception expected.
    */
   public function post($data) {
-    user_cancel(array(), \Drupal::currentUser()->id(), 'user_cancel_delete');
+    $user = user_load(\Drupal::currentUser()->id());
+    $user->delete();
+    \Drupal::service('session')->migrate();
     return new ResourceResponse(array("error" => ""));
   }
 }
