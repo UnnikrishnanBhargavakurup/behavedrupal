@@ -438,8 +438,15 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
           </if>
           <downloadfeatures url="${behave_server}/behave/features?_format=json" 
             sid="${session_id}" dir="${behat_root}/features.zip"/>
-
           <echo message="${line.separator}"/>
+          <filesize file="${behat_root}/features.zip" />
+          <if>
+            <equals arg1="${filesize}" arg2="2"/>
+            <then>
+              <fail message="Unable to download features, your session might have expired, please downlaod the build and run the command again."
+              />  
+            </then>
+          </if>        
           <if>
             <available file='${behat_root}/features.zip' type='file' />
             <then>
@@ -448,8 +455,7 @@ build/bin/phing -f build/phing/build.xml -DskipDownload -Dbrowser=phantomjs
             </then>
             <else>
               <fail 
-                message="Unable to download features, your session might have expired \
-                please downlaod the build and run the command again."
+                message="Unable to download features, your session might have expired please downlaod the build and run the command again."
               />
             </else>
           </if>

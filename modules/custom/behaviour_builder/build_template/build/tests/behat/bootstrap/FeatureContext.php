@@ -316,6 +316,7 @@ JS;
    */
   public function confirmPopup()
   {
+    //https://gist.github.com/blazarecki/2888851
     $this->getSession()->getDriver()->getWebDriverSession()->accept_alert();
   }
 
